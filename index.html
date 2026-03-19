@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poulin Électrique – Demande d'urgence</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080808;
+    --surface: #111111;
+    --surface-raised: #1A1A1A;
+    --surface-hover: #1E1E1E;
+    --border: #2A2A2A;
+    --border-focus: #D42B2B;
+    --red: #D42B2B;
+    --red-bright: #FF3B3B;
+    --red-glow: rgba(212, 43, 43, 0.2);
+    --red-glow-strong: rgba(212, 43, 43, 0.35);
+    --silver: #C8CDD4;
+    --silver-muted: #8A9099;
+    --silver-dim: #555B64;
+    --white: #F0F2F5;
+    --success: #2ECC71;
+    --success-glow: rgba(46, 204, 113, 0.15);
+    --radius: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--white);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 500px;
+    background: radial-gradient(ellipse, rgba(212, 43, 43, 0.07) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      135deg,
+      transparent,
+      transparent 40px,
+      rgba(212, 43, 43, 0.015) 40px,
+      rgba(212, 43, 43, 0.015) 41px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 520px;
+    margin-top: 16px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .logo-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 16px;
+    object-fit: cover;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 24px rgba(212, 43, 43, 0.25);
+  }
+
+  .header h1 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .header .subtitle {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--red);
+  }
+
+  .accent-line {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--red), var(--red-bright));
+    margin: 16px auto 24px;
+    border-radius: 2px;
+    box-shadow: 0 0 12px var(--red-glow);
+  }
+
+  .urgency-section {
+    margin-bottom: 20px;
+  }
+
+  .section-label {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--silver-muted);
+    margin-bottom: 10px;
+  }
+
+  .urgency-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .urgency-option {
+    padding: 16px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .urgency-option::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: transparent;
+    transition: background 0.2s ease;
+  }
+
+  .urgency-option:hover {
+    background: var(--surface-hover);
+    border-color: #333;
+  }
+
+  .urgency-option.selected.emergency {
+    border-color: var(--red);
+    background: var(--red-glow);
+    box-shadow: 0 0 30px rgba(212, 43, 43, 0.12);
+  }
+
+  .urgency-option.selected.emergency::before {
+    background: linear-gradient(90deg, var(--red), var(--red-bright));
+    box-shadow: 0 0 10px var(--red-glow-strong);
+  }
+
+  .urgency-option.selected.non-emergency {
+    border-color: var(--silver-dim);
+    background: rgba(200, 205, 212, 0.05);
+  }
+
+  .urgency-option.selected.non-emergency::before {
+    background: var(--silver-muted);
+  }
+
+  .urgency-option .urgency-icon { font-size: 22px; margin-bottom: 6px; }
+
+  .urgency-option .urgency-text {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .urgency-option .urgency-desc {
+    font-size: 11px;
+    color: var(--silver-muted);
+    margin-top: 2px;
+  }
+
+  .emergency-banner {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: var(--red-glow);
+    border: 1px solid rgba(212, 43, 43, 0.3);
+    border-left: 3px solid var(--red);
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: var(--red-bright);
+    animation: pulse-glow 2.5s ease-in-out infinite;
+  }
+
+  .emergency-banner.visible { display: flex; }
+
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0px transparent; }
+    50% { box-shadow: 0 0 20px rgba(212, 43, 43, 0.08); }
+  }
+
+  .emergency-banner svg {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    fill: var(--red-bright);
+  }
+
+  .form-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 24px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    position: relative;
+  }
+
+  .form-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 24px;
+    right: 24px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212,43,43,0.3), transparent);
+  }
+
+  .form-group { margin-bottom: 18px; }
+  .form-group:last-of-type { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--silver-muted);
+    margin-bottom: 7px;
+  }
+
+  label .req { color: var(--red); font-size: 14px; }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    outline: none;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px var(--red-glow);
+  }
+
+  input::placeholder, textarea::placeholder { color: var(--silver-dim); }
+
+  select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238A9099' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+
+  select option { background: var(--surface); color: var(--white); }
+  textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .submit-btn {
+    width: 100%;
+    margin-top: 24px;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--red), #B02020);
+    color: var(--white);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 20px var(--red-glow);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .submit-btn:hover::before { left: 100%; }
+
+  .submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 32px var(--red-glow-strong);
+  }
+
+  .submit-btn:active { transform: translateY(0); }
+
+  .submit-btn.general-mode {
+    background: linear-gradient(135deg, #3A3D44, #2A2D34);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+
+  .submit-btn.general-mode:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+
+  .success-overlay {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 48px 24px;
+  }
+
+  .success-overlay.visible { display: flex; }
+
+  .success-check {
+    width: 72px;
+    height: 72px;
+    background: var(--success-glow);
+    border: 2px solid rgba(46, 204, 113, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    animation: pop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes pop-in {
+    0% { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .success-check svg { width: 32px; height: 32px; stroke: var(--success); fill: none; }
+
+  .success-overlay h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .success-overlay p {
+    color: var(--silver-muted);
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 360px;
+  }
+
+  .success-overlay .ref-code {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--red-bright);
+    background: var(--red-glow);
+    border: 1px solid rgba(212, 43, 43, 0.2);
+    padding: 10px 20px;
+    border-radius: 6px;
+    margin-top: 16px;
+  }
+
+  .footer {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--silver-dim);
+    line-height: 1.7;
+  }
+
+  .footer a { color: var(--silver-muted); text-decoration: none; }
+  .footer .emergency-note { color: var(--red); font-weight: 600; }
+
+  @media (max-width: 480px) {
+    .container { margin-top: 8px; }
+    .form-card { padding: 22px 18px; }
+    .row { grid-template-columns: 1fr; gap: 0; }
+    .header h1 { font-size: 22px; letter-spacing: 1.5px; }
+    .logo-img { width: 68px; height: 68px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <img src="PEI_Logo.png" alt="Poulin Électrique" class="logo-img">
+    <h1>Poulin Électrique</h1>
+    <div class="subtitle">Demande de service</div>
+  </div>
+
+  <div class="accent-line"></div>
+
+  <div class="urgency-section">
+    <div class="section-label">Type de demande <span style="color:var(--red)">*</span></div>
+    <div class="urgency-options">
+      <div class="urgency-option emergency" onclick="selectUrgency('emergency', this)">
+        <div class="urgency-icon">⚡</div>
+        <div class="urgency-text">Urgence</div>
+        <div class="urgency-desc">Intervention immédiate</div>
+      </div>
+      <div class="urgency-option non-emergency" onclick="selectUrgency('non-emergency', this)">
+        <div class="urgency-icon">📋</div>
+        <div class="urgency-text">Demande générale</div>
+        <div class="urgency-desc">Requête de service</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="emergency-banner" id="emergencyBanner">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+    <span>Un membre de l'équipe sera notifié immédiatement par SMS.</span>
+  </div>
+
+  <div class="form-card" id="formCard">
+    <div class="form-group">
+      <label>Entreprise / Client <span class="req">*</span></label>
+      <select id="company">
+        <option value="" disabled selected>Sélectionnez votre entreprise</option>
+        <option value="gestion-immobiliere-xyz">Gestion Immobilière XYZ</option>
+        <option value="cssdm">CSSDM – Commission scolaire</option>
+        <option value="ville-montreal">Ville de Montréal</option>
+        <option value="groupe-lpl">Groupe LPL</option>
+        <option value="condo-plateau">Syndicat Condo Le Plateau</option>
+        <option value="other">Autre client contractuel</option>
+      </select>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label>Prénom <span class="req">*</span></label>
+        <input type="text" id="firstName" placeholder="Jean">
+      </div>
+      <div class="form-group">
+        <label>Nom <span class="req">*</span></label>
+        <input type="text" id="lastName" placeholder="Tremblay">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label>Téléphone <span class="req">*</span></label>
+        <input type="tel" id="phone" placeholder="514-000-0000">
+      </div>
+      <div class="form-group">
+        <label>Courriel</label>
+        <input type="email" id="email" placeholder="jean@exemple.com">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Adresse de l'intervention <span class="req">*</span></label>
+      <input type="text" id="address" placeholder="1234 Rue Exemple, Montréal, QC">
+    </div>
+
+    <div class="form-group">
+      <label>Description du problème <span class="req">*</span></label>
+      <textarea id="description" placeholder="Décrivez la situation (ex: panne de courant au 3e étage, odeur de brûlé dans le panneau électrique...)"></textarea>
+    </div>
+
+    <button class="submit-btn" id="submitBtn" onclick="submitForm()">
+      Soumettre la demande
+    </button>
+  </div>
+
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-check">
+      <svg viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+    </div>
+    <h2>Demande reçue</h2>
+    <p id="successMessage">Votre demande a été soumise avec succès.</p>
+    <div class="ref-code" id="refCode"></div>
+  </div>
+
+  <div class="footer">
+    Poulin Électrique Inc. · Montréal, QC<br>
+    <span class="emergency-note">En cas d'urgence vitale, composez le 911</span>
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  // CONFIG — Replace with your n8n webhook URL
+  // ============================================================
+  const WEBHOOK_URL = 'https://poulinelectriqueinc.app.n8n.cloud/webhook/85afd439-94d9-49b1-a294-65a39ef195e9';
+  // ============================================================
+
+  let selectedUrgency = null;
+
+  function selectUrgency(type, el) {
+    document.querySelectorAll('.urgency-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedUrgency = type;
+
+    const banner = document.getElementById('emergencyBanner');
+    const btn = document.getElementById('submitBtn');
+
+    if (type === 'emergency') {
+      banner.classList.add('visible');
+      btn.className = 'submit-btn';
+      btn.textContent = '⚡  Soumettre l\'urgence';
+    } else {
+      banner.classList.remove('visible');
+      btn.className = 'submit-btn general-mode';
+      btn.textContent = 'Soumettre la demande';
+    }
+  }
+
+  async function submitForm() {
+    const required = ['company', 'firstName', 'lastName', 'phone', 'address', 'description'];
+    let valid = true;
+
+    if (!selectedUrgency) {
+      alert('Veuillez sélectionner le type de demande.');
+      return;
+    }
+
+    required.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el.value.trim()) {
+        el.style.borderColor = 'var(--red)';
+        el.style.boxShadow = '0 0 0 3px var(--red-glow)';
+        valid = false;
+        el.addEventListener('input', () => {
+          el.style.borderColor = 'var(--border)';
+          el.style.boxShadow = 'none';
+        }, { once: true });
+      }
+    });
+
+    if (!valid) return;
+
+    // Generate reference code
+    const prefix = selectedUrgency === 'emergency' ? 'URG' : 'DEM';
+    const ref = prefix + '-' + Date.now().toString(36).toUpperCase().slice(-6);
+
+    // Build payload
+    const payload = {
+      ref: ref,
+      type: selectedUrgency,
+      timestamp: new Date().toISOString(),
+      company: document.getElementById('company').value,
+      companyLabel: document.getElementById('company').options[document.getElementById('company').selectedIndex].text,
+      firstName: document.getElementById('firstName').value.trim(),
+      lastName: document.getElementById('lastName').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      email: document.getElementById('email').value.trim() || null,
+      address: document.getElementById('address').value.trim(),
+      description: document.getElementById('description').value.trim()
+    };
+
+    // Loading state
+    const btn = document.getElementById('submitBtn');
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+    btn.textContent = 'Envoi en cours...';
+
+    try {
+      const response = await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) throw new Error('Erreur serveur: ' + response.status);
+
+      // Success — show confirmation
+      showSuccess(ref, selectedUrgency);
+
+    } catch (err) {
+      console.error('Webhook error:', err);
+
+      // Show error but still confirm to user — don't leave them hanging
+      // In production you could retry or queue locally
+      const errorBanner = document.createElement('div');
+      errorBanner.style.cssText = 'padding:12px 16px;background:rgba(212,43,43,0.15);border:1px solid rgba(212,43,43,0.3);border-radius:8px;margin-top:12px;font-size:13px;color:#FF3B3B;text-align:center;';
+      errorBanner.textContent = 'Erreur de connexion. Veuillez réessayer ou appeler directement.';
+      document.getElementById('formCard').appendChild(errorBanner);
+
+      // Reset button
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      btn.textContent = originalText;
+
+      // Remove error after 5s
+      setTimeout(() => errorBanner.remove(), 5000);
+    }
+  }
+
+  function showSuccess(ref, urgency) {
+    document.querySelector('.urgency-section').style.display = 'none';
+    document.getElementById('emergencyBanner').style.display = 'none';
+    document.getElementById('formCard').style.display = 'none';
+
+    const overlay = document.getElementById('successOverlay');
+    overlay.classList.add('visible');
+    document.getElementById('refCode').textContent = '# ' + ref;
+
+    const successMsg = document.getElementById('successMessage');
+    if (urgency === 'emergency') {
+      successMsg.textContent = 'Votre urgence a été transmise. Un technicien sera notifié immédiatement par SMS et vous contactera dans les plus brefs délais.';
+    } else {
+      successMsg.textContent = 'Votre demande a été soumise avec succès. Notre équipe en prendra connaissance dès le prochain jour ouvrable.';
+    }
+  }
+</script>
+
+</body>
+</html>
