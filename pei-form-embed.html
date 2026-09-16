@@ -1,0 +1,17 @@
+<!-- Bloc de code Squarespace — page Demande de service (remplace le bloc au complet) -->
+<style>
+  .pei-form-embed { padding-top: 190px; }                      /* dégage l'en-tête fixe, comme le héros */
+  @media (max-width: 800px) { .pei-form-embed { padding-top: 150px; } }
+</style>
+<div class="pei-form-embed">
+  <iframe id="peiForm" src="https://cbauer98.github.io/Poulin-Urgence/" title="Demande de service"
+    scrolling="no" allowtransparency="true"
+    style="display:block;width:100%;min-height:1200px;border:0;background:transparent;overflow:hidden"></iframe>
+</div>
+<script>
+  window.addEventListener('message', function (e) {
+    if (e.origin !== 'https://cbauer98.github.io') return;
+    var d = e.data;
+    if (d && d.pei === 'height' && d.h > 0) document.getElementById('peiForm').style.height = (d.h + 8) + 'px';
+  });
+</script>
