@@ -860,6 +860,21 @@
     document.fonts && document.fonts.ready.then(send);
     send();
   })();
+
+  // Présélection par URL : ?secteur=generac-installation | generac-service | industriel | ...
+  (function () {
+    const key = new URLSearchParams(location.search).get('secteur');
+    if (!key) return;
+    const el = document.querySelector('.sector-option[onclick*="\'' + key + '\'"]');
+    if (!el) return;
+    el.click();
+    if (key.indexOf('generac') === 0) {
+      // Page Generac : l'en-tête et le volet Électricité sont déjà gérés par la page parente
+      document.querySelector('.sector-group:not(.sector-group--generac)').classList.add('hidden');
+      document.querySelector('.header').classList.add('hidden');
+      document.querySelector('#sectorSection .section-label').firstChild.textContent = 'Type de demande Generac ';
+    }
+  })();
 </script>
 
 </body>
