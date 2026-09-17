@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Avis Google – Poulin Électrique</title>
+<!--
+  pei-avis-google.html — bandeau d'avis Google (racine du dépôt CBauer98/Poulin-Urgence, branche main)
+  Lit ./reviews.json (écrit par le workflow n8n « PEI - Avis Google sync »).
+  Embarqué dans Squarespace via <iframe> — voir AVIS-GOOGLE-README.md.
+  Logo Google : déposer google_on_non_white.png à la racine du dépôt (fichier officiel Google, requis
+  par la politique d'attribution des données Places). Sinon le mot « Google » s'affiche à sa place.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pei-black: #050505;
+    --pei-panel: #101010;
+    --pei-panel-2: #161616;
+    --pei-border: #262626;
+    --pei-red: #D63A34;
+    --pei-red-dark: #B32B26;
+    --pei-cream: #F1EDE6;
+    --pei-text: #B9B9B9;
+    --pei-muted: #8A8A8A;
+    --pei-head: 'Oswald', 'Arial Narrow', Impact, sans-serif;
+    --pei-body: 'Inter', -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --card-w: 380px;
+    --gap: 20px;
+    --set: 2000px; /* largeur d'un jeu de cartes, calculée en JS */
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--pei-black); color: var(--pei-text); font-family: var(--pei-body); }
+  body { overflow: hidden; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--pei-cream); outline-offset: 3px; border-radius: 4px; }
+
+  /* ---- En-tête : note globale + bouton ---- */
+  .head { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+          max-width: 1360px; margin: 0 auto; padding: 4px 24px 26px; }
+  .score { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .stars { display: inline-flex; gap: 3px; color: var(--pei-red); }
+  .stars svg { width: 24px; height: 24px; fill: currentColor; display: block; }
+  .score__num { font-family: var(--pei-head); font-weight: 600; font-size: 30px; line-height: 1; color: var(--pei-cream); letter-spacing: .01em; }
+  .score__num small { font-size: 18px; font-weight: 500; color: var(--pei-text); margin-left: 4px; }
+  .score__from { font-size: 15px; color: var(--pei-muted); display: inline-flex; align-items: center; gap: 8px; }
+  .score__from a { color: var(--pei-text); text-decoration: underline; text-decoration-color: var(--pei-border); text-underline-offset: 3px; }
+  .score__from a:hover { color: var(--pei-cream); }
+  .glogo { height: 22px; width: auto; display: block; }
+  .gword { font-weight: 600; color: var(--pei-cream); }
+  .cta { display: inline-block; font-family: var(--pei-head); font-weight: 600; font-size: 16px; letter-spacing: .05em; text-transform: uppercase;
+         color: #fff; background: var(--pei-red); border-radius: 8px; padding: 13px 22px; text-decoration: none; white-space: nowrap; }
+  .cta:hover { background: var(--pei-red-dark); }
+
+  /* ---- Bandeau défilant (mêmes mécaniques que .pei-strip) ---- */
+  .strip { position: relative; overflow: hidden; padding: 6px 0 10px; }
+  .strip::before, .strip::after { content: ""; position: absolute; top: 0; bottom: 0; width: 140px; z-index: 2; pointer-events: none; }
+  .strip::before { left: 0; background: linear-gradient(90deg, var(--pei-black), transparent); }
+  .strip::after { right: 0; background: linear-gradient(270deg, var(--pei-black), transparent); }
+  .track { display: flex; gap: var(--gap); width: max-content; animation: pei-scroll 60s linear infinite; will-change: transform; }
+  .strip:hover .track, .strip:focus-within .track, .strip.is-paused .track { animation-play-state: paused; }
+  @keyframes pei-scroll { from { transform: translateX(0); } to { transform: translateX(calc(-1 * var(--set))); } }
+
+  .avis { flex: 0 0 var(--card-w); width: var(--card-w); display: flex; flex-direction: column; gap: 14px;
+          background: var(--pei-panel); border: 1px solid var(--pei-border); border-radius: 14px; padding: 24px 24px 20px; }
+  .avis .stars svg { width: 18px; height: 18px; }
+  .avis__text { margin: 0; font-size: 16px; line-height: 1.55; color: var(--pei-cream);
+                display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; min-height: calc(6 * 1.55em); }
+  .avis__by { margin-top: auto; display: flex; align-items: center; gap: 12px; padding-top: 14px; border-top: 1px solid var(--pei-border); }
+  .avis__avatar, .avis__initial { width: 36px; height: 36px; border-radius: 50%; flex: 0 0 36px; object-fit: cover; background: var(--pei-panel-2); }
+  .avis__initial { display: grid; place-items: center; font-family: var(--pei-head); font-weight: 600; font-size: 17px; color: var(--pei-cream); }
+  .avis__who { min-width: 0; flex: 1 1 auto; line-height: 1.3; }
+  .avis__name { display: block; font-size: 14px; font-weight: 600; color: var(--pei-cream); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .avis__name:hover { text-decoration: underline; }
+  .avis__when { display: block; font-size: 13px; color: var(--pei-muted); }
+  .avis__link { font-size: 13px; color: var(--pei-muted); text-decoration: none; white-space: nowrap; }
+  .avis__link:hover { color: var(--pei-cream); }
+  .avis__tr { font-size: 12px; color: var(--pei-muted); }
+
+  .foot { max-width: 1360px; margin: 0 auto; padding: 8px 24px 4px; display: flex; justify-content: flex-end; }
+  .pause { background: none; border: 0; color: var(--pei-muted); font: 500 13px/1 var(--pei-body); padding: 8px 4px; cursor: pointer; }
+  .pause:hover { color: var(--pei-cream); }
+
+  /* ---- États vide / erreur ---- */
+  .note { max-width: 1360px; margin: 0 auto; padding: 8px 24px 20px; font-size: 15px; color: var(--pei-muted); }
+  .note a { color: var(--pei-text); }
+  [hidden] { display: none !important; }
+
+  @media (max-width: 800px) {
+    :root { --card-w: 300px; --gap: 14px; }
+    .head { padding: 4px 18px 20px; gap: 16px; }
+    .score__num { font-size: 26px; }
+    .cta { font-size: 15px; padding: 12px 18px; }
+    .strip::before, .strip::after { width: 40px; }
+    .avis { padding: 20px 20px 16px; }
+    .avis__text { font-size: 15px; }
+    .note, .foot { padding-left: 18px; padding-right: 18px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .track { animation: none; }
+    .strip { overflow-x: auto; scroll-snap-type: x proximity; padding-left: 24px; padding-right: 24px; }
+    .strip::before, .strip::after { display: none; }
+    .avis { scroll-snap-align: start; }
+    .foot { display: none; }
+  }
+</style>
+</head>
+<body>
+<div id="root">
+<header class="head" id="head" hidden>
+  <div class="score">
+    <span class="stars" id="head-stars" aria-hidden="true"></span>
+    <span class="score__num"><span id="rating">–</span><small>sur 5</small></span>
+    <span class="score__from">d'après <a id="count-link" href="#" target="_blank" rel="noopener"><span id="count">–</span> avis</a>
+      <img class="glogo" src="google_on_non_white.png" alt="Google" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'gword',textContent:'Google'}))"></span>
+  </div>
+  <a class="cta" id="cta" href="#" target="_blank" rel="noopener">Laisser un avis</a>
+</header>
+
+<div class="strip" id="strip" hidden>
+  <div class="track" id="track" aria-live="off"></div>
+</div>
+<div class="foot" id="foot" hidden>
+  <button class="pause" id="pause" type="button" aria-pressed="false">Mettre en pause</button>
+</div>
+
+<p class="note" id="note" hidden></p>
+</div>
+<script>
+(function () {
+  var DATA_URL   = 'reviews.json';
+  var SPEED      = 38;   /* px par seconde */
+  var PLACE_ID   = 'ChIJ4yhtivVLyUwRNKlYhUbzbE8';
+  var REVIEW_URL = 'https://search.google.com/local/writereview?placeid=' + PLACE_ID;
+  var LISTING    = 'https://share.google/vzYjkOkSMLhuuXrRB';
+
+  var STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17.4 6 20.8l1.3-6.7-5-4.6 6.8-.8z"/></svg>';
+  var $ = function (id) { return document.getElementById(id); };
+  var fmt = new Intl.NumberFormat('fr-CA', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+  function stars(n) {
+    var out = '';
+    for (var i = 0; i < 5; i++) out += '<span style="opacity:' + (i < Math.round(n) ? 1 : .25) + '">' + STAR + '</span>';
+    return out;
+  }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function safeUrl(u) { return /^https:\/\//i.test(u || '') ? u : null; }
+  function rel(iso) {
+    if (!iso) return '';
+    var d = (Date.now() - new Date(iso).getTime()) / 864e5;
+    if (isNaN(d) || d < 0) return '';
+    if (d < 1) return "aujourd'hui";
+    if (d < 2) return 'hier';
+    if (d < 7) return 'il y a ' + Math.floor(d) + ' jours';
+    if (d < 30) { var w = Math.floor(d / 7); return w <= 1 ? 'il y a une semaine' : 'il y a ' + w + ' semaines'; }
+    if (d < 365) { var m = Math.floor(d / 30.4); return m <= 1 ? 'il y a un mois' : 'il y a ' + m + ' mois'; }
+    var y = Math.floor(d / 365); return y <= 1 ? 'il y a un an' : 'il y a ' + y + ' ans';
+  }
+
+  function card(r, dup) {
+    var name = r.author || 'Client Google';
+    var photo = safeUrl(r.photo), aurl = safeUrl(r.authorUrl), rurl = safeUrl(r.url) || LISTING;
+    var avatar = photo
+      ? '<img class="avis__avatar" src="' + esc(photo) + '" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.outerHTML=\'<span class=&quot;avis__initial&quot; aria-hidden=&quot;true&quot;>' + esc(name.charAt(0).toUpperCase()) + '</span>\'">'
+      : '<span class="avis__initial" aria-hidden="true">' + esc(name.charAt(0).toUpperCase()) + '</span>';
+    var who = aurl ? '<a class="avis__name" href="' + esc(aurl) + '" target="_blank" rel="noopener nofollow">' + esc(name) + '</a>'
+                   : '<span class="avis__name">' + esc(name) + '</span>';
+    var when = esc(rel(r.time) || r.relative || '') + (r.translated ? ' <span class="avis__tr">(traduit par Google)</span>' : '');
+    return '<article class="avis"' + (dup ? ' aria-hidden="true"' : '') + '>' +
+      '<div class="stars" aria-label="' + esc(r.rating) + ' étoiles sur 5">' + stars(r.rating || 5) + '</div>' +
+      '<p class="avis__text">' + esc(r.text) + '</p>' +
+      '<footer class="avis__by">' + avatar +
+        '<div class="avis__who">' + who + '<span class="avis__when">' + when + '</span></div>' +
+        '<a class="avis__link" href="' + esc(rurl) + '" target="_blank" rel="noopener nofollow"' + (dup ? ' tabindex="-1"' : '') + '>Voir sur Google</a>' +
+      '</footer></article>';
+  }
+
+  function tellParentHeight() {
+    var h = $('root').getBoundingClientRect().height;
+    try { parent.postMessage({ type: 'pei-avis-height', height: h }, '*'); } catch (e) {}
+  }
+
+  function layout(count) {
+    var track = $('track'), strip = $('strip');
+    var setW = 0, cards = track.querySelectorAll('.avis:not([aria-hidden])');
+    cards.forEach(function (c) { setW += c.getBoundingClientRect().width; });
+    setW += count * parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap || 20);
+    /* répéter le jeu jusqu'à couvrir deux fois la largeur visible, pour une boucle sans couture */
+    var need = Math.max(2, Math.ceil((2 * strip.clientWidth) / setW) + 1);
+    var base = Array.prototype.slice.call(cards).map(function (c) { return c.outerHTML; }).join('');
+    var dupHtml = '';
+    for (var i = 1; i < need; i++) dupHtml += base.replace(/<article class="avis"/g, '<article class="avis" aria-hidden="true"').replace(/class="avis__link" href/g, 'class="avis__link" tabindex="-1" href');
+    track.innerHTML = base + dupHtml;
+    track.style.setProperty('--set', setW + 'px');
+    track.style.animationDuration = Math.max(20, setW / SPEED) + 's';
+    tellParentHeight();
+  }
+
+  function render(d) {
+    var reviews = (d.reviews || []).filter(function (r) { return r && r.text; });
+    var reviewUrl = safeUrl(d.reviewUrl) || REVIEW_URL, listing = safeUrl(d.listingUrl) || LISTING;
+    $('cta').href = reviewUrl; $('count-link').href = listing;
+    if (d.rating) { $('rating').textContent = fmt.format(d.rating); $('head-stars').innerHTML = stars(d.rating); }
+    if (d.count) { $('count').textContent = d.count; }
+    $('head').hidden = !(d.rating || d.count);
+    if (!reviews.length) {
+      $('note').innerHTML = 'Les avis s\'affichent ici dès la première synchronisation. <a href="' + esc(listing) + '" target="_blank" rel="noopener">Voir nos avis sur Google</a>';
+      $('note').hidden = false; tellParentHeight(); return;
+    }
+    $('track').innerHTML = reviews.map(function (r) { return card(r, false); }).join('');
+    $('strip').hidden = false; $('foot').hidden = false;
+    layout(reviews.length);
+  }
+
+  function fail() {
+    $('cta').href = REVIEW_URL; $('count-link').href = LISTING; $('head').hidden = true;
+    $('note').innerHTML = '<a href="' + LISTING + '" target="_blank" rel="noopener">Consulter nos avis sur Google</a>';
+    $('note').hidden = false; tellParentHeight();
+  }
+
+  $('pause').addEventListener('click', function () {
+    var on = $('strip').classList.toggle('is-paused');
+    this.setAttribute('aria-pressed', on); this.textContent = on ? 'Reprendre le défilement' : 'Mettre en pause';
+  });
+
+  var bucket = Math.floor(Date.now() / 36e5); /* contourne les caches au plus une fois l'heure */
+  fetch(DATA_URL + '?v=' + bucket, { cache: 'no-cache' })
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(render).catch(fail);
+
+  var t; window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(function () {
+    var n = document.querySelectorAll('#track .avis:not([aria-hidden])').length; if (n) layout(n); else tellParentHeight();
+  }, 150); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(tellParentHeight);
+})();
+</script>
+</body>
+</html>
