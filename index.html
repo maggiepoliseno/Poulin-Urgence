@@ -540,7 +540,7 @@
           <text x="180" y="12" font-family="Arial, sans-serif" font-size="9" fill="#fff">®</text>
           <path d="M2 37 L176 41 L2 49 Z" fill="#F26B1D"/>
         </svg>
-        <em>Distributeur autorisé</em>
+        <em>Concessionnaire autorisé</em>
       </div>
       <div class="sector-options sector-options--2">
         <div class="sector-option" onclick="selectSector('generac-installation','Generac – Nouvelle installation','generac',this)">
@@ -616,7 +616,28 @@
       <input type="text" id="address" placeholder="1234 rue Exemple, Saint-Lazare, QC">
     </div>
 
-    <div class="form-group">
+    <!-- Génératrice existante : affiché seulement pour « Generac – Demande de service » -->
+    <div id="generacGroup" class="hidden" style="margin-bottom:18px">
+      <div class="form-group">
+        <label for="genModel">Modèle ou numéro de série <span style="color:var(--silver-dim);font-weight:400">(si connu)</span></label>
+        <input type="text" id="genModel" placeholder="Sur la plaque signalétique, sous le couvercle">
+      </div>
+      <div class="row">
+        <div class="form-group">
+          <label for="genInstaller">Installée par</label>
+          <select id="genInstaller"><option value="">Choisir…</option><option>Poulin Électrique</option><option>Un autre installateur</option><option>Je ne sais pas</option></select>
+        </div>
+        <div class="form-group">
+          <label for="genWarranty">Sous garantie ?</label>
+          <select id="genWarranty"><option value="">Choisir…</option><option>Oui</option><option>Non</option><option>Je ne sais pas</option></select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="genMobileLink">Surveillance Mobile Link</label>
+        <select id="genMobileLink"><option value="">Choisir…</option><option>Oui, activée</option><option>Non</option><option>Je ne sais pas</option></select>
+      </div>
+    </div>
+        <div class="form-group">
       <label id="descLabel">Description du problème <span class="req">*</span></label>
       <textarea id="description" placeholder="Décrivez la situation (ex: panne de courant au 3e étage, odeur de brûlé dans le panneau électrique...)"></textarea>
     </div>
@@ -692,6 +713,7 @@
     document.querySelectorAll('.sector-option').forEach(o => o.classList.remove('selected'));
     el.classList.add('selected');
     selectedSector = { key: key, label: label, division: division };
+    document.getElementById('generacGroup').classList.toggle('hidden', key !== 'generac-service');
 
     const copy = COPY[key] || COPY[division] || COPY.electricite;
     document.getElementById('companyLabel').innerHTML = copy.company;
@@ -789,6 +811,15 @@
       description: document.getElementById('description').value.trim()
     };
 
+    // Génératrice existante : détails envoyés à part et ajoutés à la description (visibles dans le courriel)
+    if (selectedSector.key === 'generac-service') {
+      const v = id => document.getElementById(id).value.trim();
+      const g = { model: v('genModel') || null, installer: v('genInstaller') || null, warranty: v('genWarranty') || null, mobileLink: v('genMobileLink') || null };
+      payload.generac = g;
+      const lines = [g.model && 'Modèle / no de série : ' + g.model, g.installer && 'Installée par : ' + g.installer, g.warranty && 'Sous garantie : ' + g.warranty, g.mobileLink && 'Mobile Link : ' + g.mobileLink].filter(Boolean);
+      if (lines.length) payload.description += '\n\n— Génératrice —\n' + lines.join('\n');
+    }
+
     // Loading state
     const btn = document.getElementById('submitBtn');
     const originalText = btn.textContent;
@@ -860,6 +891,17 @@
     document.fonts && document.fonts.ready.then(send);
     send();
   })();
+
+// Présélection depuis le site : ...?type=generac-service, generac-installation, industriel, commercial, institutionnel, residentiel
+(function () {
+  function go() {
+    var t = new URLSearchParams(location.search).get('type');
+    if (!t || !/^[a-z-]+$/.test(t)) return;
+    var el = document.querySelector('.sector-option[onclick*="\'' + t + '\'"]');
+    if (el) el.click();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go); else go();
+})();
 </script>
 
 </body>
