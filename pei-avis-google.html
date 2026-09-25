@@ -113,8 +113,8 @@
 <header class="head" id="head" hidden>
   <div class="score">
     <span class="stars" id="head-stars" aria-hidden="true"></span>
-    <span class="score__num"><span id="rating">–</span><small>sur 5</small></span>
-    <span class="score__from">d'après <a id="count-link" href="#" target="_blank" rel="noopener"><span id="count">–</span> avis</a>
+    <span class="score__num"><span id="rating">–</span><small id="t-of5">sur 5</small></span>
+    <span class="score__from"><span id="t-from">d'après</span> <a id="count-link" href="#" target="_blank" rel="noopener"><span id="count">–</span> <span id="t-reviews">avis</span></a>
       <img class="glogo" src="google_on_non_white.png" alt="Google" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'gword',textContent:'Google'}))"></span>
   </div>
   <a class="cta" id="cta" href="#" target="_blank" rel="noopener">Laisser un avis</a>
@@ -139,6 +139,33 @@
 
   var STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17.4 6 20.8l1.3-6.7-5-4.6 6.8-.8z"/></svg>';
   var $ = function (id) { return document.getElementById(id); };
+
+  /* Langue (25 sept.) : la page Squarespace envoie { type: 'pei-lang', lang: 'en' | 'fr' } quand Weglot change de langue.
+     Les avis restent dans la langue du client ; seuls les libellés changent. ?lang=en fonctionne aussi. */
+  var T = {
+    fr: { of5: 'sur 5', from: "d'après", reviews: 'avis', cta: 'Laisser un avis', pause: 'Mettre en pause', resume: 'Reprendre le défilement',
+          stars: ' étoiles sur 5', see: 'Voir sur Google', tr: '(traduit par Google)', client: 'Client Google',
+          empty: "Les avis s'affichent ici dès la première synchronisation.", seeAll: 'Voir nos avis sur Google', consult: 'Consulter nos avis sur Google' },
+    en: { of5: 'out of 5', from: 'based on', reviews: 'reviews', cta: 'Leave a review', pause: 'Pause', resume: 'Resume scrolling',
+          stars: ' stars out of 5', see: 'View on Google', tr: '(translated by Google)', client: 'Google customer',
+          empty: 'Reviews will appear here after the first sync.', seeAll: 'See our Google reviews', consult: 'See our Google reviews' }
+  };
+  var LANG = /[?&]lang=en(&|$)/.test(location.search) ? 'en' : 'fr';
+  var LAST = null;
+  function t(k) { return (T[LANG] || T.fr)[k]; }
+  function applyLang() {
+    document.documentElement.lang = LANG === 'en' ? 'en-CA' : 'fr-CA';
+    $('t-of5').textContent = t('of5'); $('t-from').textContent = t('from'); $('t-reviews').textContent = t('reviews');
+    $('cta').textContent = t('cta');
+    $('pause').textContent = $('strip').classList.contains('is-paused') ? t('resume') : t('pause');
+  }
+  window.addEventListener('message', function (e) {
+    if (e.source !== window.parent || !e.data || e.data.type !== 'pei-lang') return;
+    var l = e.data.lang === 'en' ? 'en' : 'fr';
+    if (l === LANG) return;
+    LANG = l; applyLang(); if (LAST) render(LAST);
+  });
+  if (LANG === 'en') applyLang();
   var fmt = new Intl.NumberFormat('fr-CA', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
   function stars(n) {
@@ -150,6 +177,8 @@
   function safeUrl(u) { return /^https:\/\//i.test(u || '') ? u : null; }
   function rel(iso) {
     if (!iso) return '';
+    if (LANG === 'en') { var dd = (Date.now() - new Date(iso).getTime()) / 864e5; if (isNaN(dd) || dd < 0) return ''; var rf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+      if (dd < 1) return 'today'; if (dd < 7) return rf.format(-Math.floor(dd), 'day'); if (dd < 30) return rf.format(-Math.max(1, Math.floor(dd / 7)), 'week'); if (dd < 365) return rf.format(-Math.max(1, Math.floor(dd / 30.4)), 'month'); return rf.format(-Math.max(1, Math.floor(dd / 365)), 'year'); }
     var d = (Date.now() - new Date(iso).getTime()) / 864e5;
     if (isNaN(d) || d < 0) return '';
     if (d < 1) return "aujourd'hui";
@@ -161,20 +190,20 @@
   }
 
   function card(r, dup) {
-    var name = r.author || 'Client Google';
+    var name = r.author || t('client');
     var photo = safeUrl(r.photo), aurl = safeUrl(r.authorUrl), rurl = safeUrl(r.url) || LISTING;
     var avatar = photo
       ? '<img class="avis__avatar" src="' + esc(photo) + '" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.outerHTML=\'<span class=&quot;avis__initial&quot; aria-hidden=&quot;true&quot;>' + esc(name.charAt(0).toUpperCase()) + '</span>\'">'
       : '<span class="avis__initial" aria-hidden="true">' + esc(name.charAt(0).toUpperCase()) + '</span>';
     var who = aurl ? '<a class="avis__name" href="' + esc(aurl) + '" target="_blank" rel="noopener nofollow">' + esc(name) + '</a>'
                    : '<span class="avis__name">' + esc(name) + '</span>';
-    var when = esc(rel(r.time) || r.relative || '') + (r.translated ? ' <span class="avis__tr">(traduit par Google)</span>' : '');
+    var when = esc(rel(r.time) || r.relative || '') + (r.translated ? ' <span class="avis__tr">' + t('tr') + '</span>' : '');
     return '<article class="avis"' + (dup ? ' aria-hidden="true"' : '') + '>' +
-      '<div class="stars" aria-label="' + esc(r.rating) + ' étoiles sur 5">' + stars(r.rating || 5) + '</div>' +
+      '<div class="stars" aria-label="' + esc(r.rating) + t('stars') + '">' + stars(r.rating || 5) + '</div>' +
       '<p class="avis__text">' + esc(r.text) + '</p>' +
       '<footer class="avis__by">' + avatar +
         '<div class="avis__who">' + who + '<span class="avis__when">' + when + '</span></div>' +
-        '<a class="avis__link" href="' + esc(rurl) + '" target="_blank" rel="noopener nofollow"' + (dup ? ' tabindex="-1"' : '') + '>Voir sur Google</a>' +
+        '<a class="avis__link" href="' + esc(rurl) + '" target="_blank" rel="noopener nofollow"' + (dup ? ' tabindex="-1"' : '') + '>' + t('see') + '</a>' +
       '</footer></article>';
   }
 
@@ -200,14 +229,15 @@
   }
 
   function render(d) {
+    LAST = d;
     var reviews = (d.reviews || []).filter(function (r) { return r && r.text; });
     var reviewUrl = safeUrl(d.reviewUrl) || REVIEW_URL, listing = safeUrl(d.listingUrl) || LISTING;
     $('cta').href = reviewUrl; $('count-link').href = listing;
-    if (d.rating) { $('rating').textContent = fmt.format(d.rating); $('head-stars').innerHTML = stars(d.rating); }
+    if (d.rating) { $('rating').textContent = new Intl.NumberFormat(LANG === 'en' ? 'en-CA' : 'fr-CA', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(d.rating); $('head-stars').innerHTML = stars(d.rating); }
     if (d.count) { $('count').textContent = d.count; }
     $('head').hidden = !(d.rating || d.count);
     if (!reviews.length) {
-      $('note').innerHTML = 'Les avis s\'affichent ici dès la première synchronisation. <a href="' + esc(listing) + '" target="_blank" rel="noopener">Voir nos avis sur Google</a>';
+      $('note').innerHTML = t('empty') + ' <a href="' + esc(listing) + '" target="_blank" rel="noopener">' + t('seeAll') + '</a>';
       $('note').hidden = false; tellParentHeight(); return;
     }
     $('track').innerHTML = reviews.map(function (r) { return card(r, false); }).join('');
@@ -217,13 +247,13 @@
 
   function fail() {
     $('cta').href = REVIEW_URL; $('count-link').href = LISTING; $('head').hidden = true;
-    $('note').innerHTML = '<a href="' + LISTING + '" target="_blank" rel="noopener">Consulter nos avis sur Google</a>';
+    $('note').innerHTML = '<a href="' + LISTING + '" target="_blank" rel="noopener">' + t('consult') + '</a>';
     $('note').hidden = false; tellParentHeight();
   }
 
   $('pause').addEventListener('click', function () {
     var on = $('strip').classList.toggle('is-paused');
-    this.setAttribute('aria-pressed', on); this.textContent = on ? 'Reprendre le défilement' : 'Mettre en pause';
+    this.setAttribute('aria-pressed', on); this.textContent = on ? t('resume') : t('pause');
   });
 
   var bucket = Math.floor(Date.now() / 36e5); /* contourne les caches au plus une fois l'heure */
