@@ -2,7 +2,7 @@
   "source": "google-places",
   "placeId": "ChIJ4yhtivVLyUwRNKlYhUbzbE8",
   "rating": 5,
-  "count": 18,
+  "count": 19,
   "listingUrl": "https://maps.google.com/?cid=5723216710691498292&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
   "reviewUrl": "https://search.google.com/local/writereview?placeid=ChIJ4yhtivVLyUwRNKlYhUbzbE8",
   "reviews": [
@@ -62,5 +62,5 @@
       "url": "https://www.google.com/maps/reviews/data=!4m6!14m5!1m4!2m3!1sCi9DQUlRQUNvZENodHljRjlvT2paeFdTMVJTbTVpUldOaU9IbzJUM2hVZEZRMVpVRRAB!2m1!1s0x4cc94bf58a6d28e3:0x4f6cf3468558a934"
     }
   ],
-  "updated": "2026-09-20T10:00:38.989Z"
+  "updated": "2026-09-25T22:00:38.605Z"
 }
