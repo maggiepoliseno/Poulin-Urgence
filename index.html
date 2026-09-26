@@ -649,7 +649,7 @@
     <p class="consent">
       En soumettant ce formulaire, vous consentez à ce que Poulin Électrique Inc utilise vos coordonnées
       pour traiter votre demande et vous contacter à ce sujet.
-      <a href="https://www.poulinelectrique.com/politique-de-confidentialite" target="_blank" rel="noopener">Politique de confidentialité</a>
+      <a href="https://www.poulinelectrique.com/apropos-politique-de-confidentialite" target="_blank" rel="noopener">Politique de confidentialité</a>
     </p>
   </div>
 
@@ -677,6 +677,119 @@
 
   let selectedUrgency = null;
   let selectedSector = null;   // { key, label, division }
+
+  // ============================================================
+  // LANGUE (25 sept. 2026) — FR par défaut ; anglais via ?lang=en
+  // ou message { type: 'pei-lang', lang: 'en' | 'fr' } envoyé par la page Squarespace (Weglot).
+  // Les données envoyées au webhook restent en français (+ champ « lang »).
+  // ============================================================
+  let LANG = /[?&]lang=en(&|$)/.test(location.search) ? 'en' : 'fr';
+  const UI = {
+    fr: {
+      btnUrgent: '⚡  Soumettre l\'urgence', btnSubmit: 'Soumettre la demande', sending: 'Envoi en cours...',
+      needSector: 'Veuillez sélectionner le secteur d\'activité.', needType: 'Veuillez sélectionner le type de demande.',
+      connError: 'Erreur de connexion. Veuillez réessayer ou appeler directement.',
+      okUrgent: 'Votre urgence a été transmise et un technicien a été avisé par SMS. Nous tenterons de communiquer avec vous dans les 24 heures suivant l\'envoi de votre demande.',
+      okInstall: 'Votre demande a été transmise à notre division Generac. Un technicien certifié communiquera avec vous pour planifier une évaluation sur place.',
+      okGeneral: 'Votre demande a été soumise avec succès. Notre équipe en prendra connaissance dès le prochain jour ouvrable.',
+      title: 'Poulin Électrique – Demande de service'
+    },
+    en: {
+      btnUrgent: '⚡  Submit emergency', btnSubmit: 'Submit request', sending: 'Sending...',
+      needSector: 'Please select a sector.', needType: 'Please select a request type.',
+      connError: 'Connection error. Please try again or call us directly.',
+      okUrgent: 'Your emergency has been sent and a technician has been notified by text message. We will try to contact you within 24 hours of your request.',
+      okInstall: 'Your request has been sent to our Generac team. A certified technician will contact you to schedule an on-site assessment.',
+      okGeneral: 'Your request has been submitted. Our team will review it on the next business day.',
+      title: 'Poulin Électrique – Service Request'
+    }
+  };
+  function L(k) { return (UI[LANG] || UI.fr)[k]; }
+
+  // Textes fixes de la page : français → anglais
+  const STATIC_EN = {
+    'Demande de service': 'Service request',
+    'Secteur d\'activité': 'Sector',
+    'Électricité': 'Electrical',
+    'Industriel': 'Industrial', 'Usines, entrepôts': 'Factories, warehouses',
+    'Commercial': 'Commercial', 'Bureaux, commerces': 'Offices, retail',
+    'Institutionnel': 'Institutional', 'Écoles, santé, public': 'Schools, healthcare, public',
+    'Résidentiel': 'Residential', 'Maisons, condos': 'Homes, condos',
+    'Concessionnaire autorisé': 'Authorized dealer',
+    'Nouvelle installation': 'New installation', 'Soumission, évaluation': 'Quote, assessment',
+    'Entretien, réparation, garantie': 'Maintenance, repair, warranty',
+    'Type de demande': 'Request type',
+    'Urgence': 'Emergency', 'Intervention immédiate': 'Immediate response',
+    'Demande générale': 'General request', 'Requête de service': 'Service request',
+    'Un membre de l\'équipe sera avisé immédiatement par SMS. Nous tenterons de communiquer avec vous dans les 24 heures.': 'A team member will be notified immediately by text message. We will try to contact you within 24 hours.',
+    'WO # (si applicable)': 'WO # (if applicable)',
+    'Prénom': 'First name', 'Nom': 'Last name', 'Téléphone': 'Phone', 'Courriel': 'Email',
+    'Modèle ou numéro de série': 'Model or serial number', '(si connu)': '(if known)',
+    'Installée par': 'Installed by', 'Sous garantie ?': 'Under warranty?', 'Surveillance Mobile Link': 'Mobile Link monitoring',
+    'Choisir…': 'Choose…', 'Un autre installateur': 'Another installer', 'Je ne sais pas': 'I don\'t know',
+    'Oui': 'Yes', 'Non': 'No', 'Oui, activée': 'Yes, activated',
+    'Soumettre la demande': 'Submit request',
+    'En soumettant ce formulaire, vous consentez à ce que Poulin Électrique Inc utilise vos coordonnées pour traiter votre demande et vous contacter à ce sujet.': 'By submitting this form, you consent to Poulin Électrique Inc using your contact information to process your request and contact you about it.',
+    'Politique de confidentialité': 'Privacy Policy',
+    'Demande reçue': 'Request received',
+    'Votre demande a été soumise avec succès.': 'Your request has been submitted.',
+    'Poulin Électrique Inc · Saint-Lazare, QC': 'Poulin Électrique Inc · Saint-Lazare, QC',
+    'En cas d\'urgence vitale, composez le 911': 'In a life-threatening emergency, call 911'
+  };
+  const PH_EN = {
+    'Numéro de bon de travail': 'Work order number', 'Jean': 'John', 'Tremblay': 'Smith',
+    'jean@exemple.com': 'john@example.com', '1234 rue Exemple, Saint-Lazare, QC': '1234 Example St., Saint-Lazare, QC',
+    'Sur la plaque signalétique, sous le couvercle': 'On the rating plate, under the cover'
+  };
+  // Éléments gérés par COPY (libellés qui changent selon le secteur) : exclus de la traduction automatique
+  const COPY_IDS = ['companyLabel', 'addressLabel', 'descLabel'];
+  const ORIG = new WeakMap();
+  const norm = t => t.replace(/\s+/g, ' ').trim();
+
+  function translateStatic() {
+    const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    let n;
+    while ((n = w.nextNode())) {
+      const par = n.parentElement;
+      if (!par || par.closest('script,style,svg') || COPY_IDS.some(id => par.closest('#' + id))) continue;
+      if (par.closest('#submitBtn') || par.id === 'successMessage') continue;
+      if (!ORIG.has(n)) ORIG.set(n, n.textContent);
+      const fr = ORIG.get(n), key = norm(fr);
+      if (!key) continue;
+      if (LANG === 'en' && STATIC_EN[key] !== undefined) {
+        const lead = fr.match(/^\s*/)[0], trail = fr.match(/\s*$/)[0];
+        n.textContent = lead + STATIC_EN[key] + trail;
+      } else {
+        n.textContent = fr;
+      }
+    }
+    document.querySelectorAll('input[placeholder], textarea[placeholder]').forEach(el => {
+      if (COPY_IDS.includes(el.id) || el.id === 'company' || el.id === 'description') return;
+      if (!el.dataset.phFr) el.dataset.phFr = el.placeholder;
+      el.placeholder = (LANG === 'en' && PH_EN[el.dataset.phFr]) || el.dataset.phFr;
+    });
+  }
+
+  function applyLang() {
+    document.documentElement.lang = LANG === 'en' ? 'en-CA' : 'fr-CA';
+    document.title = L('title');
+    translateStatic();
+    if (selectedSector) setCopy(selectedSector.key, selectedSector.division); else setCopy('industriel', 'electricite');
+    setButton();
+  }
+
+  window.addEventListener('message', function (e) {
+    if (e.source !== window.parent || !e.data || e.data.type !== 'pei-lang') return;
+    const l = e.data.lang === 'en' ? 'en' : 'fr';
+    if (l === LANG) return;
+    LANG = l; applyLang();
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // Les choix des listes gardent leur valeur française dans les données envoyées
+    document.querySelectorAll('#generacGroup option').forEach(o => { if (!o.hasAttribute('value')) o.value = o.textContent; });
+    if (LANG === 'en') applyLang();
+  });
 
   const COPY = {
     electricite: {
@@ -709,18 +822,60 @@
     }
   };
 
+  const COPY_EN = {
+    electricite: {
+      company: 'Company / Client <span class="req">*</span>',
+      companyPh: 'Your company name',
+      address: 'Service address <span class="req">*</span>',
+      desc: 'Description of the problem <span class="req">*</span>',
+      descPh: 'Describe the situation (e.g. power outage on the 3rd floor, burning smell in the electrical panel...)'
+    },
+    residentiel: {
+      company: 'Client or company name',
+      companyPh: 'Optional for homeowners',
+      address: 'Service address <span class="req">*</span>',
+      desc: 'Description of the problem <span class="req">*</span>',
+      descPh: 'Describe the situation (e.g. breaker keeps tripping, dead outlet, adding a circuit...)'
+    },
+    'generac-installation': {
+      company: 'Client or company name',
+      companyPh: 'Optional for homeowners',
+      address: 'Installation address <span class="req">*</span>',
+      desc: 'Your project <span class="req">*</span>',
+      descPh: 'Type of building, approximate size, essential equipment to power, existing generator or not...'
+    },
+    'generac-service': {
+      company: 'Client or company name',
+      companyPh: 'Optional for homeowners',
+      address: 'Generator address <span class="req">*</span>',
+      desc: 'Description of the request <span class="req">*</span>',
+      descPh: 'Model and year if known, error code displayed, annual maintenance, repair, warranty...'
+    }
+  };
+
+  function setCopy(key, division) {
+    const src = LANG === 'en' ? COPY_EN : COPY;
+    const copy = src[key] || src[division] || src.electricite;
+    document.getElementById('companyLabel').innerHTML = copy.company;
+    document.getElementById('company').placeholder = copy.companyPh;
+    document.getElementById('addressLabel').innerHTML = copy.address;
+    document.getElementById('descLabel').innerHTML = copy.desc;
+    document.getElementById('description').placeholder = copy.descPh;
+  }
+
+  function setButton() {
+    const btn = document.getElementById('submitBtn');
+    if (!btn || btn.disabled) return;
+    btn.textContent = selectedUrgency === 'emergency' ? L('btnUrgent') : L('btnSubmit');
+  }
+
   function selectSector(key, label, division, el) {
     document.querySelectorAll('.sector-option').forEach(o => o.classList.remove('selected'));
     el.classList.add('selected');
     selectedSector = { key: key, label: label, division: division };
     document.getElementById('generacGroup').classList.toggle('hidden', key !== 'generac-service');
 
-    const copy = COPY[key] || COPY[division] || COPY.electricite;
-    document.getElementById('companyLabel').innerHTML = copy.company;
-    document.getElementById('company').placeholder = copy.companyPh;
-    document.getElementById('addressLabel').innerHTML = copy.address;
-    document.getElementById('descLabel').innerHTML = copy.desc;
-    document.getElementById('description').placeholder = copy.descPh;
+    setCopy(key, division);
 
     // Bon de travail : pertinent seulement pour la clientèle d'affaires
     const business = division === 'electricite' && key !== 'residentiel';
@@ -748,11 +903,11 @@
     if (type === 'emergency') {
       banner.classList.add('visible');
       btn.className = 'submit-btn';
-      btn.textContent = '⚡  Soumettre l\'urgence';
+      btn.textContent = L('btnUrgent');
     } else {
       banner.classList.remove('visible');
       btn.className = 'submit-btn general-mode';
-      btn.textContent = 'Soumettre la demande';
+      btn.textContent = L('btnSubmit');
     }
   }
 
@@ -763,11 +918,11 @@
     let valid = true;
 
     if (!selectedSector) {
-      alert('Veuillez sélectionner le secteur d\'activité.');
+      alert(L('needSector'));
       return;
     }
     if (!selectedUrgency) {
-      alert('Veuillez sélectionner le type de demande.');
+      alert(L('needType'));
       return;
     }
 
@@ -795,6 +950,7 @@
     const companyVal = document.getElementById('company').value.trim() || fullName;
     const payload = {
       ref: ref,
+      lang: LANG,                                 // langue du client : 'fr' | 'en'
       type: selectedUrgency,
       division: selectedSector.division,          // 'electricite' | 'generac'
       sector: selectedSector.key,                 // industriel | commercial | institutionnel | residentiel | generac-installation | generac-service
@@ -825,7 +981,7 @@
     const originalText = btn.textContent;
     btn.disabled = true;
     btn.style.opacity = '0.6';
-    btn.textContent = 'Envoi en cours...';
+    btn.textContent = L('sending');
 
     try {
       const response = await fetch(WEBHOOK_URL, {
@@ -846,7 +1002,7 @@
       // In production you could retry or queue locally
       const errorBanner = document.createElement('div');
       errorBanner.style.cssText = 'padding:12px 16px;background:rgba(212,43,43,0.15);border:1px solid rgba(212,43,43,0.3);border-radius:8px;margin-top:12px;font-size:13px;color:#FF3B3B;text-align:center;';
-      errorBanner.textContent = 'Erreur de connexion. Veuillez réessayer ou appeler directement.';
+      errorBanner.textContent = L('connError');
       document.getElementById('formCard').appendChild(errorBanner);
 
       // Reset button
@@ -870,11 +1026,11 @@
 
     const successMsg = document.getElementById('successMessage');
     if (urgency === 'emergency') {
-      successMsg.textContent = 'Votre urgence a été transmise et un technicien a été avisé par SMS. Nous tenterons de communiquer avec vous dans les 24 heures suivant l\'envoi de votre demande.';
+      successMsg.textContent = L('okUrgent');
     } else if (selectedSector && selectedSector.key === 'generac-installation') {
-      successMsg.textContent = 'Votre demande a été transmise à notre division Generac. Un technicien certifié communiquera avec vous pour planifier une évaluation sur place.';
+      successMsg.textContent = L('okInstall');
     } else {
-      successMsg.textContent = 'Votre demande a été soumise avec succès. Notre équipe en prendra connaissance dès le prochain jour ouvrable.';
+      successMsg.textContent = L('okGeneral');
     }
   }
 
