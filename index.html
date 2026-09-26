@@ -497,6 +497,11 @@
     html.embedded .container { max-width: 1280px; }
     html.embedded .pei-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: start; }
   }
+
+  /* 26 sept. 2026 — étapes numérotées (1. secteur, 2. type de demande, 3. coordonnées) */
+  .section-label { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--white); }
+  .step-num { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 999px; background: var(--red); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; line-height: 1.4; }
+  .section-label--step3 { margin-bottom: 10px; }
 </style>
 </head>
 <body>
@@ -513,7 +518,7 @@
   <div class="pei-cols">
   <div class="pei-col pei-col--left">
   <div class="urgency-section" id="sectorSection">
-    <div class="section-label">Secteur d'activité <span style="color:var(--red)">*</span></div>
+    <div class="section-label"><span class="step-num">Étape 1</span>Secteur d'activité <span style="color:var(--red)">*</span></div>
 
     <div class="sector-group">
       <div class="sector-group__title">Électricité</div>
@@ -566,7 +571,7 @@
   </div>
 
   <div class="urgency-section" id="urgencySection">
-    <div class="section-label">Type de demande <span style="color:var(--red)">*</span></div>
+    <div class="section-label"><span class="step-num">Étape 2</span>Type de demande <span style="color:var(--red)">*</span></div>
     <div class="urgency-options">
       <div class="urgency-option emergency" onclick="selectUrgency('emergency', this)">
         <div class="urgency-icon">⚡</div>
@@ -587,6 +592,7 @@
   </div>
   </div>
   <div class="pei-col pei-col--right">
+  <div class="section-label section-label--step3"><span class="step-num">Étape 3</span>Vos coordonnées</div>
   <div class="form-card" id="formCard">
     <div class="form-group">
       <label id="companyLabel">Entreprise / Client <span class="req">*</span></label>
@@ -730,6 +736,7 @@
     'Nouvelle installation': 'New installation', 'Soumission, évaluation': 'Quote, assessment',
     'Entretien, réparation, garantie': 'Maintenance, repair, warranty',
     'Type de demande': 'Request type',
+    'Étape 1': 'Step 1', 'Étape 2': 'Step 2', 'Étape 3': 'Step 3', 'Vos coordonnées': 'Your contact details',
     'Urgence': 'Emergency', 'Intervention immédiate': 'Immediate response',
     'Demande générale': 'General request', 'Requête de service': 'Service request',
     'Un membre de l\'équipe sera avisé immédiatement par SMS. Nous tenterons de communiquer avec vous dans les 24 heures.': 'A team member will be notified immediately by text message. We will try to contact you within 24 hours.',
