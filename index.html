@@ -265,6 +265,12 @@
   }
 
   .emergency-banner.visible { display: flex; }
+  /* 26 sept. 2026 — bandeau urgent : texte Generac (Alex + équipe) et rappel 911 */
+  .eb-body { display: flex; flex-direction: column; gap: 6px; line-height: 1.5; }
+  .eb-gen { display: none; }
+  html.mode-generac .eb-elec { display: none; }
+  html.mode-generac .eb-gen { display: block; }
+  .eb-911 { color: var(--white); font-weight: 600; }
 
   @keyframes pulse-glow {
     0%, 100% { box-shadow: 0 0 0px transparent; }
@@ -590,7 +596,7 @@
       <div class="urgency-option emergency" onclick="selectUrgency('emergency', this)">
         <div class="urgency-icon">⚡</div>
         <div class="urgency-text">Urgence</div>
-        <div class="urgency-desc">Intervention immédiate</div>
+        <div class="urgency-desc">Demande prioritaire</div>
       </div>
       <div class="urgency-option non-emergency" onclick="selectUrgency('non-emergency', this)">
         <div class="urgency-icon">📋</div>
@@ -602,7 +608,11 @@
 
   <div class="emergency-banner" id="emergencyBanner">
     <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-    <span>Un membre de l'équipe sera avisé immédiatement par SMS. Nous tenterons de communiquer avec vous dans les 24 heures.</span>
+    <div class="eb-body">
+      <span class="eb-elec">Un membre de l'équipe sera avisé immédiatement par SMS. Nous tenterons de communiquer avec vous dans les 24 heures.</span>
+      <span class="eb-gen">Alex et l'équipe Generac recevront votre demande urgente par texto et par courriel.</span>
+      <strong class="eb-911">Danger pour la sécurité ou vies en jeu ? Composez le 911. Nous ne sommes pas un service d'urgence.</strong>
+    </div>
   </div>
   </div>
   <div class="pei-col pei-col--right">
@@ -685,6 +695,11 @@
       <a href="https://www.poulinelectrique.com/apropos-politique-de-confidentialite" target="_blank" rel="noopener">Politique de confidentialité</a>
     </p>
   </div>
+  <!-- 26 sept. 2026 — coordonnées centrées sous le bouton Soumettre (colonne de droite) -->
+  <div class="footer">
+    Poulin Électrique Inc · Saint-Lazare, QC<br>
+    <span class="emergency-note">En cas d'urgence vitale, composez le 911</span>
+  </div>
   </div>
   </div>
 
@@ -697,10 +712,6 @@
     <div class="ref-code" id="refCode"></div>
   </div>
 
-  <div class="footer">
-    Poulin Électrique Inc · Saint-Lazare, QC<br>
-    <span class="emergency-note">En cas d'urgence vitale, composez le 911</span>
-  </div>
 </div>
 
 <script>
@@ -727,19 +738,21 @@
   const PLANS = { visite: 'À la visite', annuel: 'Entretien annuel', surveillance: 'Entretien et surveillance' };
   const UI = {
     fr: {
-      btnUrgent: '⚡  Soumettre l\'urgence', btnSubmit: 'Soumettre la demande', sending: 'Envoi en cours...',
+      btnUrgent: '⚡  Soumettre la demande urgente', btnSubmit: 'Soumettre la demande', sending: 'Envoi en cours...',
       needSector: 'Veuillez sélectionner le secteur d\'activité.', needType: 'Veuillez sélectionner le type de demande.',
       connError: 'Erreur de connexion. Veuillez réessayer ou appeler directement.',
-      okUrgent: 'Votre urgence a été transmise et un technicien a été avisé par SMS. Nous tenterons de communiquer avec vous dans les 24 heures suivant l\'envoi de votre demande.',
+      okUrgent: 'Votre demande urgente a été transmise et un membre de l\'équipe a été avisé par texto. Nous tenterons de communiquer avec vous dans les 24 heures.',
+      okUrgentGen: 'Alex et l\'équipe Generac ont reçu votre demande urgente par texto et par courriel. Nous tenterons de communiquer avec vous dans les 24 heures.',
       okInstall: 'Votre demande a été transmise à notre équipe Generac. Un technicien certifié communiquera avec vous pour planifier une évaluation sur place.',
       okGeneral: 'Votre demande a été soumise avec succès. Notre équipe en prendra connaissance dès le prochain jour ouvrable.',
       title: 'Poulin Électrique – Demande de service'
     },
     en: {
-      btnUrgent: '⚡  Submit emergency', btnSubmit: 'Submit request', sending: 'Sending...',
+      btnUrgent: '⚡  Submit urgent request', btnSubmit: 'Submit request', sending: 'Sending...',
       needSector: 'Please select a sector.', needType: 'Please select a request type.',
       connError: 'Connection error. Please try again or call us directly.',
-      okUrgent: 'Your emergency has been sent and a technician has been notified by text message. We will try to contact you within 24 hours of your request.',
+      okUrgent: 'Your urgent request has been sent and a team member has been notified by text. We will try to contact you within 24 hours.',
+      okUrgentGen: 'Alex and the Generac team have received your urgent request by text and email. We will try to contact you within 24 hours.',
       okInstall: 'Your request has been sent to our Generac team. A certified technician will contact you to schedule an on-site assessment.',
       okGeneral: 'Your request has been submitted. Our team will review it on the next business day.',
       title: 'Poulin Électrique – Service Request'
@@ -762,7 +775,9 @@
     'Type de demande': 'Request type',
     'Votre demande Generac': 'Your Generac request', 'Formule souhaitée': 'Preferred plan', 'À la visite': 'Per visit', 'Entretien annuel': 'Annual maintenance', 'Entretien et surveillance': 'Maintenance and monitoring', 'Je ne sais pas encore': 'Not sure yet', 'Une génératrice Generac ?': 'Have a Generac generator?', 'Formulaire Generac ›': 'Generac form ›',
     'Étape 1': 'Step 1', 'Étape 2': 'Step 2', 'Étape 3': 'Step 3', 'Vos coordonnées': 'Your contact details',
-    'Urgence': 'Emergency', 'Intervention immédiate': 'Immediate response',
+    'Urgence': 'Urgent', 'Demande prioritaire': 'Priority request',
+    'Alex et l\'équipe Generac recevront votre demande urgente par texto et par courriel.': 'Alex and the Generac team will receive your urgent request by text and email.',
+    'Danger pour la sécurité ou vies en jeu ? Composez le 911. Nous ne sommes pas un service d\'urgence.': 'Safety hazard or lives at risk? Call 911. We are not an emergency service.',
     'Demande générale': 'General request', 'Requête de service': 'Service request',
     'Un membre de l\'équipe sera avisé immédiatement par SMS. Nous tenterons de communiquer avec vous dans les 24 heures.': 'A team member will be notified immediately by text message. We will try to contact you within 24 hours.',
     'WO # (si applicable)': 'WO # (if applicable)',
@@ -1070,7 +1085,7 @@
 
     const successMsg = document.getElementById('successMessage');
     if (urgency === 'emergency') {
-      successMsg.textContent = L('okUrgent');
+      successMsg.textContent = L(MODE === 'generac' ? 'okUrgentGen' : 'okUrgent');
     } else if (selectedSector && selectedSector.key === 'generac-installation') {
       successMsg.textContent = L('okInstall');
     } else {
@@ -1102,10 +1117,24 @@
     }
     var p = new URLSearchParams(location.search).get('plan'), sel = document.getElementById('genPlan');
     if (sel && PLANS[p]) sel.value = PLANS[p];
+    if (new URLSearchParams(location.search).get('urgence') === '1') selectUrgent();
     // Lien vers le formulaire Generac : même domaine que la page qui intègre le formulaire
     var a = document.getElementById('generacLink');
     try { if (a && document.referrer) a.href = new URL(document.referrer).origin + '/generac-entretien-et-reparations#formulaire'; } catch (e) {}
   }
+  // 26 sept. 2026 — bouton « Ma génératrice est en panne » : demande urgente présélectionnée
+  function selectUrgent() {
+    if (MODE === 'generac' && !(selectedSector && selectedSector.key === 'generac-service')) {
+      var gs = document.querySelector('.sector-option[onclick*="\'generac-service\'"]');
+      if (gs) gs.click();
+    }
+    var u = document.querySelector('.urgency-option.emergency');
+    if (u) selectUrgency('emergency', u);
+  }
+  window.addEventListener('message', function (e) {
+    if (e.source !== window.parent || !e.data || e.data.type !== 'pei-urgent') return;
+    selectUrgent();
+  });
   // La page parente peut choisir la formule sans recharger : postMessage({ type: 'pei-plan', plan: 'annuel' })
   window.addEventListener('message', function (e) {
     if (e.source !== window.parent || !e.data || e.data.type !== 'pei-plan') return;
