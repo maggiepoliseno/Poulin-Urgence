@@ -491,6 +491,12 @@
     .header h1 { font-size: 22px; letter-spacing: 1.5px; }
     .logo-img { width: 230px; }
   }
+
+  /* 26 sept. 2026 — intégré sur grand écran : le formulaire occupe toute la largeur, en 2 colonnes */
+  @media (min-width: 1000px) {
+    html.embedded .container { max-width: 1280px; }
+    html.embedded .pei-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: start; }
+  }
 </style>
 </head>
 <body>
@@ -504,6 +510,8 @@
 
   <div class="accent-line"></div>
 
+  <div class="pei-cols">
+  <div class="pei-col pei-col--left">
   <div class="urgency-section" id="sectorSection">
     <div class="section-label">Secteur d'activité <span style="color:var(--red)">*</span></div>
 
@@ -577,7 +585,8 @@
     <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
     <span>Un membre de l'équipe sera avisé immédiatement par SMS. Nous tenterons de communiquer avec vous dans les 24 heures.</span>
   </div>
-
+  </div>
+  <div class="pei-col pei-col--right">
   <div class="form-card" id="formCard">
     <div class="form-group">
       <label id="companyLabel">Entreprise / Client <span class="req">*</span></label>
@@ -652,6 +661,8 @@
       <a href="https://www.poulinelectrique.com/apropos-politique-de-confidentialite" target="_blank" rel="noopener">Politique de confidentialité</a>
     </p>
   </div>
+  </div>
+  </div>
 
   <div class="success-overlay" id="successOverlay">
     <div class="success-check">
@@ -690,7 +701,7 @@
       needSector: 'Veuillez sélectionner le secteur d\'activité.', needType: 'Veuillez sélectionner le type de demande.',
       connError: 'Erreur de connexion. Veuillez réessayer ou appeler directement.',
       okUrgent: 'Votre urgence a été transmise et un technicien a été avisé par SMS. Nous tenterons de communiquer avec vous dans les 24 heures suivant l\'envoi de votre demande.',
-      okInstall: 'Votre demande a été transmise à notre division Generac. Un technicien certifié communiquera avec vous pour planifier une évaluation sur place.',
+      okInstall: 'Votre demande a été transmise à notre équipe Generac. Un technicien certifié communiquera avec vous pour planifier une évaluation sur place.',
       okGeneral: 'Votre demande a été soumise avec succès. Notre équipe en prendra connaissance dès le prochain jour ouvrable.',
       title: 'Poulin Électrique – Demande de service'
     },
