@@ -594,13 +594,11 @@
     <div class="section-label"><span class="step-num">Étape 2</span>Type de demande <span style="color:var(--red)">*</span></div>
     <div class="urgency-options">
       <div class="urgency-option emergency" onclick="selectUrgency('emergency', this)">
-        <div class="urgency-icon">⚡</div>
-        <div class="urgency-text">Urgence</div>
-        <div class="urgency-desc">Demande prioritaire</div>
+                <div class="urgency-text">Demande immédiate</div>
+        <div class="urgency-desc">Traitée en priorité</div>
       </div>
       <div class="urgency-option non-emergency" onclick="selectUrgency('non-emergency', this)">
-        <div class="urgency-icon">📋</div>
-        <div class="urgency-text">Demande générale</div>
+                <div class="urgency-text">Demande générale</div>
         <div class="urgency-desc">Requête de service</div>
       </div>
     </div>
@@ -610,7 +608,7 @@
     <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
     <div class="eb-body">
       <span class="eb-elec">Un membre de l'équipe sera avisé immédiatement par SMS. Nous tenterons de communiquer avec vous dans les 24 heures.</span>
-      <span class="eb-gen">Alex et l'équipe Generac recevront votre demande urgente par texto et par courriel.</span>
+      <span class="eb-gen">Alex et l'équipe Generac recevront votre demande immédiate par texto et par courriel.</span>
       <strong class="eb-911">Danger pour la sécurité ou vies en jeu ? Composez le 911. Nous ne sommes pas un service d'urgence.</strong>
     </div>
   </div>
@@ -738,21 +736,21 @@
   const PLANS = { visite: 'À la visite', annuel: 'Entretien annuel', surveillance: 'Entretien et surveillance' };
   const UI = {
     fr: {
-      btnUrgent: '⚡  Soumettre la demande urgente', btnSubmit: 'Soumettre la demande', sending: 'Envoi en cours...',
+      btnUrgent: 'Soumettre la demande immédiate', btnSubmit: 'Soumettre la demande', sending: 'Envoi en cours...',
       needSector: 'Veuillez sélectionner le secteur d\'activité.', needType: 'Veuillez sélectionner le type de demande.',
       connError: 'Erreur de connexion. Veuillez réessayer ou appeler directement.',
-      okUrgent: 'Votre demande urgente a été transmise et un membre de l\'équipe a été avisé par texto. Nous tenterons de communiquer avec vous dans les 24 heures.',
-      okUrgentGen: 'Alex et l\'équipe Generac ont reçu votre demande urgente par texto et par courriel. Nous tenterons de communiquer avec vous dans les 24 heures.',
+      okUrgent: 'Votre demande immédiate a été transmise et un membre de l\'équipe a été avisé par texto. Nous tenterons de communiquer avec vous dans les 24 heures.',
+      okUrgentGen: 'Alex et l\'équipe Generac ont reçu votre demande immédiate par texto et par courriel. Nous tenterons de communiquer avec vous dans les 24 heures.',
       okInstall: 'Votre demande a été transmise à notre équipe Generac. Un technicien certifié communiquera avec vous pour planifier une évaluation sur place.',
       okGeneral: 'Votre demande a été soumise avec succès. Notre équipe en prendra connaissance dès le prochain jour ouvrable.',
       title: 'Poulin Électrique – Demande de service'
     },
     en: {
-      btnUrgent: '⚡  Submit urgent request', btnSubmit: 'Submit request', sending: 'Sending...',
+      btnUrgent: 'Submit immediate request', btnSubmit: 'Submit request', sending: 'Sending...',
       needSector: 'Please select a sector.', needType: 'Please select a request type.',
       connError: 'Connection error. Please try again or call us directly.',
-      okUrgent: 'Your urgent request has been sent and a team member has been notified by text. We will try to contact you within 24 hours.',
-      okUrgentGen: 'Alex and the Generac team have received your urgent request by text and email. We will try to contact you within 24 hours.',
+      okUrgent: 'Your immediate request has been sent and a team member has been notified by text. We will try to contact you within 24 hours.',
+      okUrgentGen: 'Alex and the Generac team have received your immediate request by text and email. We will try to contact you within 24 hours.',
       okInstall: 'Your request has been sent to our Generac team. A certified technician will contact you to schedule an on-site assessment.',
       okGeneral: 'Your request has been submitted. Our team will review it on the next business day.',
       title: 'Poulin Électrique – Service Request'
@@ -775,8 +773,8 @@
     'Type de demande': 'Request type',
     'Votre demande Generac': 'Your Generac request', 'Formule souhaitée': 'Preferred plan', 'À la visite': 'Per visit', 'Entretien annuel': 'Annual maintenance', 'Entretien et surveillance': 'Maintenance and monitoring', 'Je ne sais pas encore': 'Not sure yet', 'Une génératrice Generac ?': 'Have a Generac generator?', 'Formulaire Generac ›': 'Generac form ›',
     'Étape 1': 'Step 1', 'Étape 2': 'Step 2', 'Étape 3': 'Step 3', 'Vos coordonnées': 'Your contact details',
-    'Urgence': 'Urgent', 'Demande prioritaire': 'Priority request',
-    'Alex et l\'équipe Generac recevront votre demande urgente par texto et par courriel.': 'Alex and the Generac team will receive your urgent request by text and email.',
+    'Demande immédiate': 'Immediate request', 'Traitée en priorité': 'Handled as a priority',
+    'Alex et l\'équipe Generac recevront votre demande immédiate par texto et par courriel.': 'Alex and the Generac team will receive your immediate request by text and email.',
     'Danger pour la sécurité ou vies en jeu ? Composez le 911. Nous ne sommes pas un service d\'urgence.': 'Safety hazard or lives at risk? Call 911. We are not an emergency service.',
     'Demande générale': 'General request', 'Requête de service': 'Service request',
     'Un membre de l\'équipe sera avisé immédiatement par SMS. Nous tenterons de communiquer avec vous dans les 24 heures.': 'A team member will be notified immediately by text message. We will try to contact you within 24 hours.',
