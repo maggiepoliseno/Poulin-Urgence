@@ -1,0 +1,1007 @@
+<!-- 28 sept. 2026 : bloque la traduction automatique de Chrome/Google — seule la traduction Weglot (règles et corrections du projet) doit s’afficher -->
+<meta name="google" content="notranslate">
+<!-- ============================================================
+     POULIN ÉLECTRIQUE — Code Injection → FOOTER  ("filament" header, v3, self-contained)
+     Website Tools → Code Injection → Footer: REPLACE everything in the box with this file.
+     The header CSS is included below, so DELETE section 3 (En-tête) from Custom CSS —
+     nothing header-related should remain there.
+     Squarespace settings: Header Style = Solid · Button ON · Announcement Bar OFF · Cart/Social OFF.
+   v3.1 (24 sept. 2026) : vrais slugs des pages, bouton de l’en-tête → /nous-joindre, lien du mega-menu réparé.
+   v3.2 (24 sept. 2026) : « Concessionnaire autorisé Generac » en tête de la bande du haut.
+   v3.3 (25 sept. 2026) : logo « G » Generac (classe .pei-g) devant « Generac ».
+   v3.4 (25 sept. 2026) : Generac retiré de la bande du haut (la classe .pei-g reste pour les pages).
+   v3.5 (25 sept. 2026) : curseur Poulin (section 3l).
+   v3.6 (25 sept. 2026) : menu déroulant tolérant (3g-bis + script H).
+   v3.7 (25 sept. 2026) : hauteur réelle de l’en-tête publiée dans --pei-header-h (script I).
+   v3.8 (25 sept. 2026) : descriptions du menu, bande du haut et pied du menu mobile suivent la langue Weglot (wg-notranslate + re-rendu au changement de langue).
+   v3.9 (25 sept. 2026) : langue Weglot transmise aux iframes cbauer98.github.io (formulaire de demande, avis) par message pei-lang.
+     v3.10 (25 sept. 2026) : page Demander une soumission (Generac) : le contenu commence sous la hauteur réelle de l’en-tête (3m).
+     v3.11 (26 sept. 2026) : la page courante est en gras dans les menus déroulants (3n).
+     v3.12 (26 sept. 2026) : héros des pages secteur/service, FAQ, Nous joindre et Notre équipe : nom de la page en grand, phrase plus petite (3o).
+     v3.13 (26 sept. 2026) : tous les héros commencent sous la hauteur réelle de l’en-tête (3p) ; --pei-header-h suit les changements de taille de l’en-tête (ResizeObserver).
+     v3.14 (26 sept. 2026) : menu : « Besoin d’un électricien ? » (sans le mot projet) ; description Industriel EN : Manufacturing.
+     ============================================================ -->
+<style id="pei-header-css">
+/* ============================================================================
+   3. HEADER — "filament" concept  (replaces the WHOLE former section 3)
+   Squarespace prerequisites:
+     • Edit Site Header → Style: Solid (any colour — the CSS makes it glass)
+     • Edit Site Header → Elements → Logo: PEI_logo_C_trad_metal_h120.png
+     • Edit Site Header → Elements → Button ON: text "Soumission", link /contact
+     • Marketing → Announcement Bar: OFF (the utility strip is injected by the script)
+   Depends on 2_Code_Injection_Footer.html (strip, mega-menu, scrolled state).
+   ============================================================================ */
+/* ---- 3a. Local variables ---- */
+:root {
+  --pei-steel: #C9CCD1;
+  --pei-steel-2: #8A8F96;
+  --pei-ember: #F07A2A;
+  --pei-glass: rgba(5, 5, 5, 0.58);
+  --pei-glass-solid: rgba(5, 5, 5, 0.92);
+}
+/* ---- 3b. The bar: glass, no Squarespace border ---- */
+.header,
+.header-inner,
+.header-background {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.header-announcement-bar-wrapper {
+  background: var(--pei-glass) !important;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  transition: background 0.25s;
+}
+body.pei-scrolled .header-announcement-bar-wrapper {
+  background: var(--pei-glass-solid) !important;
+}
+.header-inner {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  min-height: 88px;
+  display: flex;
+  align-items: center;
+  transition: min-height 0.25s;
+}
+body.pei-scrolled .header-inner {
+  min-height: 64px;
+}
+@media (max-width: 799px) {
+  .header-inner,
+  body.pei-scrolled .header-inner {
+    min-height: 66px;
+    padding-left: 18px !important;
+    padding-right: 12px !important;
+  }
+}
+.header a[href="/cart"],
+.header-actions-action--cart,
+.header-actions-action--social {
+  display: none !important;
+}
+/* filament: red → ember line under the whole bar */
+.header-announcement-bar-wrapper {
+  position: relative;
+}
+.header-announcement-bar-wrapper::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(214, 58, 52, 0) 0%, rgba(214, 58, 52, 0.55) 18%, rgba(214, 58, 52, 0.9) 45%, rgba(240, 122, 42, 0.95) 52%, rgba(214, 58, 52, 0.55) 70%, rgba(214, 58, 52, 0) 100%);
+  box-shadow: 0 0 14px rgba(214, 58, 52, 0.55), 0 0 32px rgba(214, 58, 52, 0.25);
+}
+/* Squarespace's own announcement bar must stay off: the injected strip replaces it */
+.sqs-announcement-bar-dropzone,
+.sqs-announcement-bar,
+.sqs-announcement-bar-custom-location {
+  display: none !important;
+  height: 0 !important;
+}
+/* ---- 3c. Utility strip (injected by the script) ---- */
+.pei-strip {
+  height: 36px;
+  background: #050505;
+  border-bottom: 1px solid #1c1d20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4vw;
+  font-family: var(--pei-body);
+  font-size: 12px;
+  color: #9A9EA5;
+  transition: height 0.25s, opacity 0.2s;
+  overflow: hidden;
+}
+body.pei-scrolled .pei-strip {
+  height: 0;
+  opacity: 0;
+  border-bottom-width: 0;
+}
+.pei-strip__group {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+.pei-strip__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #C9CCD1 !important;
+  text-decoration: none !important;
+}
+.pei-strip__item strong {
+  color: #FFFFFF !important;
+  font-weight: 500;
+}
+.pei-strip__item svg {
+  width: 13px;
+  height: 13px;
+  stroke: var(--pei-red);
+  stroke-width: 2;
+  fill: none;
+}
+.pei-strip__item:hover {
+  color: #FFFFFF !important;
+}
+.pei-strip__lang {
+  letter-spacing: 0.08em;
+  color: #9A9EA5;
+  text-decoration: none !important;
+}
+.pei-strip__lang b {
+  color: #E6E7EA;
+  font-weight: 500;
+}
+@media (max-width: 799px) {
+  .pei-strip {
+    height: 30px;
+    padding: 0 18px;
+  }
+  .pei-strip__hours {
+    display: none;
+  }
+}
+/* Generac « G » mark (official file, embedded) — used in the strip and on pages */
+.pei-g { display: inline-block; flex: 0 0 auto; height: 18px; aspect-ratio: 78 / 72; background: url(data:image/png;base64,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) center / contain no-repeat; vertical-align: middle; }
+.pei-strip__generac .pei-g { height: 14px; }
+/* Generac badge (first item in the strip) */
+.pei-strip__generac strong { letter-spacing: 0.04em; }
+@media (max-width: 799px) {
+  .pei-strip__group { gap: 18px; }
+}
+@media (max-width: 480px) {
+  .pei-strip__glabel { display: none; }
+}
+/* ---- 3d. Logo ---- */
+.header-title-logo {
+  display: block !important;
+  line-height: 0;
+}
+.header-title-logo img {
+  height: 44px !important;
+  width: auto !important;
+  max-height: none !important;
+  max-width: none !important;
+  transition: height 0.25s;
+}
+body.pei-scrolled .header-title-logo img {
+  height: 34px !important;
+}
+@media (max-width: 799px) {
+  .header-title-logo img,
+  body.pei-scrolled .header-title-logo img {
+    height: 28px !important;
+  }
+}
+/* ---- 3e. Desktop layout: logo — nav — button ---- */
+@media (min-width: 800px) {
+  .header-display-desktop {
+    display: flex !important;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+  .header-title-nav-wrapper {
+    display: flex !important;
+    align-items: center;
+    gap: 44px;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .header-title {
+    flex: 0 0 auto;
+  }
+  .header-nav {
+    flex: 1 1 auto;
+    margin: 0 !important;
+    text-align: left !important;
+  }
+  .header-nav-list {
+    display: flex;
+    justify-content: flex-end !important;
+    align-items: center;
+    gap: 34px;
+  }
+  .header-actions,
+  .header-actions--right {
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    margin-left: 0;
+    flex: 0 0 auto;
+  }
+  .header-burger {
+    display: none !important;
+  }
+}
+/* ---- 3f. Nav links: Oswald, uppercase, ember glow ---- */
+.header-nav-item {
+  margin: 0 !important;
+  position: relative;
+}
+@media (min-width: 800px) {
+  /* item spans the full bar height: the panel opens right under the filament, no hover gap */
+  .header-nav-item {
+    height: 88px;
+    display: flex;
+    align-items: center;
+    transition: height 0.25s;
+  }
+  body.pei-scrolled .header-nav-item {
+    height: 64px;
+  }
+}
+.header-nav-item > a,
+.header-nav-folder-title {
+  font-family: var(--pei-head) !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.07em !important;
+  text-transform: uppercase !important;
+  color: #E6E7EA !important;
+  padding: 10px 2px !important;
+  background: none !important;
+  border-radius: 0 !important;
+  white-space: nowrap !important;
+  text-decoration: none !important;
+  transition: color 0.15s;
+}
+.header-nav-item > a:hover,
+.header-nav-folder-title:hover {
+  color: #FFFFFF !important;
+}
+/* active item or open folder: ember bar with glow */
+.header-nav-item--active > a::before,
+.header-nav-item--folder:hover > .header-nav-folder-title::before,
+.header-nav-item--folder:focus-within > .header-nav-folder-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--pei-ember);
+  box-shadow: 0 0 10px var(--pei-red), 0 0 22px rgba(214, 58, 52, 0.7);
+}
+.header-nav-item--active > a,
+.header-nav-item--folder:hover > .header-nav-folder-title {
+  color: #FFFFFF !important;
+}
+/* chevron */
+.header-nav-folder-title::after {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-left: 9px;
+  position: relative;
+  top: -3px;
+  border-right: 1.5px solid var(--pei-steel-2);
+  border-bottom: 1.5px solid var(--pei-steel-2);
+  transform: rotate(45deg);
+  transition: transform 0.15s, border-color 0.15s;
+}
+.header-nav-item--folder:hover > .header-nav-folder-title::after {
+  transform: rotate(-135deg);
+  top: 1px;
+  border-color: var(--pei-ember);
+}
+/* ---- 3g. Dropdown panel: two-column mega-menu + call-out ---- */
+.header-nav-folder-content {
+  background: #0a0a0b !important;
+  border: 1px solid #1f2024 !important;
+  border-top: 0 !important;
+  border-radius: 0 !important;
+  padding: 10px 0 !important;
+  top: 100% !important;
+  margin-top: 2px !important;
+  min-width: 320px !important;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6) !important;
+  text-align: left !important;
+}
+.header-nav-folder-item {
+  padding: 0 !important;
+}
+.header-nav-folder-item a {
+  display: flex !important;
+  flex-direction: column;
+  gap: 5px;
+  padding: 18px 20px !important;
+  text-align: left !important;
+  border-left: 2px solid transparent;
+  white-space: normal !important;
+  text-decoration: none !important;
+  transition: background 0.15s, border-color 0.15s;
+}
+.header-nav-folder-item a:hover {
+  background: #111214 !important;
+  border-left-color: var(--pei-red);
+}
+.header-nav-folder-item-content {
+  display: block;
+  font-family: var(--pei-head) !important;
+  font-size: 17px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  color: #E6E7EA !important;
+  background-image: none !important;
+  text-decoration: none !important;
+}
+.header-nav-folder-item--active .header-nav-folder-item-content {
+  color: #FFFFFF !important;
+  background-image: none !important;
+}
+.header-nav-folder-item a:hover .header-nav-folder-item-content {
+  color: #FFFFFF !important;
+}
+.pei-nav-desc {
+  display: block;
+  font-family: var(--pei-body);
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 400;
+  color: #9A9EA5 !important;
+  text-transform: none;
+  letter-spacing: 0;
+}
+/* folders with 4+ pages: two columns + call-out (class added by the script) */
+.header-nav-folder-content {
+  left: auto !important;
+  right: 0 !important;
+  transform: none !important;
+}
+.header-nav-item--folder:hover > .header-nav-folder-content.pei-mega,
+.header-nav-item--folder:focus-within > .header-nav-folder-content.pei-mega {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 230px;
+  grid-auto-rows: min-content;
+  align-content: start;
+  align-items: start;
+  min-width: 720px !important;
+}
+.pei-mega > .header-nav-folder-item:nth-child(odd) {
+  grid-column: 1;
+}
+.pei-mega > .header-nav-folder-item:nth-child(even) {
+  grid-column: 2;
+}
+.pei-menu-side {
+  grid-column: 3;
+  grid-row: 1 / span 12;
+  align-self: stretch;
+  background: #0e0e10;
+  border-left: 1px solid #1f2024;
+  margin: -10px 0;
+  padding: 26px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pei-menu-side,
+.pei-menu-side * {
+  white-space: normal !important;
+}
+.pei-menu-side__k {
+  font-family: var(--pei-head) !important;
+  font-size: 13px !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pei-ember) !important;
+}
+.pei-menu-side__v {
+  font-family: var(--pei-head) !important;
+  font-size: 24px !important;
+  color: #FFFFFF !important;
+  text-decoration: none !important;
+  background-image: none !important;
+}
+.pei-menu-side__v:hover {
+  color: var(--pei-ember) !important;
+}
+.pei-menu-side__s {
+  font-family: var(--pei-body) !important;
+  font-size: 13px !important;
+  line-height: 1.45;
+  color: #C9CCD1 !important;
+}
+.pei-menu-side__s a {
+  color: #FFFFFF !important;
+  text-decoration: underline !important;
+}
+/* ---- 3g-bis. Menu déroulant « tolérant » (25 sept.) : reste ouvert ~0,4 s quand la souris
+   quitte le titre, pas d'espace entre la barre et le panneau, pont invisible au-dessus du panneau.
+   La classe .pei-open est posée par le script (section H). ---- */
+@media (min-width: 800px) {
+  .header-nav-folder-content { margin-top: 0 !important; }
+  .header-nav-folder-content::before { content: ""; position: absolute; left: -24px; right: -24px; top: -16px; height: 16px; }
+  .header-nav-item--folder.pei-open > .header-nav-folder-content { display: block !important; pointer-events: auto !important; }
+  .header-nav-item--folder.pei-open > .header-nav-folder-content.pei-mega {
+    display: grid !important; grid-template-columns: 1fr 1fr 230px; grid-auto-rows: min-content;
+    align-content: start; align-items: start; min-width: 720px !important;
+  }
+  .header-nav-item--folder.pei-open > .header-nav-folder-title { color: #FFFFFF !important; }
+  .header-nav-item--folder.pei-open > .header-nav-folder-title::before {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px;
+    background: var(--pei-ember); box-shadow: 0 0 10px var(--pei-red), 0 0 22px rgba(214, 58, 52, 0.7);
+  }
+  .header-nav-item--folder.pei-open > .header-nav-folder-title::after { transform: rotate(-135deg); top: 1px; border-color: var(--pei-ember); }
+}
+/* ---- 3h. Native "Soumission" button: chamfered blade ---- */
+.header-actions-action--cta .btn,
+.header-menu-cta .btn {
+  font-family: var(--pei-head) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: #FFFFFF !important;
+  background: var(--pei-red) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 22px !important;
+  height: 44px;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  -webkit-clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  transition: background 0.15s, height 0.25s;
+}
+body.pei-scrolled .header-actions-action--cta .btn {
+  height: 38px;
+  padding: 0 18px !important;
+  font-size: 13px !important;
+}
+.header-actions-action--cta .btn:hover,
+.header-menu-cta .btn:hover {
+  background: var(--pei-red-dark) !important;
+}
+.header-actions-action--cta .btn::after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  flex: 0 0 12px;
+  border-top: 2.2px solid #fff;
+  border-right: 2.2px solid #fff;
+  transform: rotate(45deg);
+  margin-left: -2px;
+}
+.pei-pill {
+  display: none !important;
+}
+/* old pill: removed */
+/* ---- 3i. Language picker (Weglot / Squarespace), if it shows in the bar ---- */
+.header .language-picker .current-language,
+.header .language-picker .current-language-name {
+  font-family: var(--pei-body) !important;
+  color: #9A9EA5 !important;
+  font-size: 12px !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+.header .language-picker .current-language:hover {
+  color: #E6E7EA !important;
+}
+.header .language-picker-content {
+  background: #0a0a0b !important;
+  border: 1px solid #1f2024 !important;
+  border-radius: 0 !important;
+  padding: 6px !important;
+}
+.header .language-picker-content a,
+.header .language-picker-content span {
+  color: #E6E7EA !important;
+  padding: 8px 14px !important;
+  text-transform: none !important;
+}
+.header .language-picker-content a:hover,
+.header .language-picker-content a:hover span {
+  color: var(--pei-red) !important;
+}
+/* ---- 3j. Mobile: two-line burger, dark sheet, sub-items with rule ---- */
+.header-burger {
+  width: 44px !important;
+  height: 44px !important;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.header-burger .burger-inner {
+  width: 26px !important;
+  height: 16px !important;
+  position: relative;
+}
+.header-burger .burger-inner .top-bun,
+.header-burger .burger-inner .bottom-bun {
+  background-color: #E6E7EA !important;
+  height: 2px !important;
+  position: absolute;
+  right: 0;
+}
+.header-burger .burger-inner .top-bun {
+  width: 26px !important;
+  top: 0;
+}
+.header-burger .burger-inner .bottom-bun {
+  width: 18px !important;
+  bottom: 0;
+}
+.header-burger .burger-inner .patty {
+  display: none !important;
+}
+.header-menu,
+.header-menu-bg {
+  background: #0a0a0b !important;
+}
+.header-menu-nav-folder {
+  background: #0a0a0b !important;
+}
+.header-menu-nav-item a,
+.header-menu-nav-folder-title {
+  font-family: var(--pei-head) !important;
+  font-weight: 500 !important;
+  font-size: 22px !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  color: #E6E7EA !important;
+  padding: 16px 0 !important;
+  border-bottom: 1px solid #1c1d20;
+  text-align: left !important;
+}
+.header-menu-nav-item a:hover,
+.header-menu-nav-folder-title:hover {
+  color: #FFFFFF !important;
+}
+.header-menu-nav-folder-content .header-menu-nav-item a {
+  font-family: var(--pei-body) !important;
+  font-size: 15px !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-weight: 400 !important;
+  color: var(--pei-steel) !important;
+  padding: 11px 0 11px 18px !important;
+  border-bottom: 0;
+  border-left: 2px solid #26272b;
+}
+.header-menu-nav-folder-content .header-menu-nav-item--active a,
+.header-menu-nav-folder-content .header-menu-nav-item a:hover {
+  color: #FFFFFF !important;
+  border-left-color: var(--pei-red);
+}
+.header-menu-nav-folder-content .pei-nav-desc {
+  display: none;
+}
+.header-menu-controls-control span {
+  color: #E6E7EA !important;
+  font-family: var(--pei-body) !important;
+}
+.header-menu-cta .btn {
+  width: 100%;
+  justify-content: center;
+  height: 52px;
+  font-size: 15px !important;
+}
+/* sheet footer block (injected) */
+.pei-menu-foot {
+  padding: 18px 0 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.pei-menu-foot__phone {
+  font-family: var(--pei-head);
+  font-size: 20px;
+  color: #FFFFFF !important;
+  text-decoration: none !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pei-menu-foot__phone svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--pei-red);
+  stroke-width: 2;
+  fill: none;
+}
+.pei-menu-foot__phone small {
+  font-family: var(--pei-body);
+  font-size: 12px;
+  color: #9A9EA5;
+}
+.pei-menu-foot__hours {
+  font-family: var(--pei-body);
+  font-size: 13px;
+  line-height: 1.5;
+  color: #9A9EA5;
+}
+/* ---- 3l. Curseur Poulin — flèche rouge, orange sur ce qui se clique (souris seulement) ---- */
+@media (hover: hover) and (pointer: fine) {
+  html, body { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'%3E%3Cpath d='M4 3 L4 20.5 L8.6 16.2 L11.7 23 L14.6 21.8 L11.6 15.1 L17.8 15.1 Z' fill='%23D63A34' stroke='%23ffffff' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") 4 3, auto; }
+  a[href], button, [role="button"], summary, select, label[for], .btn, .header-burger, .header-nav-folder-title { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'%3E%3Cpath d='M4 3 L4 20.5 L8.6 16.2 L11.7 23 L14.6 21.8 L11.6 15.1 L17.8 15.1 Z' fill='%23F07A2A' stroke='%23ffffff' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") 4 3, pointer !important; }
+  input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]), textarea, [contenteditable="true"] { cursor: text !important; }
+}
+/* ---- 3k. Old floating bubble: removed (the Soumission button replaces it) ---- */
+#pei-cta {
+  display: none !important;
+}
+
+/* ---- 3m. Contenu sous l’en-tête : la page soumission Generac suit --pei-header-h ---- */
+.pei-soum {
+  padding-top: calc(var(--pei-header-h, 190px) + 48px) !important;
+}
+
+/* ---- 3n. Page courante en gras dans les menus déroulants (bureau et mobile) ---- */
+.header-nav-folder-item--active .header-nav-folder-item-content,
+.header-nav-folder-content a[aria-current="page"] .header-nav-folder-item-content,
+.header-menu-nav-folder-content a[aria-current="page"] .header-menu-nav-item-content {
+  font-weight: 700 !important;
+}
+
+/* ---- 3o. Héros des pages secteur et service (+ FAQ, Nous joindre, Notre équipe) : le nom de la page en grand, la phrase plus petite ---- */
+:is(
+#collection-6aa4368353c91c12fb4c64eb,
+#collection-6aa4373b112bf47fa668d97e,
+#collection-6aa71d0b408cd15a53b2bd8a,
+#collection-6aa43688c437965f7491ae0b,
+#collection-6aaaf4955dfc2815cb8b228d,
+#collection-6aa43438b2542759612357cf,
+#collection-6aa43450c437965f749118f3,
+#collection-6aa4346122440745024faa01,
+#collection-6939b4a0f73b490157882bc4,
+#collection-6aaaf6023deb4577cc49b486,
+#collection-6aa6ca0ce65c433c118d04ca
+) .pei-hero .pei-kicker {
+  font-size: clamp(34px, 5.4vw, 92px) !important;
+  line-height: 1.02 !important;
+  letter-spacing: .01em !important;
+  color: #F1EDE6 !important;
+  margin: 0 0 18px !important;
+  max-width: 20ch;
+}
+:is(
+#collection-6aa4368353c91c12fb4c64eb,
+#collection-6aa4373b112bf47fa668d97e,
+#collection-6aa71d0b408cd15a53b2bd8a,
+#collection-6aa43688c437965f7491ae0b,
+#collection-6aaaf4955dfc2815cb8b228d,
+#collection-6aa43438b2542759612357cf,
+#collection-6aa43450c437965f749118f3,
+#collection-6aa4346122440745024faa01,
+#collection-6939b4a0f73b490157882bc4,
+#collection-6aaaf6023deb4577cc49b486,
+#collection-6aa6ca0ce65c433c118d04ca
+) .pei-hero h1 {
+  font-size: clamp(22px, 2.4vw, 38px) !important;
+  line-height: 1.15 !important;
+  letter-spacing: .02em !important;
+  margin: 0 0 18px !important;
+  max-width: 30ch !important;
+}
+:is(
+#collection-6aa4368353c91c12fb4c64eb,
+#collection-6aa4373b112bf47fa668d97e,
+#collection-6aa71d0b408cd15a53b2bd8a,
+#collection-6aa43688c437965f7491ae0b,
+#collection-6aaaf4955dfc2815cb8b228d,
+#collection-6aa43438b2542759612357cf,
+#collection-6aa43450c437965f749118f3,
+#collection-6aa4346122440745024faa01,
+#collection-6939b4a0f73b490157882bc4,
+#collection-6aaaf6023deb4577cc49b486,
+#collection-6aa6ca0ce65c433c118d04ca
+) .pei-hero .pei-hero__tag {
+  font-size: clamp(14px, 1.15vw, 18px) !important;
+  line-height: 1.5 !important;
+  letter-spacing: .14em !important;
+  margin: 0 0 24px !important;
+}
+
+/* ---- 3p. Tous les héros commencent sous l’en-tête réel (--pei-header-h, script I) ---- */
+.pei-hero {
+  padding-top: calc(var(--pei-header-h, 214px) + 40px) !important;
+}
+
+/* ---- 3q. 26 sept. 2026 — Menus déroulants : on voit toujours sur quelle page on est ---- */
+/* Onglet du haut : trait orange = section courante ; survol d'une autre section = trait gris */
+.header-nav-item--folder:not(.header-nav-item--active):hover > .header-nav-folder-title::before,
+.header-nav-item--folder:not(.header-nav-item--active):focus-within > .header-nav-folder-title::before {
+  background: rgba(255, 255, 255, 0.45) !important;
+  box-shadow: none !important;
+}
+/* Titres et descriptions toujours alignés à gauche */
+.header-nav-folder-item a { align-items: stretch !important; }
+.header-nav-folder-item-content,
+.header-nav-folder-item a .pei-nav-desc { text-align: left !important; }
+/* Page courante : barre orange, fond, titre orange et « Vous êtes ici » */
+.header-nav-folder-item--active a { background: #16120f !important; border-left-color: var(--pei-ember) !important; }
+.header-nav-folder-item--active a:hover { background: #1b1612 !important; }
+.header-nav-folder-item--active .header-nav-folder-item-content { color: var(--pei-ember) !important; }
+.header-nav-folder-item--active .header-nav-folder-item-content::after {
+  content: "· Vous êtes ici";
+  margin-left: 8px;
+  font-family: var(--pei-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  vertical-align: middle;
+  color: var(--pei-ember);
+}
+html[lang^="en"] .header-nav-folder-item--active .header-nav-folder-item-content::after { content: "· You are here"; }
+/* Menu mobile : page courante en orange */
+.header-menu-nav-item--active a { color: var(--pei-ember) !important; box-shadow: inset 3px 0 0 var(--pei-ember); }
+.header-menu-nav-item--active a * { color: var(--pei-ember) !important; }
+
+</style>
+<script>
+(function () {
+  function curLang() {
+    try { var w = window.Weglot && Weglot.getCurrentLang && Weglot.getCurrentLang(); if (w) return String(w).toLowerCase(); } catch (e) {}
+    return (document.documentElement.lang || 'fr').toLowerCase();
+  }
+  var lang = curLang();
+  var fr = lang.indexOf('fr') === 0;
+  var path = location.pathname.toLowerCase().replace(/\/+$/, '') || '/';
+
+  /* ---------- Settings ---------- */
+  var PHONE = '450 218-4600';
+  var PHONE_HREF = 'tel:+14502184600';
+  var HOURS_FR = 'lun–jeu 7 h – 15 h, ven 7 h – 12 h';
+  var HOURS_EN = 'Mon–Thu 7 a.m. – 3 p.m., Fri 7 a.m. – noon';
+  var LANG_URL = '';                    /* e.g. 'https://en.poulinelectrique.com' — empty = no FR/EN switch in the strip */
+  var QUOTE_URL = '/nous-joindre';           /* Soumission button target */
+  var QUOTE_URL_GENERAC = '/generac-demander-une-soumission';
+  var GENERAC_URL = '/generac-apercu';    /* Generac badge in the strip */
+
+  var ICON_PHONE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>';
+  var ICON_SHIELD = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg>';
+
+  /* ---------- A. Description under each dropdown link (keyed by page slug) ---------- */
+  var DESC = {
+    fr: {
+      '': 'Un héritage familial, plus de 25 ans à votre service.',
+      '/notreequipe': 'Les gens derrière Poulin Électrique.',
+      '/apropos-certifications-et-licences': 'Notre licence RBQ et nos certifications.',
+      '/apropos-politique-de-confidentialite': 'Comment nous protégeons vos renseignements.',
+      '/electricite-apercu': 'Nos services électriques en un coup d’œil.',
+      '/electricite-commercial': 'Bureaux, commerces et immeubles à locataires.',
+      '/electricite-industriel': 'Usines, automatisation et contrôle, entretien planifié.',
+      '/electricite-institutionnel': 'Écoles, centres de santé et bâtiments publics.',
+      '/electricite-residentiel': 'Panneaux, bornes de recharge et mises aux normes.',
+      '/electricite-demande-de-service': 'Décrivez vos travaux et nous vous rappelons pendant les heures de bureau.',
+      '/generac-apercu': 'Génératrices résidentielles Generac : vente, installation, service.',
+      '/generac-generatrices-residentielles': 'Alimentation automatique de toute la maison.',
+      '/generac-entretien-et-reparations': 'Entretien et réparations pour une génératrice toujours prête.',
+      '/generac-surveillance-24/7': 'Suivi à distance avec Mobile Link.',
+      '/generac-demander-une-soumission': 'Appelez-nous pour une estimation ou une soumission.',
+      '/carriere-travailler-chez-poulin': 'Une équipe stable, des chantiers près de chez vous.',
+      '/carrieres-postes-ouverts': 'Compagnons, apprentis et techniciens Generac : envoyez votre CV.'
+    },
+    en: {
+      '': 'A family-built legacy, 25+ years serving our community.',
+      '/notreequipe': 'The people behind Poulin Électrique.',
+      '/apropos-certifications-et-licences': 'Our RBQ licence and certifications.',
+      '/apropos-politique-de-confidentialite': 'How we protect your information.',
+      '/electricite-apercu': 'Our electrical services at a glance.',
+      '/electricite-commercial': 'Offices, retail and multi-tenant buildings.',
+      '/electricite-industriel': 'Manufacturing, automation and controls, planned maintenance.',
+      '/electricite-institutionnel': 'Schools, healthcare and public buildings.',
+      '/electricite-residentiel': 'Panels, EV chargers and code upgrades.',
+      '/electricite-demande-de-service': 'Describe the work and we’ll call you back during office hours.',
+      '/generac-apercu': 'Generac home standby generators: sales, installation, service.',
+      '/generac-generatrices-residentielles': 'Automatic backup power for the whole home.',
+      '/generac-entretien-et-reparations': 'Maintenance and repairs to keep your generator ready.',
+      '/generac-surveillance-24/7': 'Remote monitoring with Mobile Link.',
+      '/generac-demander-une-soumission': 'Call now for an estimate or a quote.',
+      '/carriere-travailler-chez-poulin': 'A stable team, job sites close to home.',
+      '/carrieres-postes-ouverts': 'Journeymen, apprentices and Generac technicians: send your CV.'
+    }
+  };
+  var map = fr ? DESC.fr : DESC.en;
+
+  function slug(a) { return a.getAttribute('href').replace(/^https?:\/\/[^/]+/, '').replace(/[?#].*$/, '').replace(/^\/en(?=\/|$)/, '').toLowerCase().replace(/\/+$/, ''); }
+
+  function addDescriptions() {
+    document.querySelectorAll('.header-nav-folder-item a[href]').forEach(function (a) {
+      if (a.querySelector('.pei-nav-desc')) return;
+      var text = map[slug(a)];
+      if (!text) return;
+      var s = document.createElement('div'); /* div, pas span : Weglot traduit le titre et la description séparément */
+      s.className = 'pei-nav-desc wg-notranslate';
+      s.textContent = text;
+      a.appendChild(s);
+    });
+  }
+
+  /* ---------- B. Clickable folder title (opens the folder's first page) — desktop only ---------- */
+  function clickableFolders() {
+    if ('ontouchstart' in window) return;
+    document.querySelectorAll('.header-nav-folder-title').forEach(function (title) {
+      if (title.tagName === 'A' && title.getAttribute('href') && title.getAttribute('href') !== '#') return;
+      var first = title.parentElement.querySelector('.header-nav-folder-content a[href]');
+      if (!first) return;
+      var link = document.createElement('a');
+      link.className = title.className;
+      link.href = first.getAttribute('href');
+      link.textContent = title.textContent.trim();
+      title.replaceWith(link);
+    });
+  }
+
+  /* ---------- C. Mega-menu: folders with 4+ pages → two columns + call-out ---------- */
+  function megaMenus() {
+    document.querySelectorAll('.header-nav-folder-content').forEach(function (panel) {
+      var items = panel.querySelectorAll('.header-nav-folder-item');
+      if (items.length < 4 || panel.querySelector('.pei-menu-side')) return;
+      panel.classList.add('pei-mega');
+      var generac = false;
+      items.forEach(function (it) { var a = it.querySelector('a[href]'); if (a && slug(a).indexOf('generac') > -1) generac = true; });
+      var side = document.createElement('div');
+      side.className = 'pei-menu-side wg-notranslate';
+      var link = generac ? '<a href="' + QUOTE_URL_GENERAC + '">' + (fr ? 'demandez une soumission' : 'request a quote') + '</a>'
+                         : '<a href="/electricite-demande-de-service">' + (fr ? 'faites une demande de service' : 'send a service request') + '</a>';
+      side.innerHTML =
+        '<span class="pei-menu-side__k">' + (fr ? 'Besoin d’un électricien ?' : 'Need an electrician?') + '</span>' +
+        '<a class="pei-menu-side__v" href="' + PHONE_HREF + '">' + PHONE + '</a>' +
+        '<span class="pei-menu-side__s">' + (fr ? 'Appelez-nous du lundi au vendredi, ou ' + link + '.'
+                                                : 'Call us Monday to Friday, or ' + link + '.') + '</span>';
+      panel.appendChild(side);
+    });
+  }
+
+  /* ---------- D. Utility strip above the bar ---------- */
+  function addStrip() {
+    var host = document.querySelector('.header-announcement-bar-wrapper');
+    if (!host || host.querySelector('.pei-strip')) return;
+    var strip = document.createElement('div');
+    strip.className = 'pei-strip wg-notranslate';
+    var langHtml = LANG_URL ? '<a class="pei-strip__lang" href="' + LANG_URL + '">' + (fr ? '<b>FR</b> / EN' : 'FR / <b>EN</b>') + '</a>' : '';
+    strip.innerHTML =
+      '<div class="pei-strip__group">' +
+        '<a class="pei-strip__item" href="' + PHONE_HREF + '">' + ICON_PHONE + '<strong>' + PHONE + '</strong></a>' +
+        '<span class="pei-strip__item pei-strip__hours">' + (fr ? 'Bureau <strong>' + HOURS_FR + '</strong>' : 'Office <strong>' + HOURS_EN + '</strong>') + '</span>' +
+      '</div>' +
+      '<div class="pei-strip__group">' +
+        langHtml +
+      '</div>';
+    host.insertBefore(strip, host.firstChild);
+  }
+
+  /* ---------- E. Soumission button: Generac target on Generac pages ---------- */
+  function quoteButton() {
+    var generac = path.indexOf('generac') > -1 || path.indexOf('generatrice') > -1;
+    document.querySelectorAll('.header-actions-action--cta .btn, .header-menu-cta .btn').forEach(function (b) {
+      b.setAttribute('href', generac ? QUOTE_URL_GENERAC : QUOTE_URL);
+      if (!fr && b.textContent.trim().toLowerCase() === 'soumission') b.textContent = 'Quote';
+    });
+  }
+
+  /* ---------- F. Mobile menu footer: phone and hours ---------- */
+  function mobileFoot() {
+    var nav = document.querySelector('.header-menu-nav-list') || document.querySelector('.header-menu-nav');
+    if (!nav || document.querySelector('.pei-menu-foot')) return;
+    var d = document.createElement('div');
+    d.className = 'pei-menu-foot wg-notranslate';
+    d.innerHTML =
+      '<a class="pei-menu-foot__phone" href="' + PHONE_HREF + '">' + ICON_PHONE + PHONE + ' <small>' + (fr ? 'Bureau' : 'Office') + '</small></a>' +
+      '<span class="pei-menu-foot__hours">' + (fr ? HOURS_FR.charAt(0).toUpperCase() + HOURS_FR.slice(1) : HOURS_EN) + '</span>';
+    nav.appendChild(d);
+  }
+
+  /* ---------- G. Scrolled state: compact bar ---------- */
+  function scrollState() {
+    var on = false;
+    function tick() {
+      var s = window.scrollY > 40;
+      if (s !== on) { on = s; document.body.classList.toggle('pei-scrolled', on); }
+    }
+    window.addEventListener('scroll', tick, { passive: true });
+    tick();
+  }
+
+  /* ---------- H. Menu déroulant tolérant : délai de fermeture (ordinateur seulement) ---------- */
+  function hoverIntent() {
+    if (window.__peiHoverIntent || !window.matchMedia('(hover: hover) and (min-width: 800px)').matches) return;
+    window.__peiHoverIntent = true;
+    var DELAY = 400, timer = null, open = null;
+    /* garde le panneau dans l'écran (ex. « À propos » débordait à gauche) */
+    function fit(item) {
+      var p = item.querySelector('.header-nav-folder-content');
+      if (!p) return;
+      p.style.removeProperty('transform');
+      var r = p.getBoundingClientRect(), m = 16, dx = 0;
+      if (r.left < m) dx = m - r.left; else if (r.right > window.innerWidth - m) dx = window.innerWidth - m - r.right;
+      if (dx) p.style.setProperty('transform', 'translateX(' + Math.round(dx) + 'px)', 'important');
+    }
+    function close(el) { if (el) el.classList.remove('pei-open'); if (open === el) open = null; }
+    document.addEventListener('pointerover', function (e) {
+      var item = e.target.closest && e.target.closest('.header-nav-item--folder');
+      if (!item || !item.closest('.header-nav')) return;
+      clearTimeout(timer);
+      if (open && open !== item) close(open);
+      item.classList.add('pei-open'); open = item;
+      fit(item);
+    });
+    document.addEventListener('pointerout', function (e) {
+      var item = e.target.closest && e.target.closest('.header-nav-item--folder');
+      if (!item || item !== open) return;
+      if (e.relatedTarget && item.contains(e.relatedTarget)) return;
+      clearTimeout(timer);
+      timer = setTimeout(function () { close(item); }, DELAY);
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(open); });
+  }
+
+  /* ---------- I. Hauteur réelle de l'en-tête → --pei-header-h (le héros commence juste dessous) ---------- */
+  function headerOffset() {
+    var h = document.querySelector('.header');
+    if (!h || document.body.classList.contains('pei-scrolled')) return;
+    var b = Math.round(h.getBoundingClientRect().bottom + (window.scrollY || 0));
+    if (b > 40) document.documentElement.style.setProperty('--pei-header-h', b + 'px');
+    if (window.ResizeObserver && !window.__peiRO) { window.__peiRO = new ResizeObserver(function () { headerOffset(); }); window.__peiRO.observe(h); }
+  }
+
+    /* v3.9 : le formulaire et les avis (GitHub Pages, dans des iframes) suivent la langue Weglot */
+  function syncFrames() {
+    var ORIGIN = 'https://cbauer98.github.io';
+    var send = function (f) { try { f.contentWindow.postMessage({ type: 'pei-lang', lang: curLang().indexOf('fr') === 0 ? 'fr' : 'en' }, ORIGIN); } catch (e) {} };
+    document.querySelectorAll('iframe[src*="cbauer98.github.io"]').forEach(function (f) {
+      if (!f.__peiLang) { f.__peiLang = true; f.addEventListener('load', function () { send(f); }); }
+      send(f);
+    });
+  }
+
+  function run() { lang = curLang(); fr = lang.indexOf('fr') === 0; map = fr ? DESC.fr : DESC.en; addDescriptions(); clickableFolders(); megaMenus(); addStrip(); quoteButton(); mobileFoot(); headerOffset(); syncFrames(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
+  window.addEventListener('load', run); /* second pass: Squarespace sometimes re-renders the header */
+
+  /* v3.8 : Weglot — re-render the language-dependent pieces once Weglot starts, and on every language switch */
+  function rerender() {
+    document.querySelectorAll('.pei-nav-desc, .pei-menu-side, .pei-strip, .pei-menu-foot').forEach(function (n) { n.remove(); });
+    run();
+  }
+  function hookWeglot() {
+    if (window.__peiWeglot || !window.Weglot || typeof Weglot.on !== 'function') return;
+    window.__peiWeglot = true;
+    Weglot.on('initialized', rerender);
+    Weglot.on('languageChanged', rerender);
+    if (Weglot.initialized || (Weglot.getCurrentLang && Weglot.getCurrentLang())) rerender();
+  }
+  window.addEventListener('load', hookWeglot);
+  scrollState();
+  hoverIntent();
+  var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(headerOffset, 150); });
+  headerOffset();
+})();
+</script>
