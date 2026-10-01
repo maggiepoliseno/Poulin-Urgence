@@ -1,0 +1,259 @@
+<!-- ============================================================================
+     POULIN ÉLECTRIQUE — PAGE « ACCUEIL » (page d'accueil)
+     17 septembre 2026 — révision après recherche au Registraire des entreprises
+     23 septembre 2026 — révision de contenu demandée par Maggie : titres, jalons
+     raccourcis, retrait des blocs Citation et « Ce qui n'a pas changé ».
+     27 septembre 2026 — page Accueil créée en dupliquant Notre histoire (demande de
+     Maggie : accueil moins chargé). Retirés ici : surtitre « Notre histoire », clips
+     vidéo (1a), ligne du temps (2) et appel « prochain chapitre » (6) — ils restent
+     sur la page Notre histoire.
+     27 sept. (suite) — photos des deux portes remplacées (industriel-01 et
+     generac-guardian) : chaque photo n'est utilisée qu'une fois sur le site.
+
+     Prérequis : Custom CSS v3 (section 8b — .pei-timeline, .pei-quote).
+     Où coller : page Notre histoire → un bloc de code par section, en
+     remplacement du contenu au complet.
+
+     CE QUI A CHANGÉ (17 sept.) :
+       • 1978 = début de Claude Poulin dans le métier, seul. Ce n'est PAS la
+         date de fondation de l'entreprise. Toute formulation « depuis 1978 »
+         appliquée à l'entreprise a été retirée de cette page.
+       • Poulin Électrique inc. a été constituée en société le 2 juillet 1999
+         (Registraire des entreprises du Québec, NEQ 1148666176). Claude Poulin,
+         président ; Nancy Paquette Poulin, secrétaire-trésorière ; tous deux
+         actionnaires. Siège social initial : La Prairie (Rive-Sud).
+       • Trajet des bureaux : La Prairie → Candiac → Saint-Lazare
+         (ch. Sainte-Angélique) → 1255 ch. Legault. « Fondée à Saint-Lazare »
+         et « une adresse depuis le début » étaient faux : corrigé partout.
+       • Jalon 2008 : mandats institutionnels, aucun client nommé (confidentialité).
+       • Direction : Jacob Poulin président depuis 2021 (année à confirmer) ;
+         Nina Poliseno nommée chef des opérations en 2026. Claude Poulin est
+         écrit au passé uniquement — rien sur son rôle actuel. Nancy Paquette
+         Poulin apparaît seulement comme cofondatrice (jalon 1999).
+
+     CHIFFRES — comment les tenir à jour :
+       • Âge de l'entreprise : 2026 − 1999 = 27 ans. La page utilise
+         « plus de vingt-cinq ans », vrai jusqu'en juillet 2029 ; « depuis 1999 »
+         ne vieillit jamais. Éviter « 27 ans » en dur, sinon à bumper chaque année.
+       • Métier de Claude : 1978 → « près de cinquante ans » (vrai jusqu'en 2028).
+
+     RÈGLE : aucune adresse résidentielle, aucun numéro de registre, aucune
+     adresse civique des anciens bureaux sur la page publique. Villes seulement.
+
+     RÉVISION 23 SEPTEMBRE 2026 :
+       • Tous les [À VÉRIFIER] ont été résolus ou retirés — aucun ne reste sur la page.
+       • Dates confirmées : ISO 9001 → 2019 ; division Generac → 2026.
+       • « Inc » s'écrit sans point, partout (choix de l'entreprise).
+       • Blocs Citation et « Ce qui n'a pas changé » retirés.
+       • Nouveau jalon final « Aujourd'hui — Cap sur l'avenir » (classe pei-tl--now).
+       • Titre héro long : classes .pei-h1-fit / .pei-nowrap (voir le <style> du bloc 1).
+     RÉVISION 24 SEPTEMBRE 2026 :
+       • Héros : le titre est le nom de l'entreprise ; adresse et licences dans le texte ;
+         ligne rouge (.pei-hero__tag) retirée ; classes .pei-h1-fit supprimées.
+       • « Concessionnaire autorisé Generac » (et non « distributeur ») ; le volet Generac
+         est présenté comme intégré à l'entreprise, jamais comme une équipe distincte.
+       • Jalons raccourcis (Candiac/Saint-Lazare, 2021, Generac, direction) ;
+         titre de la ligne du temps : « Notre parcours ».
+       • Bloc « Deux métiers sous un même toit » (phrase, boutons et 4 tuiles) retiré :
+         il répétait le jalon Generac, ISO 9001, 24/7 et « 2 générations ».
+       • Jalons 2021 et « Cap sur l'avenir » raccourcis (redites avec le héros).
+       • Héros : « Saint-Lazare (Québec) » et « Partout en Montérégie » ajoutés.
+       • Balise </section> manquante ajoutée à la fin (le pied de page Squarespace se retrouvait
+         à l'intérieur de la section Avis, d'où un bandeau vide sous le pied de page).
+     27 sept. (suite) — bandeau Avis Google : titre « Aidez vos voisins à nous trouver » + texte
+     d'invitation (le bouton « Laisser un avis » du widget sert d'appel à l'action).
+     ============================================================================ -->
+
+
+<!-- ===== BLOC 1 — HÉROS ===================================================== -->
+<style>
+  /* Titre héro : nom de l'entreprise ; « Électrique Inc » ne se coupe jamais. */
+  .pei-hero--plain h1{max-width:none}
+  .pei-hero--plain h1 .pei-nowrap{white-space:nowrap}
+  /* Mobile : le thème force la taille du h1 avec !important ; on la réduit juste assez pour
+     que « Électrique Inc » tienne sur une ligne sur les téléphones (360–430 px). */
+  @media (max-width:767px){
+    .pei-hero--plain h1{font-size:min(44px, calc((100vw - 84px) * .125)) !important}
+  }
+  /* Dernier jalon : « Aujourd'hui » est plus long qu'une année (ordinateur seulement). */
+  @media (min-width:768px){
+    .pei-tl__year.pei-tl__year--sm{font-size:24px}
+  }
+  /* 25 sept. — espace resserré avant « Notre parcours » (la ligne Generac est dans le pied de page). */
+  .pei-hero.pei-hero--plain{min-height:0;padding-bottom:40px}
+  .pei-hero--plain .pei-hero__lead{margin-bottom:0}
+  .pei-hero--plain + .pei-section{padding-top:56px}
+  @media (max-width:800px){
+    .pei-hero.pei-hero--plain{padding-bottom:28px}
+    .pei-hero--plain .pei-hero__inner{padding-bottom:0}
+    .pei-hero--plain + .pei-section{padding-top:44px}
+  }
+
+  /* ===== 25 sept. — accueil plus attrayant : boutons du héros, deux portes (Électricité / Generac),
+     ligne du temps sur 2 colonnes (ordinateur), bande Licences et certifications. ===== */
+  .pei-hero--plain .pei-hero__actions{margin-top:28px}
+  /* Deux portes */
+  .pei-doors{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .pei-door{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;min-height:340px;padding:28px 30px;border:1px solid #262626;border-radius:14px;overflow:hidden;background:#0B0B0B;text-decoration:none !important;transition:border-color .2s}
+  .pei-door::before{content:"";position:absolute;inset:0;z-index:-2;background:var(--img) center/cover no-repeat;transition:transform .6s ease}
+  .pei-door::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(5,5,5,0) 15%,rgba(5,5,5,.55) 50%,rgba(5,5,5,.95) 100%)}
+  .pei-door__k,.pei-door__t,.pei-door__go{text-shadow:0 1px 14px rgba(0,0,0,.7)}
+  .pei-door:hover{border-color:var(--pei-red)}
+  .pei-door:hover::before{transform:scale(1.04)}
+  .pei-door__k{display:flex;align-items:center;gap:8px;font-family:var(--pei-head);font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--pei-red)}
+  .pei-door__t{font-family:var(--pei-head);font-size:clamp(24px,2.4vw,34px);line-height:1.1;font-weight:600;text-transform:uppercase;color:#FFFFFF}
+  .pei-door__go{margin-top:8px;font-family:var(--pei-head);font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#E6E7EA}
+  .pei-door--gen:hover{border-color:#F26B1D}
+  .pei-door--gen .pei-door__k{color:#F26B1D}
+  @media (max-width:767px){.pei-doors{grid-template-columns:1fr;gap:16px}.pei-door{min-height:230px;padding:22px}}
+  /* Ligne du temps sur 2 colonnes (ordinateur) — les boîtes restent (exception voulue) */
+  @media (min-width:1000px){
+    .pei-timeline{max-width:none;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(5,auto);grid-auto-flow:column;column-gap:40px}
+    .pei-timeline::before{display:none}
+    .pei-timeline .pei-tl{position:relative;grid-template-columns:124px minmax(0,1fr);column-gap:40px}
+    .pei-timeline .pei-tl__year,.pei-timeline .pei-tl__year.pei-tl__year--sm{font-size:22px !important;line-height:1.15;overflow-wrap:normal;word-break:normal;hyphens:none}
+    .pei-timeline .pei-tl::before{content:"";position:absolute;left:143px;top:0;bottom:0;width:2px;background:rgba(214,58,52,.4)}
+    .pei-timeline .pei-tl:first-child::before,.pei-timeline .pei-tl:nth-child(6)::before{top:26px}
+    .pei-timeline .pei-tl__dot{left:133px !important;top:16px !important}
+  }
+  /* Bande Licences et certifications (lien vers la page Certifications) */
+  .pei-trust{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:18px 44px;padding:22px 28px;border:1px solid #262626;border-radius:14px;text-decoration:none !important;transition:border-color .2s}
+  .pei-trust:hover{border-color:var(--pei-red)}
+  .pei-trust__k{font-family:var(--pei-head);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#9A9EA5}
+  .pei-trust__rbq{font-family:var(--pei-head);font-size:12px;letter-spacing:.1em;text-transform:uppercase;line-height:1.3;color:#9A9EA5}
+  .pei-trust__rbq strong{display:block;font-size:18px;letter-spacing:.04em;color:#FFFFFF}
+  .pei-trust img{display:block;height:44px;width:auto;filter:grayscale(1);mix-blend-mode:screen;opacity:.8;transition:opacity .2s}
+  .pei-trust img.pei-trust__inv{filter:grayscale(1) invert(1)}
+  .pei-trust img.pei-trust__iso{height:76px;margin:-12px 0}
+  .pei-trust:hover img{opacity:1}
+  .pei-trust__go{font-family:var(--pei-head);font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--pei-red)}
+
+/* 28 sept. 2026 : Nouveau client / Client existant — choix du formulaire sous les boutons du héros */
+.pei-hero__actions { align-items: flex-start; }
+button.pei-btn { font-family: inherit; border: 0; cursor: pointer; -webkit-appearance: none; appearance: none; }
+.pei-who svg { transition: transform 0.15s ease; }
+.pei-who[aria-expanded="true"] svg { transform: rotate(180deg); }
+.pei-who.pei-btn--ghost[aria-expanded="true"] { box-shadow: inset 0 0 0 1px var(--pei-red, #d63a34); }
+.pei-route { flex: 1 0 100%; display: flex; flex-wrap: wrap; gap: 12px; }
+.pei-route[hidden] { display: none !important; }
+.pei-route a { flex: 0 1 340px; display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 16px; padding: 14px 18px; border: 1px solid #262626; border-radius: 9px; background: rgba(11, 11, 11, 0.85); color: #FFFFFF !important; text-decoration: none !important; transition: border-color 0.15s, background 0.15s; }
+.pei-route a:hover, .pei-route a:focus-visible { border-color: var(--pei-red, #d63a34); background: rgba(214, 58, 52, 0.12); }
+.pei-route strong { grid-column: 1; font-family: var(--pei-head); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; font-size: 1.05rem; }
+.pei-route span { grid-column: 1; margin-top: 2px; font-size: 0.875rem; color: var(--pei-steel, #C9CCD1); }
+.pei-route svg { grid-column: 2; grid-row: 1 / span 2; width: 18px; height: 18px; fill: none; stroke: var(--pei-red, #d63a34); stroke-width: 2; }
+@media (max-width: 640px) { .pei-hero__actions > .pei-btn { flex: 1 1 100%; justify-content: center; } .pei-route a { flex: 1 1 100%; } }
+</style>
+
+<section class="pei-hero pei-hero--plain">
+  <div class="pei-hero__inner">
+
+
+    <h1>Poulin <span class="pei-nowrap">Électrique Inc</span></h1>
+
+    <p class="pei-hero__lead">Électricien établi à Saint-Lazare, au service des secteurs résidentiel, commercial, industriel et institutionnel. Concessionnaire et centre de service autorisé Generac pour les génératrices de secours résidentielles.</p>
+    <div class="pei-hero__actions">
+      <!-- 28 sept. 2026 : Nouveau client / Client existant → bon formulaire (services électriques, 4 secteurs, ou Generac) -->
+      <button type="button" class="pei-btn pei-btn--primary pei-who" aria-expanded="false" aria-controls="pei-who-nouveau">Nouveau client <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+      <button type="button" class="pei-btn pei-btn--ghost pei-who" aria-expanded="false" aria-controls="pei-who-existant">Client existant <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+      <a class="pei-btn pei-btn--ghost" href="tel:+14502184600"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"></path></svg> 450 218-4600</a>
+      <div class="pei-route" id="pei-who-nouveau" hidden>
+        <a href="/electricite-demande-de-service"><strong>Services électriques</strong><span>Commercial · industriel · institutionnel · résidentiel</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+        <a href="/generac-demander-une-soumission"><strong>Generac</strong><span>Demander une soumission</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+      </div>
+      <div class="pei-route" id="pei-who-existant" hidden>
+        <a href="/electricite-demande-de-service"><strong>Services électriques</strong><span>Commercial · industriel · institutionnel · résidentiel</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+        <a href="/generac-entretien-et-reparations"><strong>Generac</strong><span>Entretien et réparations</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+      </div>
+    </div>
+
+  </div>
+</section>
+<script>
+/* 28 sept. 2026 : Nouveau client / Client existant — un seul choix ouvert à la fois ; Échap referme. */
+(function () {
+  function setup() {
+    var btns = document.querySelectorAll('.pei-who');
+    function show(btn, on) { var p = document.getElementById(btn.getAttribute('aria-controls')); btn.setAttribute('aria-expanded', on ? 'true' : 'false'); if (p) p.hidden = !on; }
+    btns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var open = b.getAttribute('aria-expanded') !== 'true';
+        btns.forEach(function (o) { show(o, false); });
+        show(b, open);
+        if (open) { var first = document.querySelector('#' + b.getAttribute('aria-controls') + ' a'); if (first && window.matchMedia('(max-width: 640px)').matches) first.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+      });
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') btns.forEach(function (o) { show(o, false); }); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup); else setup();
+})();
+</script>
+
+
+<!-- ····· BLOC 1b — DEUX PORTES (25 sept.) : mènent aux sections, sans répéter leur contenu ····· -->
+<section class="pei-section">
+  <div class="pei-wrap">
+    <div class="pei-doors">
+      <a class="pei-door" href="/electricite-apercu" style="--img:url('https://cbauer98.github.io/Poulin-Urgence/industriel-01.jpg')">
+        <div class="pei-door__k">Électricité</div>
+        <div class="pei-door__t">Résidentiel · commercial · institutionnel · industriel</div>
+        <div class="pei-door__go">Voir les services ›</div>
+      </a>
+      <a class="pei-door pei-door--gen" href="/generac-apercu" style="--img:url('https://cbauer98.github.io/Poulin-Urgence/generac-guardian.jpg')">
+        <div class="pei-door__k"><span class="pei-g" aria-hidden="true"></span>Generac</div>
+        <div class="pei-door__t">Génératrices de secours résidentielles</div>
+        <div class="pei-door__go">Voir Generac ›</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ····· BLOC 2b — LICENCES ET CERTIFICATIONS (25 sept.) : lien vers la page Certifications ·····
+     (le badge RBQ image n'est pas utilisé : il porte « Established 1978 ») -->
+<section class="pei-section">
+  <div class="pei-wrap">
+    <a class="pei-trust" href="/apropos-certifications-et-licences">
+      <span class="pei-trust__k">Licences et certifications</span>
+      <span class="pei-trust__rbq">Licence RBQ<strong>8249-8551-45</strong></span>
+      <img class="pei-trust__inv" src="https://cbauer98.github.io/Poulin-Urgence/logo-cmeq.jpg" alt="Membre de la CMEQ" loading="lazy">
+      <img class="pei-trust__iso" src="https://cbauer98.github.io/Poulin-Urgence/logo-iso-9001-pei.jpg" alt="Certifié ISO 9001" loading="lazy">
+      <span class="pei-trust__go">Voir ›</span>
+    </a>
+  </div>
+</section>
+
+<!-- Avis Google (bandeau) -->
+<section class="pei-section" style="padding:48px 0 8px">
+  <div class="pei-wrap">
+    <div class="pei-section__head" style="margin-bottom:40px">
+      <p class="pei-kicker">Avis Google</p>
+      <h2>Aidez vos voisins à nous trouver</h2>
+      <p>Votre avis Google aide les familles et les commerces de la région à trouver un électricien de confiance, tout près de chez eux. Une minute suffit, et ça fait une vraie différence.</p>
+    </div>
+  </div>
+  <div class="pei-bleed">
+    <iframe id="pei-avis" src="https://cbauer98.github.io/Poulin-Urgence/pei-avis-google.html?v=20260925" title="Avis Google de Poulin Électrique" loading="lazy" scrolling="no" style="display:block;width:100%;height:450px;border:0;background:#050505"></iframe>
+  </div>
+  <script>
+    window.addEventListener('message', function (e) {
+      if (e.origin !== 'https://cbauer98.github.io') return;
+      var d = e.data || {};
+      if (d.type === 'pei-avis-height' && d.height) document.getElementById('pei-avis').style.height = Math.ceil(d.height) + 'px';
+    });
+
+    /* 25 sept. — langue des avis : le cadre des avis est rechargé avec ?lang=en quand le site est en anglais (Weglot). */
+    (function () {
+      var f = document.getElementById('pei-avis'); if (!f) return;
+      var base = (f.getAttribute('src') || '').replace(/[?&]lang=\w+/, '');
+      function lang() { var l = document.documentElement.lang || ''; try { if (window.Weglot && Weglot.getCurrentLang) l = Weglot.getCurrentLang() || l; } catch (e) {} return /^en/i.test(l) ? 'en' : 'fr'; }
+      function sync() {
+        var want = base + (lang() === 'en' ? (base.indexOf('?') > -1 ? '&' : '?') + 'lang=en' : '');
+        if (f.getAttribute('src') !== want) f.setAttribute('src', want);
+        try { f.contentWindow.postMessage({ type: 'pei-lang', lang: lang() }, 'https://cbauer98.github.io'); } catch (e) {}
+      }
+      sync();
+      new MutationObserver(sync).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+      var tries = 0, iv = setInterval(function () { tries++; sync(); if (tries > 20) clearInterval(iv); }, 500);
+    })();
+  </script>
+</section>
