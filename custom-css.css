@@ -1,0 +1,978 @@
+/* ============================================================================
+   POULIN ÉLECTRIQUE — THÈME SOMBRE (structure et couleurs de firesafehq.com)
+   Où coller : Website Tools → Custom CSS  (REMPLACE l'ancien CSS au complet)
+   Version du 17 septembre 2026 (v4) — fichier complet, à coller en entier.
+   Changements depuis la v3 :
+     • Section 3 (en-tête) RETIRÉE : tout l'en-tête vit maintenant dans
+       Code Injection → Footer (fichier FOOTER_v4_self_contained.txt),
+       CSS et script ensemble. Rien d'en-tête ne doit rester ici.
+     • Section 4 (bulle flottante) RETIRÉE : le bouton natif de l'en-tête la remplace.
+     • « AJOUT A — menu en Oswald » RETIRÉ : remplacé par l'en-tête v4.
+     • 5a Héros : nouvelle image de fond pei-hero-art-v2.png (cheval sans
+       contour, plus bas, badge Generac Distributeur autorisé en dessous, les
+       deux estompés et entièrement visibles). Hauteur minimale pour ne jamais
+       couper l'image.
+     • 5c : l'ancien badge Generac estompé de la section services est retiré
+       (il est maintenant sous le cheval, dans le héros).
+   Prérequis :
+     • Images, vidéos et logos : à la racine du dépôt GitHub CBauer98/Poulin-Urgence
+       (branche main) → https://cbauer98.github.io/Poulin-Urgence/<fichier>
+     • Edit Site Header → Style : Solid ; Elements : Button ON ; Announcement Bar OFF
+     • Page Demande de service : bloc de code contenant l'iframe id="peiForm"
+     • Page Generac › Demander une soumission : bloc pei-soumission-embed.html
+   ============================================================================ */
+
+/* ---------- 1. Palette et polices ---------- */
+:root {
+  --pei-black: #050505;
+  --pei-black-2: #0B0B0B;
+  --pei-panel: #101010;
+  --pei-panel-2: #161616;
+  --pei-border: #262626;
+  --pei-red: #D63A34;
+  --pei-red-dark: #B32B26;
+  --pei-red-tint: rgba(214, 58, 52, 0.12);
+  --pei-band: #1B0A0A;
+  --pei-cream: #F1EDE6;
+  --pei-text: #B9B9B9;
+  --pei-muted: #8A8A8A;
+  --pei-head: 'Oswald', 'Arial Narrow', Impact, sans-serif;
+  --pei-body: 'Inter', -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --pei-hero-img: url(/s/PEI_horse_hero.jpg);
+}
+
+/* ---------- 2. Base : tout le site en sombre ---------- */
+/* Fond continu sur tout le site : brume rouge + braises, fixé derrière la page.
+   Appliqué sur <body> uniquement — aucune règle de position ni de z-index ailleurs,
+   pour ne jamais perturber l'en-tête fixe de Squarespace. */
+/* ---------- Base : tout le site en sombre ---------- */
+/* Fond identique sur toutes les pages : noir + brume rouge + braises + logo cheval/Generac estompé.
+   Deux couches fixes derrière la page (position: fixed) — fiables sur iPhone/Android,
+   contrairement à background-attachment: fixed. Aucune règle de position ni de z-index
+   sur l'en-tête ni sur #siteWrapper. */
+
+/* --- réglages ------------------------------------------------------------ */
+@pei-fond-noir:     #050505;
+@pei-logo-opacite:  0.18;                          /* 0 = invisible, 1 = plein (ordinateur) */
+@pei-logo-opacite-mobile: 0.14;
+@pei-logo-taille:   ~"min(52vw, 92vh, 800px)";     /* largeur du logo (ordinateur) */
+@pei-logo-place:    ~"right 6vw center";           /* position du logo dans la fenêtre (ordinateur) */
+
+html { background: transparent !important; }
+body { background: @pei-fond-noir !important; }   /* couleur de secours, derrière les couches */
+
+/* couche 1 : noir + brume rouge + braises */
+body::before {
+  content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: -2; pointer-events: none;
+  background-color: @pei-fond-noir;
+  background-image:
+    ~"radial-gradient(1200px 900px at 82% 6%, rgba(214, 58, 52, .20), transparent 60%)",
+    ~"radial-gradient(900px 700px at 96% 48%, rgba(214, 58, 52, .12), transparent 62%)",
+    ~"radial-gradient(1100px 800px at 68% 96%, rgba(214, 58, 52, .10), transparent 60%)",
+    ~"url(data:image/png;base64,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)";
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  background-size: auto, auto, auto, 700px 700px;
+  background-position: center, center, center, center;
+}
+
+/* couche 2 : logo cheval + Generac, estompé */
+body::after {
+  content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: -1; pointer-events: none;
+  opacity: @pei-logo-opacite;
+  background-image: ~"url(https://cbauer98.github.io/Poulin-Urgence/PEI_logo_horse.png)"; /* 28 sept. : logo complet PEI (cheval, ailes, nom) sans badge Generac — ancien : pei-bg-art-sans-contour.png. 27 sept. : cheval sans contour blanc (effet autocollant retiré) — ancien fichier : pei-bg-art.png sur GitHub */
+  background-repeat: no-repeat;
+  background-position: @pei-logo-place;
+  background-size: @pei-logo-taille auto;
+}
+@media (max-width: 767px) {
+  body::after { opacity: @pei-logo-opacite-mobile; background-position: center 45%; background-size: ~"min(96vw, 58vh)" auto; }
+}
+
+/* Squarespace transparent partout : sections, blocs, pied de page */
+#siteWrapper, #page, .sections,
+.page-section, .page-section .section-border, .page-section .section-background,
+.content-wrapper, #footer-sections .page-section,
+.sqs-block, .fluid-engine, .fe-block { background-color: transparent !important; background-image: none !important; }
+
+/* Sections Squarespace : hauteur réelle du contenu, sans espace fantôme */
+.page-section { min-height: 0 !important; }
+.page-section > .content-wrapper { padding-top: 0 !important; padding-bottom: 0 !important; }
+#footer-sections .page-section > .content-wrapper { padding-top: 48px !important; padding-bottom: 12px !important; }
+.fluid-engine { grid-auto-rows: auto !important; }
+.fluid-engine > .fe-block { grid-row-end: span 1 !important; align-self: start !important; }
+.fluid-engine > .fe-block > .sqs-block { padding-top: 0 !important; padding-bottom: 0 !important; }
+
+body { font-family: var(--pei-body); color: var(--pei-text); -webkit-font-smoothing: antialiased; }
+p, li, a, span, button, input, textarea, select { font-family: var(--pei-body); }
+html, body { overflow-x: clip !important; max-width: 100% !important; }
+
+h1, h2, h3, h4, .sqsrte-large {
+  font-family: var(--pei-head) !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: var(--pei-cream) !important;
+}
+h1 { font-size: ~"clamp(44px, 6vw, 92px)" !important; line-height: 1.02 !important; }
+h2 { font-size: ~"clamp(34px, 4.2vw, 64px)" !important; line-height: 1.05 !important; }
+h3 { font-size: ~"clamp(24px, 2.4vw, 34px)" !important; line-height: 1.15 !important; }
+p, li, .sqsrte-small, .sqsrte-large { color: var(--pei-text); }
+p a { color: var(--pei-red); text-decoration: none; }
+p a:hover { color: #fff; }
+
+/* Boutons natifs Squarespace */
+.sqs-block-button-element,
+.sqs-button-element--primary,
+.sqs-button-element--secondary,
+.form-wrapper .button {
+  background: var(--pei-red) !important; color: #fff !important; border: none !important;
+  border-radius: 9px !important; font-family: var(--pei-body) !important; font-weight: 600 !important;
+  text-transform: none !important; letter-spacing: 0 !important; padding: 18px 30px !important;
+}
+.sqs-block-button-element:hover, .sqs-button-element--primary:hover { background: var(--pei-red-dark) !important; }
+.sqs-button-element--tertiary { background: #1A1A1A !important; color: #fff !important; border-radius: 9px !important; }
+
+/* Formulaires natifs (Nous joindre) */
+.form-wrapper .field-list .title, .form-wrapper .field-list .caption, .form-wrapper .field-list .description { color: var(--pei-text) !important; }
+.form-wrapper input, .form-wrapper textarea, .form-wrapper select {
+  background: var(--pei-black-2) !important; color: #fff !important; border: 1px solid var(--pei-border) !important; border-radius: 8px !important;
+}
+.form-wrapper input:focus, .form-wrapper textarea:focus { border-color: var(--pei-red) !important; }
+
+/* ---------- 3. EN-TÊTE ---------- */
+/* Déplacé au complet dans Code Injection → Footer (FOOTER_v4_self_contained.txt).
+   Ne rien remettre ici. */
+
+/* ---------- 4. Bulle flottante ---------- */
+/* Retirée : le bouton natif de l'en-tête (Nous joindre / Soumission) la remplace. */
+
+/* ---------- 5. Composants des sections (blocs de code) ---------- */
+.pei-wrap { width: ~"min(1360px, 100% - 64px)"; margin: 0 auto; }
+.pei-bleed { width: auto; margin-left: ~"calc(50% - 50vw)"; margin-right: ~"calc(50% - 50vw)"; }
+.pei-btn {
+  display: inline-flex; align-items: center; gap: 14px; padding: 20px 32px; border-radius: 9px;
+  font-family: var(--pei-body); font-size: 19px; font-weight: 600; text-decoration: none !important; transition: background .15s, transform .15s;
+}
+.pei-btn--primary { background: var(--pei-red); color: #fff !important; }
+.pei-btn--primary:hover { background: var(--pei-red-dark); transform: translateY(-1px); }
+.pei-btn--ghost { background: #191919; color: #fff !important; }
+.pei-btn--ghost:hover { background: #232323; }
+.pei-btn svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2.2; }
+.pei-link { color: var(--pei-red) !important; font-size: 19px; font-weight: 600; text-decoration: none !important; display: inline-flex; align-items: center; gap: 10px; }
+.pei-link:hover { color: #fff !important; }
+.pei-kicker { font-family: var(--pei-head); font-size: 18px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--pei-red); margin: 0 0 18px; }
+
+/* 5a. Héros — image de fond : cheval (sans contour) + badge Generac en dessous,
+   estompés, entièrement visibles. La hauteur minimale garantit que l'image
+   n'est jamais coupée ; le cheval est descendu sous la barre d'en-tête. */
+.pei-hero {
+  position: relative; min-height: 780px; display: flex; align-items: center; padding: 190px 0 80px; overflow: hidden;
+  background-color: transparent;
+  background-image: ~"url(https://cbauer98.github.io/Poulin-Urgence/pei-hero-art-v2.png)";
+  background-repeat: no-repeat;
+  background-position: right 0 top 170px;
+  background-size: ~"min(36%, 540px) auto";
+}
+.pei-hero__inner { width: ~"min(1360px, 100% - 64px)"; margin: 0 auto; }
+.pei-hero h1 { max-width: 15ch; margin: 0 0 22px; overflow-wrap: normal; word-break: normal; hyphens: manual; }
+.pei-hero__tag { font-family: var(--pei-head); font-size: ~"clamp(26px, 3vw, 44px)"; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--pei-red); margin: 0 0 30px; }
+.pei-hero__lead { font-size: ~"clamp(18px, 1.4vw, 22px)"; line-height: 1.7; color: #BEBEBE; max-width: 56ch; margin: 0 0 42px; }
+.pei-hero__actions { display: flex; gap: 20px; flex-wrap: wrap; }
+@media (max-width: 800px) {
+  .pei-hero { min-height: 0; padding: 150px 0 60px; background-position: center bottom 20px; background-size: 78% auto; }
+  .pei-hero__inner { padding-bottom: 0; } /* 25 sept. : l’image du héros est retirée par le script du pied de page (fond de site unique) — plus d’espace réservé sous le texte */
+}
+
+/* 5a-bis. Héros : appel à l'action « Vous savez déjà ce dont vous avez besoin ? » */
+.pei-hero__know {
+  display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+  max-width: 820px; margin: 0; padding: 20px 24px;
+  background: rgba(0, 0, 0, .35); border: 1px solid rgba(255, 255, 255, .14); border-left: 3px solid var(--pei-red); border-radius: 8px;
+}
+.pei-hero__know-text { display: flex; flex-direction: column; gap: 4px; flex: 1 1 300px; max-width: 480px; }
+.pei-hero__know-text strong { font-family: var(--pei-head); font-size: 22px; font-weight: 600; letter-spacing: .02em; color: #fff; line-height: 1.2; }
+.pei-hero__know-text span { font-size: 15px; line-height: 1.5; color: var(--pei-cream); }
+.pei-hero__know .pei-hero__actions { margin: 0; flex: 0 0 auto; gap: 12px; }
+.pei-hero__know .pei-btn { white-space: nowrap; padding: 15px 22px; font-size: 17px; }
+@media (max-width: 640px) {
+  .pei-hero__know { padding: 18px; }
+  .pei-hero__know .pei-hero__actions, .pei-hero__know .pei-btn { width: 100%; justify-content: center; }
+}
+
+/* 5b. Bande de chiffres */
+.pei-stats { background: var(--pei-band); border-top: 1px solid #2A1212; border-bottom: 1px solid #2A1212; padding: 78px 0; }
+.pei-stats__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; text-align: center; }
+.pei-stat__num { font-family: var(--pei-head); font-size: ~"clamp(44px, 4.4vw, 66px)"; font-weight: 600; color: var(--pei-red); line-height: 1; }
+.pei-stat__label { margin-top: 16px; font-size: 20px; color: #C0C0C0; }
+@media (max-width: 800px) { .pei-stats__grid { grid-template-columns: repeat(2, 1fr); gap: 40px 20px; } }
+
+/* 5c. Section « solutions » */
+.pei-section { padding: 88px 0; }
+/* le badge Generac estompé de cette section est retiré : il est maintenant sous le cheval, dans le héros */
+.pei-section--generac { position: relative; background-image: none; }
+.pei-section__head { position: relative; z-index: 1; text-align: center; max-width: 880px; margin: 0 auto 56px; }
+.pei-section__head h2 { margin: 0 0 22px; }
+.pei-section__head p { font-size: ~"clamp(19px, 1.5vw, 23px)"; line-height: 1.6; margin: 0; }
+.pei-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.pei-card {
+  background: var(--pei-black-2); border: 1px solid var(--pei-border); border-radius: 14px; padding: 60px 48px 56px;
+  display: flex; flex-direction: column; transition: border-color .2s, transform .2s;
+}
+.pei-card:hover, .pei-card--accent { border-color: rgba(214, 58, 52, .6); }
+.pei-card:hover { transform: translateY(-3px); }
+.pei-card__icon { width: 92px; height: 92px; border-radius: 14px; background: var(--pei-red-tint); display: flex; align-items: center; justify-content: center; margin-bottom: 52px; }
+.pei-card__icon svg { width: 44px; height: 44px; stroke: var(--pei-red); fill: none; stroke-width: 2; }
+.pei-card h3 { margin: 0 0 24px; font-size: 32px !important; }
+.pei-card p { font-size: 20px; line-height: 1.6; margin: 0 0 40px; flex: 1; }
+@media (max-width: 1000px) { .pei-cards { grid-template-columns: 1fr; } }
+
+/* 5c-bis. Carte Generac : pleine largeur, teinte orange, bandeau « Distributeur autorisé » */
+.pei-card--generac {
+  grid-column: ~"1 / -1";
+  border-color: rgba(244, 143, 32, .45);
+  background: linear-gradient(135deg, rgba(244, 143, 32, .10) 0%, rgba(244, 143, 32, 0) 55%);
+}
+.pei-card--generac .pei-card__icon { background: rgba(244, 143, 32, .14); }
+.pei-card--generac .pei-card__icon svg { stroke: #F48F20; }
+@media (min-width: 768px) {
+  .pei-card--generac { display: grid; grid-template-columns: auto 1fr; column-gap: 32px; align-items: start; }
+  .pei-card--generac .pei-card__icon { grid-row: ~"1 / span 2"; }
+  .pei-card--generac h3 { margin-top: 6px; }
+  .pei-card--generac .pei-hero__generac { grid-column: ~"1 / -1"; }
+}
+.pei-card--generac .pei-hero__generac {
+  display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
+  margin-top: 28px; padding: 20px 24px;
+  background: rgba(0, 0, 0, .35); border: 1px solid rgba(244, 143, 32, .35); border-radius: 14px;
+  color: inherit; text-decoration: none;
+}
+.pei-card--generac .pei-hero__generac:hover { border-color: #F48F20; background: rgba(0, 0, 0, .45); }
+.pei-card--generac .pei-hero__generac-logo { width: 140px; height: auto; flex: none; }
+.pei-card--generac .pei-hero__generac-text { flex: 1 1 260px; font-size: 15px; line-height: 1.4; color: var(--pei-cream); }
+.pei-card--generac .pei-hero__generac-text strong { display: block; font-size: 19px; letter-spacing: .04em; text-transform: uppercase; color: #fff; margin-bottom: 4px; }
+.pei-card--generac .pei-hero__generac-cta {
+  flex: none; margin-left: auto; padding: 14px 22px; border-radius: 8px;
+  background: var(--pei-red); color: #fff; font-weight: 700; white-space: nowrap;
+}
+.pei-card--generac .pei-hero__generac:hover .pei-hero__generac-cta { filter: brightness(1.1); }
+@media (max-width: 767px) {
+  .pei-card--generac .pei-hero__generac-cta { margin-left: 0; width: 100%; text-align: center; }
+}
+
+/* 5d. En vedette */
+.pei-feature { background: var(--pei-black-2); border: 1px solid var(--pei-border); border-radius: 16px; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; min-height: 560px; }
+.pei-feature__media { position: relative; background-color: #101827; background-image: url(/s/PEI_feature.jpg); background-position: center; background-size: cover; background-repeat: no-repeat; min-height: 360px; }
+.pei-feature__spot { position: absolute; top: 34px; left: 34px; background: var(--pei-red); color: #fff; font-family: var(--pei-body); font-size: 17px; font-weight: 600; padding: 12px 24px; border-radius: 999px; }
+.pei-feature__body { padding: 84px 72px; display: flex; flex-direction: column; justify-content: center; }
+.pei-tag { display: inline-block; align-self: flex-start; background: #1A1A1A; color: #fff; font-size: 17px; font-weight: 600; padding: 10px 20px; border-radius: 999px; margin-bottom: 28px; }
+.pei-feature__body h3 { font-size: ~"clamp(34px, 3.6vw, 58px)" !important; margin: 0 0 28px; }
+.pei-feature__body p { font-size: 21px; line-height: 1.6; margin: 0 0 40px; }
+@media (max-width: 1000px) { .pei-feature { grid-template-columns: 1fr; } .pei-feature__body { padding: 48px 32px; } }
+
+/* 5e. Appel à l'action */
+.pei-cta { text-align: center; padding: 120px 0 140px; background: radial-gradient(ellipse at 50% 120%, rgba(214, 58, 52, .16), transparent 60%); }
+.pei-cta h2 { margin: 0 0 22px; }
+.pei-cta p { font-size: 22px; margin: 0 auto 44px; max-width: 60ch; }
+
+/* 5f. Certifications (vidéo logos en rotation) */
+.pei-cert { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.pei-cert__media { border-radius: 16px; overflow: hidden; border: 1px solid var(--pei-border); background: #0B0B0B; box-shadow: 0 30px 80px rgba(0, 0, 0, .55); aspect-ratio: ~"16 / 9"; }
+.pei-cert__media video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.pei-cert h2 { margin: 0 0 20px; }
+.pei-cert p { font-size: 20px; line-height: 1.6; margin: 0 0 30px; }
+.pei-cert ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; }
+.pei-cert li { display: flex; align-items: flex-start; gap: 14px; font-size: 19px; color: #DADADA; }
+.pei-cert li svg { width: 26px; height: 26px; flex: 0 0 26px; stroke: var(--pei-red); fill: none; stroke-width: 2.2; margin-top: 1px; }
+@media (max-width: 1000px) { .pei-cert { grid-template-columns: 1fr; gap: 36px; } }
+
+/* 5g. Réalisations : bandeau de photos défilant */
+.pei-strip { position: relative; overflow: hidden; padding: 8px 0 12px; }
+.pei-strip::before, .pei-strip::after { content: ""; position: absolute; top: 0; bottom: 0; width: 140px; z-index: 2; pointer-events: none; }
+.pei-strip::before { left: 0; background: linear-gradient(90deg, var(--pei-black), transparent); }
+.pei-strip::after { right: 0; background: linear-gradient(270deg, var(--pei-black), transparent); }
+.pei-strip__track { display: flex; gap: 20px; width: max-content; animation: pei-scroll 70s linear infinite; }
+.pei-strip:hover .pei-strip__track { animation-play-state: paused; }
+.pei-strip figure { margin: 0; position: relative; height: 420px; flex: 0 0 auto; border-radius: 14px; overflow: hidden; border: 1px solid var(--pei-border); background: #111; }
+.pei-strip img { display: block; height: 100%; width: auto; object-fit: cover; }
+.pei-strip figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 40px 22px 18px; font-size: 15px; color: #fff; background: linear-gradient(180deg, transparent, rgba(0, 0, 0, .85)); }
+.pei-strip figcaption strong { display: block; font-family: var(--pei-head); font-size: 18px; letter-spacing: .04em; text-transform: uppercase; color: #fff; margin-bottom: 2px; }
+@keyframes pei-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (max-width: 800px) { .pei-strip figure { height: 260px; } .pei-strip::before, .pei-strip::after { width: 40px; } .pei-strip__track { animation-duration: 45s; } }
+@media (prefers-reduced-motion: reduce) { .pei-strip__track { animation: none; } .pei-strip { overflow-x: auto; } }
+
+/* ---------- 6. Pied de page (bloc de code) ---------- */
+#footer-sections .section-border, #footer-sections .page-section { border-top: 1px solid #1B1B1B; }
+.pei-footer { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.25fr; gap: 48px; padding: 40px 0 60px; }
+.pei-footer__logo { display: block; width: 320px; max-width: 100%; height: auto; margin: -20px 0 22px -10px; }
+.pei-footer__blurb { font-size: 20px; line-height: 1.6; color: #B9B9B9; margin: 0 0 30px; max-width: 34ch; }
+.pei-footer__tag { font-family: var(--pei-head); font-size: 22px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--pei-red); }
+.pei-footer h4 { font-size: 24px !important; letter-spacing: .04em; color: var(--pei-red) !important; margin: 0 0 32px; }
+.pei-footer ul { list-style: none; padding: 0; margin: 0; }
+.pei-footer li { margin: 0 0 22px; }
+.pei-footer li a { color: #B9B9B9 !important; font-size: 20px; text-decoration: none !important; display: inline-flex; align-items: flex-start; gap: 14px; line-height: 1.4; }
+.pei-footer li a:hover { color: #fff !important; }
+.pei-footer li svg { width: 24px; height: 24px; flex: 0 0 24px; stroke: var(--pei-red); fill: none; stroke-width: 2; margin-top: 2px; }
+/* badge détaillant Generac autorisé, sous le logo */
+.pei-footer__generac {
+  display: inline-flex; align-items: center; gap: 16px; margin-top: 24px; padding: 14px 20px;
+  border: 1px solid rgba(242, 107, 29, .4); border-radius: 12px; background: rgba(242, 107, 29, .06);
+  text-decoration: none !important; transition: border-color .15s, background .15s;
+}
+.pei-footer__generac:hover { border-color: #F26B1D; background: rgba(242, 107, 29, .12); }
+.pei-footer__generac svg { height: 26px; width: auto; flex: 0 0 auto; display: block; }
+.pei-footer__generac span { font-size: 12.5px; line-height: 1.45; font-weight: 600; letter-spacing: .04em;
+  text-transform: uppercase; color: #E8C9AE; white-space: nowrap; }
+.pei-footer__bottom { border-top: 1px solid #1E1E1E; padding: 34px 0 20px; text-align: center; color: #8A8A8A; font-size: 17px; line-height: 1.7; }
+.pei-footer__bottom a { color: #B9B9B9 !important; text-decoration: none !important; }
+@media (max-width: 1000px) { .pei-footer { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px) { .pei-footer { grid-template-columns: 1fr; } }
+
+/* ---------- 7. Bannière de témoins (cookies) ---------- */
+.gdpr-cookie-banner { background: #0E0E0E !important; border: none !important; border-top: 1px solid #232323 !important; padding: 16px 4vw !important; }
+.gdpr-cookie-banner .disclaimer-text, .gdpr-cookie-banner .disclaimer-text * { color: #fff !important; font-size: 15px !important; line-height: 1.5 !important; }
+.gdpr-cookie-banner.full-styling .button-group .accept,
+.gdpr-cookie-banner.full-styling .button-group .decline,
+.gdpr-cookie-banner.full-styling .button-group .manage {
+  background: var(--pei-red) !important; color: #fff !important; border: none !important; border-radius: 8px !important;
+  padding: 10px 20px !important; font-size: 14px !important; font-weight: 700 !important; text-decoration: none !important; box-shadow: none !important; cursor: pointer;
+}
+.gdpr-cookie-banner.full-styling .button-group .decline, .gdpr-cookie-banner.full-styling .button-group .manage { background: #1F1F1F !important; }
+.gdpr-cookie-banner.full-styling .button-group .manage::after { display: none !important; }
+.gdpr-cookie-banner.full-styling .button-group .accept span,
+.gdpr-cookie-banner.full-styling .button-group .decline span,
+.gdpr-cookie-banner.full-styling .button-group .manage span { color: #fff !important; }
+
+/* ---------- 8. Page Notre équipe (bloc de code 6) ---------- */
+.pei-team__group { margin-bottom: 72px; }
+.pei-team__group-title { display: flex; align-items: center; gap: 22px; margin: 0 0 40px; }
+.pei-team__group-title h3 { margin: 0; font-size: 26px !important; letter-spacing: .08em; color: var(--pei-red) !important; }
+.pei-team__group-title::after { content: ""; flex: 1; height: 1px; background: #262626; }
+.pei-team { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+.pei-team--lead { grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.pei-member { background: var(--pei-black-2); border: 1px solid var(--pei-border); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: border-color .2s, transform .2s; }
+.pei-member:hover { border-color: rgba(214, 58, 52, .6); transform: translateY(-3px); }
+.pei-member__photo { aspect-ratio: ~"1 / 1"; background: linear-gradient(180deg, #1A0B0B, #0B0B0B); position: relative; overflow: hidden; }
+.pei-member__photo img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(.15); }
+.pei-member__photo svg { position: absolute; inset: 18% 22% 0; width: 56%; height: auto; fill: #2A2A2A; }
+.pei-member__photo::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--pei-red); }
+.pei-member__body { padding: 28px 28px 30px; display: flex; flex-direction: column; flex: 1; }
+.pei-member__name { font-family: var(--pei-head); font-size: 26px; font-weight: 600; text-transform: uppercase; color: var(--pei-cream); line-height: 1.1; }
+.pei-member__role { color: var(--pei-red); font-size: 16px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; margin: 8px 0 4px; }
+.pei-member__mail { display: inline-block; margin-top: 4px; margin-bottom: 14px; font-size: 15px; color: var(--pei-red) !important; text-decoration: none !important; word-break: break-all; }
+.pei-member__mail:hover { color: #fff !important; }
+.pei-member__bio { font-size: 17px; line-height: 1.6; color: var(--pei-text); margin: 0 0 20px; flex: 1; }
+.pei-member__links { display: flex; gap: 10px; }
+.pei-member__links a { width: 40px; height: 40px; border-radius: 9px; background: #171717; display: inline-flex; align-items: center; justify-content: center; transition: background .15s; }
+.pei-member__links a:hover { background: var(--pei-red); }
+.pei-member__links svg { width: 20px; height: 20px; stroke: #fff; fill: none; stroke-width: 2; }
+.pei-team__field { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; background: var(--pei-band); border: 1px solid #2A1212; border-radius: 16px; padding: 64px 60px; }
+.pei-team__field h3 { margin: 0 0 18px; font-size: 40px !important; }
+.pei-team__field p { font-size: 20px; line-height: 1.65; margin: 0 0 30px; }
+.pei-team__field-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.pei-team__field-stats .pei-stat__num { font-size: 56px; }
+
+/* 8a. Certifications : tuiles de taille uniforme, logos normalisés (15 sept. 2026) */
+.pei-team__logos { display: flex; flex-wrap: wrap; gap: 14px; align-content: flex-start; }
+.pei-team__logos > div, .pei-team__logos > a {
+  flex: 0 0 152px; height: 100px; margin: 0; padding: 18px; background: #fff; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, .28); transition: transform .18s ease;
+}
+.pei-team__logos > a:hover { transform: translateY(-2px); }
+.pei-team__logos img { display: block; width: auto; height: auto; max-width: 100%; max-height: 54px; object-fit: contain; }
+@media (max-width: 767px) {
+  .pei-team__logos > div, .pei-team__logos > a { flex: 0 0 118px; height: 80px; padding: 12px; }
+  .pei-team__logos img { max-height: 42px; }
+}
+
+@media (max-width: 1100px) { .pei-team { grid-template-columns: repeat(2, 1fr); } .pei-team--lead { grid-template-columns: repeat(2, 1fr); } .pei-team__field { grid-template-columns: 1fr; padding: 44px 32px; } }
+@media (max-width: 640px) { .pei-team, .pei-team--lead { grid-template-columns: 1fr; } }
+
+/* ---------- 8b. Page Notre histoire : ligne du temps et valeurs ---------- */
+.pei-timeline { position: relative; max-width: 980px; margin: 0 auto; padding-left: 0; }
+.pei-timeline::before { content: ""; position: absolute; left: 156px; top: 8px; bottom: 8px; width: 2px;
+  background: linear-gradient(180deg, var(--pei-red), rgba(214, 58, 52, .15)); }
+.pei-tl { position: relative; display: grid; grid-template-columns: 130px 1fr; gap: 50px; padding: 0 0 52px; }
+.pei-tl:last-child { padding-bottom: 0; }
+.pei-tl__year { font-family: var(--pei-head); font-size: 34px; font-weight: 600; color: var(--pei-red); line-height: 1.05; text-align: right; padding-top: 6px; padding-right: 4px; }
+.pei-tl__dot { position: absolute; left: 149px; top: 16px; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--pei-black); border: 3px solid var(--pei-red); box-shadow: 0 0 0 6px rgba(214, 58, 52, .12); }
+.pei-tl__body { background: var(--pei-black-2); border: 1px solid var(--pei-border); border-radius: 14px; padding: 30px 34px; transition: border-color .2s; }
+.pei-tl:hover .pei-tl__body { border-color: rgba(214, 58, 52, .5); }
+.pei-tl__body h3 { margin: 0 0 10px; font-size: 26px !important; }
+.pei-tl__body p { margin: 0; font-size: 18px; line-height: 1.65; color: var(--pei-text); }
+.pei-tl__body p + p { margin-top: 12px; }
+.pei-tl--now .pei-tl__body { border-color: rgba(214, 58, 52, .6); background: #120808; }
+.pei-tl--now .pei-tl__dot { background: var(--pei-red); }
+@media (max-width: 760px) {
+  .pei-timeline::before { left: 10px; }
+  .pei-tl { grid-template-columns: 1fr; gap: 12px; padding-left: 38px; }
+  .pei-tl__year { text-align: left; font-size: 30px; }
+  .pei-tl__dot { left: 3px; top: 6px; }
+  .pei-tl__body { padding: 22px 22px; }
+}
+
+/* citation fondateur */
+.pei-quote { max-width: 900px; margin: 0 auto; text-align: center; padding: 24px 0; }
+.pei-quote blockquote { margin: 0; font-family: var(--pei-head); font-size: ~"clamp(26px, 2.8vw, 40px)"; font-weight: 600;
+  line-height: 1.25; color: var(--pei-cream); letter-spacing: .01em; }
+.pei-quote blockquote::before { content: "\201C"; color: var(--pei-red); margin-right: 6px; }
+.pei-quote blockquote::after { content: "\201D"; color: var(--pei-red); margin-left: 6px; }
+.pei-quote cite { display: block; margin-top: 22px; font-style: normal; font-size: 16px; letter-spacing: .12em; text-transform: uppercase; color: var(--pei-red); }
+
+/* ---------- 9. Section Generac : bandeau détaillant autorisé (bloc de code 7) ---------- */
+.pei-generac-band { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 44px; background: var(--pei-black-2); border: 1px solid var(--pei-border); border-left: 4px solid #F26B1D; border-radius: 14px; padding: 36px 44px; }
+.pei-generac-band__logo { height: 118px; width: auto; display: block; border-radius: 10px; }
+.pei-generac-band__text { font-size: 19px; line-height: 1.55; color: var(--pei-text); margin: 0; }
+.pei-generac-band__text strong { display: block; font-family: var(--pei-head); font-size: 24px; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; color: var(--pei-cream); margin-bottom: 6px; }
+.pei-generac-badge { display: inline-flex; align-items: center; gap: 16px; text-decoration: none !important; background: #0B0B0B; border: 1px solid var(--pei-border); border-radius: 12px; padding: 14px 22px; }
+.pei-generac-badge img { height: 72px; width: auto; border-radius: 8px; }
+.pei-generac-badge span { font-size: 15px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--pei-text); max-width: 26ch; line-height: 1.4; }
+@media (max-width: 1000px) { .pei-generac-band { grid-template-columns: 1fr; text-align: center; justify-items: center; gap: 24px; } }
+
+/* ---------- 10. Page Électricité – Aperçu : avantages et étapes ---------- */
+.pei-adv { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+.pei-adv__item { background: var(--pei-black-2); border: 1px solid var(--pei-border); border-radius: 14px; padding: 40px 32px; }
+.pei-adv__item svg { width: 40px; height: 40px; stroke: var(--pei-red); fill: none; stroke-width: 2; margin-bottom: 24px; }
+.pei-adv__item h3 { font-size: 24px !important; margin: 0 0 12px; }
+.pei-adv__item p { font-size: 17px; line-height: 1.6; margin: 0; }
+@media (max-width: 1100px) { .pei-adv { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .pei-adv { grid-template-columns: 1fr; } }
+.pei-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid var(--pei-border); border-radius: 14px; overflow: hidden; }
+.pei-step { padding: 40px 32px; border-right: 1px solid var(--pei-border); background: var(--pei-black-2); }
+.pei-step:last-child { border-right: none; }
+.pei-step__num { font-family: var(--pei-head); font-size: 54px; font-weight: 600; color: var(--pei-red); line-height: 1; margin-bottom: 18px; }
+.pei-step h3 { font-size: 22px !important; margin: 0 0 10px; }
+.pei-step p { font-size: 17px; line-height: 1.6; margin: 0; }
+@media (max-width: 1000px) { .pei-steps { grid-template-columns: 1fr 1fr; } .pei-step:nth-child(2) { border-right: none; } .pei-step:nth-child(-n+2) { border-bottom: 1px solid var(--pei-border); } }
+@media (max-width: 640px) { .pei-steps { grid-template-columns: 1fr; } .pei-step { border-right: none; border-bottom: 1px solid var(--pei-border); } .pei-step:last-child { border-bottom: none; } }
+
+/* ========== PATCH 6 — héros : panneau Generac + cartes de services 2 x 2 ========== */
+.pei-hero__grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 56px; align-items: center; }
+.pei-hero__panel { background: #0B0B0B; border: 1px solid var(--pei-border); border-radius: 16px; overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, .55); }
+.pei-hero__panel video { display: block; width: 100%; height: auto; background: #000; }
+.pei-hero__panel-body { display: flex; align-items: center; gap: 18px; padding: 22px 26px 8px; }
+.pei-hero__panel-body img { height: 64px; width: auto; flex: 0 0 auto; border-radius: 8px; }
+.pei-hero__panel-body p { margin: 0; font-size: 16px; line-height: 1.5; color: var(--pei-text); }
+.pei-hero__panel-body p strong { display: block; font-family: var(--pei-head); font-size: 21px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #fff; margin-bottom: 4px; }
+.pei-hero__panel-actions { display: flex; flex-wrap: wrap; gap: 12px; padding: 16px 26px 26px; }
+.pei-btn--sm { padding: 13px 20px; font-size: 16px; gap: 10px; }
+.pei-btn--sm svg { width: 18px; height: 18px; }
+.pei-cards { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 1000px) {
+  .pei-hero__grid { grid-template-columns: 1fr; gap: 40px; }
+  .pei-cards { grid-template-columns: 1fr; }
+}
+
+/* ========== PATCH 7 (corrigé) — lien Generac, listes déroulantes lisibles ========== */
+.pei-hero__generac { display: inline-block; margin-top: 36px; padding: 12px 20px; border: 1px solid rgba(214, 58, 52, .55); border-radius: 999px; background: rgba(11, 11, 11, .72); color: var(--pei-text) !important; font-size: 15px; line-height: 1.4; text-decoration: none !important; transition: border-color .15s, color .15s; }
+.pei-hero__generac strong { color: #fff; font-weight: 700; margin-right: 6px; }
+.pei-hero__generac:hover { border-color: var(--pei-red); color: #fff !important; }
+.form-wrapper select option { color: #111 !important; background: #fff !important; }
+#footer-sections button { background: #1A1A1A !important; color: #fff !important; border: 1px solid #262626 !important; border-radius: 8px !important; font-family: var(--pei-body) !important; }
+@media (max-width: 800px) { .pei-hero__generac { margin-top: 28px; } }
+
+/* ========== AJOUT A — menu en Oswald ========== */
+/* Retiré : l'en-tête v4 (Code Injection → Footer) définit toute la typographie du menu. */
+
+/* ========== AJOUT B — héros : carte Generac et réseaux sociaux ========== */
+.pei-hero__generac { display: inline-flex; align-items: center; gap: 22px; flex-wrap: wrap; margin-top: 40px; padding: 16px 18px 16px 22px; border: 1px solid rgba(214, 58, 52, .5); border-radius: 14px; background: rgba(11, 11, 11, .78); text-decoration: none !important; transition: border-color .15s, background .15s; }
+.pei-hero__generac:hover { border-color: var(--pei-red); background: rgba(20, 8, 8, .92); }
+.pei-hero__generac-logo { height: 30px; width: auto; flex: 0 0 auto; }
+.pei-hero__generac-text { font-size: 15px; line-height: 1.4; color: var(--pei-text); }
+.pei-hero__generac-text strong { display: block; font-family: var(--pei-head); font-size: 18px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: #fff; margin: 0; }
+.pei-hero__generac-cta { font-family: var(--pei-body); font-size: 15px; font-weight: 700; color: #fff; background: var(--pei-red); padding: 12px 18px; border-radius: 9px; white-space: nowrap; }
+.pei-hero__social { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.pei-hero__social > span { font-size: 14px; letter-spacing: .12em; text-transform: uppercase; color: var(--pei-muted); margin-right: 6px; }
+.pei-hero__social > a { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--pei-border); background: rgba(11, 11, 11, .7); display: inline-flex; align-items: center; justify-content: center; color: #fff; text-decoration: none !important; transition: background .15s, border-color .15s, transform .15s; }
+.pei-hero__social > a:hover { background: var(--pei-red); border-color: var(--pei-red); transform: translateY(-2px); }
+.pei-hero__social > a > svg { width: 20px; height: 20px; fill: currentColor; }
+@media (max-width: 800px) { .pei-hero__generac { gap: 14px; padding: 14px 16px; } .pei-hero__generac-cta { width: 100%; text-align: center; } }
+
+/* ---------- 11. Pages de texte : Politique de confidentialité ---------- */
+.pei-hero--plain { background-image: none; min-height: 0; }
+.pei-legal { max-width: 860px; }
+.pei-legal h2 { font-size: 26px !important; letter-spacing: .03em; margin: 48px 0 14px; }
+.pei-legal p, .pei-legal li { font-size: 18px; line-height: 1.7; color: var(--pei-text); }
+.pei-legal p { margin: 0 0 18px; }
+.pei-legal ul { margin: 0 0 18px; padding-left: 22px; }
+.pei-legal li { margin: 0 0 10px; }
+.pei-legal a { color: var(--pei-red); text-decoration: none; }
+.pei-legal a:hover { color: #fff; }
+.pei-legal strong { color: var(--pei-cream); }
+.pei-legal__meta { display: grid; grid-template-columns: 300px 1fr; gap: 0; margin: 0 0 40px; border: 1px solid var(--pei-border); border-radius: 12px; overflow: hidden; }
+.pei-legal__meta dt, .pei-legal__meta dd { margin: 0; padding: 14px 20px; font-size: 16px; line-height: 1.5; border-bottom: 1px solid var(--pei-border); }
+.pei-legal__meta dt { background: var(--pei-black-2); color: var(--pei-cream); font-weight: 600; }
+.pei-legal__meta dd { color: var(--pei-text); }
+.pei-legal__meta dt:nth-last-of-type(1), .pei-legal__meta dd:nth-last-of-type(1) { border-bottom: none; }
+.pei-legal__contact { border-left: 3px solid var(--pei-red); padding-left: 18px; }
+@media (max-width: 700px) { .pei-legal__meta { grid-template-columns: 1fr; } .pei-legal__meta dt { border-bottom: none; padding-bottom: 4px; } }
+
+/* ---------- 12. Formulaire intégré (iframe id="peiForm") ---------- */
+/* Deux pages utilisent le même formulaire GitHub :
+     • Demande de service : l'iframe est seul dans le bloc → on le décale sous
+       l'en-tête fixe (260 px / 170 px).
+     • Generac › Demander une soumission : le bloc .pei-soum a déjà son en-tête
+       (logo Generac, territoire) et son propre dégagement → aucun décalage.
+   Le formulaire se rend transparent lorsqu'il est intégré, puis transmet sa
+   hauteur à la page — d'où l'absence de barre de défilement interne. */
+#peiForm {
+  display: block !important;
+  width: 100% !important;
+  margin-top: 260px !important;
+  border: 0 !important;
+  background: transparent !important;
+  overflow: hidden !important;
+}
+@media (max-width: 800px) { #peiForm { margin-top: 170px !important; } }
+.pei-soum #peiForm { margin-top: 0 !important; }
+
+/* ---------- 13. SECTION GENERAC ---------- */
+/* Habillage orange et composants des pages Generac (Aperçu, Génératrices
+   résidentielles, Entretien et réparations, Surveillance 24/7).
+   Le BLOC 0 de la page Generac – Aperçu reprend ces mêmes règles : une fois
+   cette section en place, ce bloc peut être retiré de la page. */
+
+/* ---------- 13a. Habillage général de la section Generac ---------- */
+.pei-gen { --gen-orange: #F26B1D; --gen-orange-d: #D45A12; --gen-tint: rgba(242, 107, 29, .10); }
+.pei-gen .pei-kicker,
+.pei-gen .pei-hero__tag { color: var(--gen-orange); }
+.pei-gen .pei-card:hover,
+.pei-gen .pei-adv__item:hover { border-color: rgba(242, 107, 29, .55); }
+.pei-gen .pei-card__icon { background: var(--gen-tint); }
+.pei-gen .pei-card__icon svg,
+.pei-gen .pei-adv__item svg { stroke: var(--gen-orange); }
+.pei-gen .pei-step__num,
+.pei-gen .pei-stat__num { color: var(--gen-orange); }
+.pei-gen .pei-btn--primary { background: var(--gen-orange); }
+.pei-gen .pei-btn--primary:hover { background: var(--gen-orange-d); }
+.pei-gen .pei-link { color: var(--gen-orange) !important; }
+.pei-gen .pei-link:hover { color: #fff !important; }
+.pei-gen .pei-generac-band { border-left-color: var(--gen-orange); }
+.pei-gen .pei-team__field { background: #1B1008; border-color: #2E1A0C; }
+.pei-gen .pei-cta { background: radial-gradient(ellipse at 50% 120%, rgba(242, 107, 29, .16), transparent 60%); }
+.pei-gen-mark { height: 34px; width: auto; display: block; }
+
+/* ---------- 13b. Pastilles de municipalités ---------- */
+.pei-gen-zones { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 26px; }
+.pei-gen-zones span {
+  display: inline-block; padding: 9px 16px; border: 1px solid rgba(242, 107, 29, .4);
+  border-radius: 999px; background: rgba(242, 107, 29, .06); color: #E8C9AE;
+  font-size: 15px; font-weight: 600; letter-spacing: .04em;
+}
+
+/* ---------- 13c. Carte du territoire ---------- */
+.pei-gen-carte-wrap {
+  margin: 0 0 34px; padding: 0; border: 1px solid #2A2A2A; border-radius: 16px;
+  overflow: hidden; background: #0B0B0B; box-shadow: 0 30px 80px rgba(0, 0, 0, .55);
+}
+.pei-gen-carte { display: block; width: 100%; height: auto; }
+.pei-gen-carte-hint { display: none; margin: -24px 0 30px; font-size: 13px; color: #8A8A8A; text-align: center; }
+@media (max-width: 860px) {
+  .pei-gen-carte-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .pei-gen-carte { width: 820px; max-width: none; }
+  .pei-gen-carte-hint { display: block; }
+  .pei-gen-zones span { font-size: 13.5px; padding: 7px 13px; }
+}
+
+/* ---------- 13d. Vérificateur de code postal ---------- */
+.pei-check {
+  max-width: 760px; margin: 0 auto; background: #0E0B09; border: 1px solid rgba(242, 107, 29, .35);
+  border-radius: 16px; padding: 44px 44px 38px; text-align: center;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, .5);
+}
+.pei-check h3 { margin: 0 0 12px; font-size: 30px !important; }
+.pei-check__lead { font-size: 18px; line-height: 1.6; color: var(--pei-text); margin: 0 0 28px; }
+.pei-check__row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.pei-check__input {
+  flex: 0 1 300px; background: #050505; border: 1.5px solid var(--pei-border); border-radius: 10px;
+  color: #fff; font-family: var(--pei-head); font-size: 26px; font-weight: 600; letter-spacing: .18em;
+  text-align: center; text-transform: uppercase; padding: 16px 18px; outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+.pei-check__input::placeholder { color: #4A4A4A; letter-spacing: .12em; }
+.pei-check__input:focus { border-color: #F26B1D; box-shadow: 0 0 0 4px rgba(242, 107, 29, .12); }
+.pei-check__btn {
+  border: none; cursor: pointer; background: #F26B1D; color: #fff; border-radius: 10px;
+  font-family: var(--pei-body); font-size: 17px; font-weight: 600; padding: 16px 28px;
+  transition: background .15s, transform .15s;
+}
+.pei-check__btn:hover { background: #D45A12; transform: translateY(-1px); }
+.pei-check__out { margin-top: 26px; text-align: left; }
+.pei-check__card {
+  display: flex; gap: 18px; align-items: flex-start; border-radius: 12px; padding: 22px 24px;
+  border: 1px solid var(--pei-border); background: #121212;
+}
+.pei-check__card svg { width: 30px; height: 30px; flex: 0 0 30px; fill: none; stroke-width: 2.2; margin-top: 2px; }
+.pei-check__card > div > strong { display: block; font-family: var(--pei-head); font-size: 22px; font-weight: 600;
+  letter-spacing: .03em; text-transform: uppercase; color: #fff; margin-bottom: 6px; }
+.pei-check__card p b { color: #fff; font-weight: 700; }
+.pei-check__card p { margin: 0; font-size: 17px; line-height: 1.55; color: var(--pei-text); }
+.pei-check__card .pei-btn { margin-top: 18px; }
+.pei-check__card--yes { border-color: rgba(242, 107, 29, .55); background: rgba(242, 107, 29, .07); }
+.pei-check__card--yes svg { stroke: #F26B1D; }
+.pei-check__card--no { border-color: #3A2A2A; }
+.pei-check__card--no svg { stroke: #C9A38A; }
+.pei-check__card--err { border-color: #3A3A3A; }
+.pei-check__card--err svg { stroke: #8A8A8A; }
+.pei-check__note { margin: 22px 0 0; font-size: 14px; color: var(--pei-muted); line-height: 1.5; }
+.pei-check__codes { margin-top: 20px; font-size: 13.5px; color: #6E6E6E; letter-spacing: .08em; }
+@media (max-width: 640px) {
+  .pei-check { padding: 32px 22px 28px; }
+  .pei-check__input { flex: 1 1 100%; font-size: 22px; }
+  .pei-check__btn { flex: 1 1 100%; }
+}
+
+/* ---------- 13e. Liste de vérification (entretien) ---------- */
+.pei-checklist { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px 40px; }
+.pei-checklist > div { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid #1E1E1E; }
+.pei-checklist svg { width: 24px; height: 24px; flex: 0 0 24px; stroke: #F26B1D; fill: none; stroke-width: 2.4; margin-top: 2px; }
+.pei-checklist strong { display: block; font-size: 18px; color: var(--pei-cream); font-weight: 600; margin-bottom: 3px; }
+.pei-checklist p { margin: 0; font-size: 16px; line-height: 1.5; color: var(--pei-text); }
+@media (max-width: 900px) { .pei-checklist { grid-template-columns: 1fr; gap: 0; } }
+
+/* ---------- 13f. Tableau des codes d'alarme ---------- */
+.pei-codes { width: 100%; border-collapse: collapse; border: 1px solid var(--pei-border); border-radius: 14px; overflow: hidden; }
+.pei-codes th {
+  background: #1A1207; color: #F5C9A8; font-family: var(--pei-head); font-size: 15px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; text-align: left; padding: 16px 20px; border-bottom: 1px solid #2E1A0C;
+}
+.pei-codes td { padding: 18px 20px; font-size: 16.5px; line-height: 1.5; color: var(--pei-text); border-bottom: 1px solid #1C1C1C; vertical-align: top; }
+.pei-codes tr:last-child td { border-bottom: none; }
+.pei-codes tr:nth-child(even) td { background: #0E0E0E; }
+.pei-codes td:first-child { font-family: var(--pei-head); font-size: 17px; font-weight: 600; color: #fff; letter-spacing: .03em; white-space: nowrap; }
+.pei-codes .pei-codes__sev { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+.pei-codes .sev-now { color: #F26B1D; }
+.pei-codes .sev-soon { color: #C9A38A; }
+.pei-codes .sev-info { color: #7E7E7E; }
+@media (max-width: 800px) {
+  .pei-codes, .pei-codes tbody, .pei-codes tr, .pei-codes td { display: block; width: 100%; }
+  .pei-codes thead { display: none; }
+  .pei-codes tr { border-bottom: 1px solid #242424; padding: 6px 0 14px; }
+  .pei-codes td { border: none; padding: 6px 18px; }
+  .pei-codes td:first-child { padding-top: 16px; font-size: 19px; }
+}
+
+/* ---------- 13g. Forfaits d'entretien ---------- */
+.pei-plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; align-items: stretch; }
+.pei-plan {
+  position: relative; display: flex; flex-direction: column; background: var(--pei-black-2);
+  border: 1px solid var(--pei-border); border-radius: 16px; padding: 40px 32px 34px; transition: border-color .2s, transform .2s;
+}
+.pei-plan:hover { transform: translateY(-3px); border-color: rgba(242, 107, 29, .5); }
+.pei-plan--best { border-color: rgba(242, 107, 29, .65); background: #120D08; }
+.pei-plan__flag {
+  position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: #F26B1D; color: #fff;
+  font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 6px 16px; border-radius: 999px; white-space: nowrap;
+}
+.pei-plan h3 { margin: 0 0 8px; font-size: 26px !important; }
+.pei-plan__sub { font-size: 15.5px; color: var(--pei-muted); margin: 0 0 24px; line-height: 1.5; }
+.pei-plan ul { list-style: none; padding: 0; margin: 0 0 28px; flex: 1; }
+.pei-plan li { display: flex; gap: 12px; align-items: flex-start; font-size: 16.5px; line-height: 1.5; color: var(--pei-text); margin-bottom: 14px; }
+.pei-plan li svg { width: 20px; height: 20px; flex: 0 0 20px; stroke: #F26B1D; fill: none; stroke-width: 2.6; margin-top: 2px; }
+.pei-plan li.pei-plan__off { color: #5E5E5E; }
+.pei-plan li.pei-plan__off svg { stroke: #3C3C3C; }
+@media (max-width: 1000px) { .pei-plans { grid-template-columns: 1fr; } }
+
+/* ---------- 13h. Comparaison (portative / permanente) ---------- */
+.pei-vs { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+.pei-vs__col { background: var(--pei-black-2); border: 1px solid var(--pei-border); border-radius: 16px; padding: 38px 32px 32px; }
+.pei-vs__col--hl { border-color: rgba(242, 107, 29, .5); background: #120D08; }
+.pei-vs__head { display: flex; align-items: center; gap: 16px; margin-bottom: 26px; }
+.pei-vs__head svg { width: 46px; height: 46px; stroke: #F26B1D; fill: none; stroke-width: 1.8; flex: 0 0 46px; }
+.pei-vs__head h3 { margin: 0; font-size: 26px !important; }
+.pei-vs dl { margin: 0; }
+.pei-vs dt { font-size: 13.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--pei-muted); margin-top: 18px; }
+.pei-vs dd { margin: 5px 0 0; font-size: 17px; line-height: 1.55; color: var(--pei-text); }
+@media (max-width: 900px) { .pei-vs { grid-template-columns: 1fr; } }
+
+/* ---------- 13i. Encadré de sécurité ---------- */
+.pei-warn { display: flex; gap: 22px; align-items: flex-start; background: #1A0B0B; border: 1px solid #4A1E1A;
+  border-left: 4px solid #D63A34; border-radius: 14px; padding: 32px 34px; }
+.pei-warn svg { width: 42px; height: 42px; flex: 0 0 42px; stroke: #D63A34; fill: none; stroke-width: 2; margin-top: 2px; }
+.pei-warn h3 { margin: 0 0 12px; font-size: 24px !important; color: #F1EDE6 !important; }
+.pei-warn p { margin: 0 0 12px; font-size: 17.5px; line-height: 1.6; color: #D8D2CC; }
+.pei-warn ul { margin: 0; padding-left: 20px; }
+.pei-warn li { font-size: 17px; line-height: 1.6; color: #D8D2CC; margin-bottom: 8px; }
+.pei-warn strong { color: #fff; }
+@media (max-width: 700px) { .pei-warn { flex-direction: column; gap: 14px; padding: 26px 22px; } }
+
+/* ---------- 13j. Téléphone (Mobile Link) ---------- */
+.pei-phone-grid { display: grid; grid-template-columns: 340px 1fr; gap: 64px; align-items: center; }
+.pei-phone {
+  width: 300px; margin: 0 auto; background: #050505; border: 10px solid #1C1C1C; border-radius: 34px;
+  padding: 0; overflow: hidden; box-shadow: 0 30px 70px rgba(0, 0, 0, .6);
+}
+.pei-phone__bar { background: #0E0E0E; padding: 12px 18px; display: flex; justify-content: space-between;
+  font-size: 12px; color: #7E7E7E; letter-spacing: .04em; border-bottom: 1px solid #1C1C1C; }
+.pei-phone__body { padding: 22px 18px 26px; }
+.pei-phone__status { text-align: center; padding: 18px 0 22px; }
+.pei-phone__dot { width: 14px; height: 14px; border-radius: 50%; background: #3FBF6A; display: inline-block; margin-right: 9px; vertical-align: middle; }
+.pei-phone__state { font-family: var(--pei-head); font-size: 24px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: #fff; vertical-align: middle; }
+.pei-phone__sub { font-size: 13px; color: #7E7E7E; margin-top: 8px; }
+.pei-phone__row { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-top: 1px solid #191919; font-size: 14.5px; }
+.pei-phone__row span:first-child { color: #8A8A8A; }
+.pei-phone__row span:last-child { color: #fff; font-weight: 600; }
+.pei-phone__alert { margin-top: 18px; background: rgba(242, 107, 29, .12); border: 1px solid rgba(242, 107, 29, .45);
+  border-radius: 10px; padding: 14px 16px; font-size: 13.5px; line-height: 1.5; color: #F5C9A8; }
+.pei-phone__alert strong { display: block; color: #F26B1D; font-size: 14px; margin-bottom: 4px; letter-spacing: .04em; text-transform: uppercase; }
+@media (max-width: 900px) { .pei-phone-grid { grid-template-columns: 1fr; gap: 40px; } }
+
+/* ---------- 13k. Chaîne de surveillance ---------- */
+.pei-chain { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid var(--pei-border); border-radius: 16px; overflow: hidden; }
+.pei-chain__step { position: relative; padding: 36px 28px; background: var(--pei-black-2); border-right: 1px solid var(--pei-border); }
+.pei-chain__step:last-child { border-right: none; }
+.pei-chain__step--live { background: #120D08; }
+.pei-chain__icon { width: 56px; height: 56px; border-radius: 14px; background: rgba(242, 107, 29, .12);
+  display: flex; align-items: center; justify-content: center; margin-bottom: 22px; }
+.pei-chain__icon svg { width: 28px; height: 28px; stroke: #F26B1D; fill: none; stroke-width: 2; }
+.pei-chain__step h3 { font-size: 21px !important; margin: 0 0 10px; }
+.pei-chain__step p { font-size: 16px; line-height: 1.55; margin: 0; }
+.pei-chain__time { display: inline-block; margin-top: 16px; font-size: 12.5px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: #F26B1D; background: rgba(242, 107, 29, .1); border-radius: 999px; padding: 5px 12px; }
+@media (max-width: 1000px) {
+  .pei-chain { grid-template-columns: 1fr 1fr; }
+  .pei-chain__step:nth-child(2) { border-right: none; }
+  .pei-chain__step:nth-child(-n+2) { border-bottom: 1px solid var(--pei-border); }
+}
+@media (max-width: 620px) {
+  .pei-chain { grid-template-columns: 1fr; }
+  .pei-chain__step { border-right: none; border-bottom: 1px solid var(--pei-border); }
+  .pei-chain__step:last-child { border-bottom: none; }
+}
+
+/* ---------- 13l. Questions fréquentes (repliables) ---------- */
+.pei-faq { max-width: 900px; margin: 0 auto; }
+.pei-faq details { border: 1px solid var(--pei-border); border-radius: 12px; background: var(--pei-black-2); margin-bottom: 14px; overflow: hidden; }
+.pei-faq details[open] { border-color: rgba(242, 107, 29, .45); }
+.pei-faq summary {
+  cursor: pointer; list-style: none; padding: 24px 28px; font-family: var(--pei-head); font-size: 20px; font-weight: 600;
+  letter-spacing: .02em; color: var(--pei-cream); display: flex; justify-content: space-between; align-items: center; gap: 20px;
+}
+.pei-faq summary::-webkit-details-marker { display: none; }
+.pei-faq summary::after { content: ""; flex: 0 0 11px; width: 11px; height: 11px; border-right: 2px solid #F26B1D;
+  border-bottom: 2px solid #F26B1D; transform: rotate(45deg); transition: transform .18s; margin-top: -4px; }
+.pei-faq details[open] summary::after { transform: rotate(-135deg); margin-top: 4px; }
+.pei-faq summary:hover { color: #fff; }
+.pei-faq .pei-faq__a { padding: 0 28px 26px; font-size: 17px; line-height: 1.65; color: var(--pei-text); }
+.pei-faq .pei-faq__a p { margin: 0 0 14px; font-size: 17px; line-height: 1.65; }
+.pei-faq .pei-faq__a p:last-child { margin-bottom: 0; }
+
+/* ---------- 13m. Page Generac › Demander une soumission (.pei-soum) ---------- */
+/* Le bloc de cette page porte son propre en-tête, donc l'iframe n'est pas
+   décalé (voir section 12). Le dégagement sous l'en-tête fixe est appliqué
+   ici, une seule fois, sur le conteneur. */
+.pei-soum { padding-top: 190px; }
+.pei-soum__head { text-align: center; max-width: 820px; margin: 0 auto 44px; }
+.pei-soum__mark { height: 38px; width: auto; display: block; margin: 0 auto 22px; }
+.pei-soum__head h1 { max-width: none; margin: 0 0 18px; font-size: ~"clamp(38px, 4.6vw, 64px)" !important; }
+.pei-soum__head p { font-size: ~"clamp(18px, 1.4vw, 21px)"; line-height: 1.65; color: var(--pei-text); margin: 0 auto; max-width: 62ch; }
+.pei-soum__steps { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin: 30px 0 0; }
+.pei-soum__steps span {
+  display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px; border-radius: 999px;
+  border: 1px solid var(--pei-border); background: #0E0B09; font-size: 15px; color: var(--pei-text);
+}
+.pei-soum__steps b { font-family: var(--pei-head); font-size: 15px; font-weight: 600; color: #F26B1D; letter-spacing: .06em; }
+.pei-soum__form { margin-top: 44px; }
+.pei-soum__form-note { text-align: center; font-size: 15px; color: var(--pei-muted); margin: 0 0 18px; }
+@media (max-width: 800px) {
+  .pei-soum { padding-top: 150px; }
+  .pei-soum__steps span { font-size: 13.5px; padding: 8px 14px; }
+}
+
+/* ---------- 14. Divers ---------- */
+/* masquer toute section vide (sans bloc) */
+.page-section:not(:has(.sqs-block)) { display: none !important; }
+#footer-sections .page-section:not(:has(.sqs-block)) { display: none !important; }
+/* En-tête : plus de téléphone ni d'heures (déplacés au pied de page) */
+.pei-topbar, .pei-menu-foot { display: none !important; }
+
+/* En-tête : plus de téléphone ni d'heures (déplacés au pied de page) */
+.pei-topbar, .pei-menu-foot { display: none !important; }
+
+/* Fond unique : les pages ne portent plus leur propre fond cheval/braises */
+.pei-hero { background-image: none !important; background-color: transparent !important; }
+[style*="pei-hero"], [style*="pei-logo-faded"], [style*="pei-embers"] { background-image: none !important; background-color: transparent !important; }
+img[src*="pei-hero-art"], img[src*="pei-hero-bg"], img[src*="pei-logo-faded"] { display: none !important; }
+/* Correctif menu : le libellé est dans un <span> que rien ne colore → le rendre visible */
+.header-nav-folder-title-text,
+.header-nav-item > a {
+  color: #E6E7EA !important;
+  -webkit-text-fill-color: #E6E7EA !important;
+  opacity: 1 !important;
+}
+.header-nav-item--folder:hover > .header-nav-folder-title .header-nav-folder-title-text,
+.header-nav-item--active > .header-nav-folder-title .header-nav-folder-title-text {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* Pages bâties en code : masquer l'espace réservé « Empty Page » de Squarespace (zone de contenu native vide) */
+.sqs-empty-section {
+  display: none !important;
+}
+
+/* En-tête : éviter que le menu passe à la verticale sur les écrans moyens (768–1499 px) */
+@media (min-width: 768px) and (max-width: 1499px) {
+  .header-display-desktop .language-picker-desktop { display: none !important; }
+  .header-display-desktop .header-title-logo img { max-height: 36px !important; width: auto !important; }
+  .header-display-desktop .header-nav-list { flex-wrap: nowrap !important; }
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  .header-display-desktop .header-title-logo img { max-height: 28px !important; }
+}
+
+/* ---------- 9. RYTHME MOBILE (25 sept.) ----------
+   Espacement resserré sur téléphone pour toutes les pages ; une règle propre à une page
+   (avec !important) garde la priorité. */
+@media (max-width: 767px) {
+  .pei-hero { padding-bottom: 32px !important; } /* !important : certaines pages fixent le padding en ligne */
+  .pei-section { padding-top: 40px; padding-bottom: 40px; }
+  .pei-cta { padding-top: 40px; padding-bottom: 64px; }
+}
+
+/* ---------- 10. RYTHME ORDINATEUR (25 sept.) ----------
+   Même rythme que les pages déjà resserrées (~96 px entre les blocs). Le héros n’a plus
+   de hauteur minimale : l’image du cheval est maintenant le fond du site. */
+@media (min-width: 768px) {
+  .pei-hero { min-height: 0; padding-bottom: 48px !important; }
+  .pei-section { padding-top: 48px; padding-bottom: 48px; }
+  .pei-cta { padding-top: 48px; padding-bottom: 80px; }
+}
+
+/* ---------- 11. LISTES DE SERVICES (non cliquables) — 25 sept. ----------
+   Les grilles .pei-adv ne sont pas des liens : plus d’allure de tuile (fond, bordure,
+   coins arrondis) — une liste avec icône et filet, sur 2 colonnes (1 sur téléphone). */
+.pei-section .pei-adv { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; column-gap: 56px !important; row-gap: 0 !important; }
+.pei-section .pei-adv > .pei-adv__item {
+  display: grid !important; grid-template-columns: 26px minmax(0, 1fr); column-gap: 16px; align-items: start;
+  background: none !important; border: 0 !important; border-top: 1px solid rgba(255, 255, 255, .09) !important;
+  border-radius: 0 !important; box-shadow: none !important; transform: none !important;
+  padding: 18px 0 20px !important; cursor: default;
+}
+.pei-section .pei-adv > .pei-adv__item:hover { background: none !important; border-color: rgba(255, 255, 255, .09) !important; transform: none !important; }
+.pei-section .pei-adv > .pei-adv__item > svg { grid-column: 1; grid-row: 1 / span 2; width: 26px !important; height: 26px !important; margin: 2px 0 0 !important; }
+.pei-section .pei-adv > .pei-adv__item > h3 { grid-column: 2; font-size: 19px !important; line-height: 1.25; margin: 0 0 4px !important; }
+.pei-section .pei-adv > .pei-adv__item > p { grid-column: 2; font-size: 15px !important; line-height: 1.5 !important; margin: 0 !important; }
+@media (max-width: 640px) { .pei-section .pei-adv { grid-template-columns: minmax(0, 1fr) !important; } }
+
+/* 11b. Cartes .pei-card en <div> (la carte elle-même n’est pas un lien) : même traitement.
+   Les cartes <article> (Électricité › Aperçu) mènent à une page et gardent leur tuile. */
+.pei-section :has(> div.pei-card) > div.pei-card { background: none !important; border: 0 !important; border-top: 1px solid rgba(255, 255, 255, .09) !important; border-radius: 0 !important; box-shadow: none !important; transform: none !important; padding: 20px 0 0 !important; cursor: default; }
+.pei-section :has(> div.pei-card) > div.pei-card:hover { background: none !important; border-color: rgba(255, 255, 255, .09) !important; transform: none !important; }
+.pei-section :has(> div.pei-card) > div.pei-card .pei-card__icon { background: none !important; width: auto !important; height: auto !important; border-radius: 0 !important; padding: 0 !important; margin-bottom: 12px !important; justify-content: flex-start !important; }
+
+/* 11c. Règle du site : pas de boîte si ce n’est pas cliquable (25 sept.) — seule exception : la ligne du temps */
+/* Exception : la ligne du temps (Notre histoire) garde ses boîtes. */
+/* Équipe (Notre équipe) */
+.pei-section .pei-member { background: none !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; transform: none !important; border-top: 1px solid rgba(255, 255, 255, .09) !important; padding: 18px 0 0 !important; }
+/* Comparaison circuits essentiels / maison complète (Génératrices résidentielles) */
+.pei-section .pei-vs__col { background: none !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; transform: none !important; border-top: 2px solid rgba(255, 255, 255, .09) !important; padding: 20px 0 0 !important; }
+.pei-section .pei-vs__col:first-child { border-top-color: var(--pei-red) !important; }
+/* Coordonnées (Nous joindre) : lignes ouvertes ; seuls les liens réagissent */
+.pei-section .pei-coord__item { background: none !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; transform: none !important; border-top: 1px solid rgba(255, 255, 255, .09) !important; padding: 16px 0 !important; }
+.pei-section a.pei-coord__item:hover, .pei-section .pei-coord__item a:hover { color: #FFFFFF !important; }
+.pei-section a.pei-coord__item:hover { background: none !important; }
+/* Équipe : pas de cadre photo vide tant qu’il n’y a pas de vraie photo (une <img> le fait réapparaître) */
+.pei-section .pei-member__photo:not(:has(img)) { display: none !important; }
+.pei-section .pei-member { padding-top: 16px !important; }
+/* Pied de page : bloc Confidentialité et sécurité sans boîte */
+.pei-footer-wrap .pei-footer__secure { background: none !important; border: 0 !important; border-top: 1px solid rgba(255, 255, 255, .09) !important; border-radius: 0 !important; padding: 20px 0 0 !important; }
+
+/* 12. Le héros commence juste sous l’en-tête, quelle que soit la largeur d’écran (25 sept.)
+   --pei-header-h est mesuré par le script de l’en-tête (Code Injection → Header, section I). */
+.pei-hero { padding-top: ~"calc(var(--pei-header-h, 196px) + 32px)" !important; }
+@media (max-width: 767px) { .pei-hero { padding-top: ~"calc(var(--pei-header-h, 144px) + 24px)" !important; } }
+/* Coordonnées (Nous joindre) : colonne d’icône à la largeur réelle de l’icône */
+.pei-section .pei-coord__item { grid-template-columns: auto minmax(0, 1fr) !important; column-gap: 18px !important; }
+
+
+/* 13. Rangée de photos sous l’intro — pages secteurs Électricité (25 sept.)
+   Trois photos (ou courts clips en boucle, sans son). Ordinateur : 3 carrés. Mobile : bande qui défile au doigt.
+   object-position par photo : attribut style sur l’image. */
+.pei-section.pei-shots { padding-top: 0 !important; }
+.pei-shots__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.pei-shots__grid figure { margin: 0; position: relative; aspect-ratio: ~"1 / 1"; border-radius: 14px; overflow: hidden; border: 1px solid var(--pei-border); background: #111; }
+.pei-shots__grid img, .pei-shots__grid video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+@media (max-width: 767px) {
+  .pei-shots__grid { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 78%; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .pei-shots__grid::-webkit-scrollbar { display: none; }
+  .pei-shots__grid figure { aspect-ratio: ~"4 / 5"; scroll-snap-align: start; }
+}
+
+
+/* 14. Cartes-liens : toute la carte mène à sa page (Generac › Aperçu, 25 sept.)
+   <a class="pei-card pei-card--go"> — format compact ; l’accent vient de la page (.pei-gen = orange).
+   Grille .pei-cards--2 : deux colonnes sur ordinateur, une sur mobile. */
+@media (min-width: 701px) { .pei-cards.pei-cards--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; } }
+@media (max-width: 700px) { .pei-cards.pei-cards--2 { grid-template-columns: minmax(0, 1fr); gap: 16px; } }
+a.pei-card.pei-card--go { color: inherit !important; text-decoration: none !important; padding: 32px 32px 28px; cursor: pointer; }
+a.pei-card--go .pei-card__icon { width: 56px; height: 56px; border-radius: 12px; margin-bottom: 22px; }
+a.pei-card--go .pei-card__icon svg { width: 28px; height: 28px; }
+a.pei-card--go h3 { margin: 0 0 10px; font-size: 28px !important; }
+a.pei-card--go p { font-size: 18px; margin: 0 0 22px; }
+a.pei-card--go .pei-link { font-size: 17px; }
+a.pei-card--go .pei-link svg { transition: transform .2s; }
+a.pei-card--go:hover .pei-link { color: #FFFFFF !important; }
+a.pei-card--go:hover .pei-link svg { transform: translateX(4px); }
+a.pei-card--go:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+@media (max-width: 767px) {
+  a.pei-card.pei-card--go { padding: 24px 22px 22px; }
+  a.pei-card--go h3 { font-size: 24px !important; }
+  a.pei-card--go p { font-size: 16px; margin-bottom: 18px; }
+  a.pei-card--go .pei-card__icon { width: 44px; height: 44px; border-radius: 10px; margin-bottom: 14px; }
+  a.pei-card--go .pei-card__icon svg { width: 24px; height: 24px; }
+}
+
+
+/* 15. Weglot (25 sept.) : les lignes du téléphone Mobile Link sont en <div> pour que l’étiquette et la valeur
+   soient traduites séparément (avec des <span>, Weglot les fusionnait en une seule phrase). */
+.pei-phone__row > div:first-child { color: #8A8A8A; }
+.pei-phone__row > div:last-child { color: #fff; font-weight: 600; }
+
+
+
+/* 16. Menu : la page Accueil s’affiche en icône de maison (27 sept.). Le mot « Accueil »
+   reste dans le code (lecteurs d’écran, Weglot) ; seul l’affichage change.
+   Ordinateur : icône seule, avec la même barre braise que les autres onglets au survol
+   et sur la page active (l’icône est dans ::after pour laisser ::before à la barre).
+   Menu mobile : icône + texte. */
+.header-nav-list > .header-nav-item > a[href="/"] {
+  font-size: 0 !important;
+  line-height: 0 !important;
+  display: inline-flex !important;
+  align-items: center;
+  transform: none !important; /* l’animation d’entrée de Squarespace (transform) plaçait la barre sous l’icône au lieu du bas de l’en-tête */
+}
+.header-nav-list > .header-nav-item > a[href="/"]::after,
+.header-menu-nav-item > a[href="/"] .header-menu-nav-item-content::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 10.5 12 3l9 7.5'/%3E%3Cpath d='M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 10.5 12 3l9 7.5'/%3E%3Cpath d='M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.header-nav-list > .header-nav-item > a[href="/"]:hover::before,
+.header-nav-list > .header-nav-item > a[href="/"]:focus-visible::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--pei-ember);
+  box-shadow: 0 0 10px var(--pei-red), 0 0 22px rgba(214, 58, 52, 0.7);
+}
+.header-menu-nav-item > a[href="/"] .header-menu-nav-item-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.header-menu-nav-item > a[href="/"] .header-menu-nav-item-content::before {
+  width: 22px;
+  height: 22px;
+}
