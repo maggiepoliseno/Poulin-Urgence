@@ -1018,6 +1018,7 @@
 
       // Success — show confirmation
       showSuccess(ref, selectedUrgency);
+      notifyLeadSubmitted(selectedSector && selectedSector.division);
 
     } catch (err) {
       console.error('Webhook error:', err);
@@ -1036,6 +1037,32 @@
 
       // Remove error after 5s
       setTimeout(() => errorBanner.remove(), 5000);
+    }
+  }
+
+  // Suivi des demandes (26 oct. 2026) : prévient la page parente (poulinelectrique.com) qu'une demande a été envoyée.
+  // Aucun renseignement personnel n'est transmis, seulement le type de demande ('generac' ou 'electricite').
+  var POULIN_PARENT_ORIGINS = [
+    'https://www.poulinelectrique.com',
+    'https://poulinelectrique.com',
+    'https://en.poulinelectrique.com'
+  ];
+
+  function notifyLeadSubmitted(formType) {
+    try {
+      var parentOrigin = '';
+      if (window.location.ancestorOrigins && window.location.ancestorOrigins.length) {
+        parentOrigin = window.location.ancestorOrigins[0];
+      } else if (document.referrer) {
+        parentOrigin = new URL(document.referrer).origin;
+      }
+      if (POULIN_PARENT_ORIGINS.indexOf(parentOrigin) === -1) return;
+      window.parent.postMessage(
+        { source: 'poulin-form', event: 'lead_submitted', form: formType || 'unknown' },
+        parentOrigin
+      );
+    } catch (err) {
+      // Le suivi ne doit jamais empêcher l'envoi du formulaire.
     }
   }
 
