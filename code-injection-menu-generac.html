@@ -1,0 +1,87 @@
+<!-- ============================================================
+     POULIN ÉLECTRIQUE — Menu « Services électriques » : ajout Generac (v1, 5 nov. 2026)
+     Squarespace → Website → Code Injection → FOOTER : COLLER CE BLOC À LA TOUTE FIN
+     (après le script du menu « filament »). Ne remplace rien : on l'ajoute seulement.
+       1. Retire « Nouvelle installation – Soumission » du menu Services électriques
+          (ordinateur et mobile). Le menu Generac n'est pas touché.
+       2. Ajoute dans la colonne de droite, sous « Besoin d'un électricien ? »,
+          un bloc « Besoin d'une Generac ? » avec le 514 944-6419 (même format).
+     Pour annuler : supprimer ce bloc.
+     ============================================================ -->
+<style id="pei-menu-generac-css">
+.pei-menu-side__gen {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 18px;
+  border-top: 1px solid #1f2024;
+}
+</style>
+<script>
+(function () {
+  var GEN_PHONE = '514 944-6419';
+  var GEN_HREF = 'tel:+15149446419';
+
+  function isFr() {
+    try { var w = window.Weglot && Weglot.getCurrentLang && Weglot.getCurrentLang(); if (w) return String(w).toLowerCase().indexOf('fr') === 0; } catch (e) {}
+    return (document.documentElement.lang || 'fr').toLowerCase().indexOf('fr') === 0;
+  }
+
+  /* Le panneau « Services électriques » = celui qui contient des pages /electricite-… */
+  function hasElectric(container) {
+    var links = container.querySelectorAll('a[href]');
+    for (var i = 0; i < links.length; i++) {
+      if (/\/electricite-/i.test(links[i].getAttribute('href') || '')) return true;
+    }
+    return false;
+  }
+
+  function isQuoteItem(a) {
+    var href = (a.getAttribute('href') || '').toLowerCase();
+    var text = (a.textContent || '').toLowerCase();
+    return /nouvelle[\s-]+installation|new[\s-]+installation/.test(text) ||
+           /nouvelle-installation|new-installation|soumission|quote/.test(href);
+  }
+
+  function apply() {
+    /* 1. Retirer l'élément de menu (bureau + mobile) */
+    document.querySelectorAll('.header-nav-folder-content, .header-menu-nav-folder-content').forEach(function (panel) {
+      if (!hasElectric(panel)) return;
+      panel.querySelectorAll('.header-nav-folder-item, .header-menu-nav-item').forEach(function (item) {
+        var a = item.querySelector('a[href]');
+        if (a && isQuoteItem(a)) item.remove();
+      });
+    });
+
+    /* 2. Bloc « Besoin d'une Generac ? » dans la colonne de droite du menu Services électriques */
+    var fr = isFr();
+    document.querySelectorAll('.header-nav-folder-content').forEach(function (panel) {
+      if (!hasElectric(panel)) return;
+      var side = panel.querySelector('.pei-menu-side');
+      if (!side || side.querySelector('.pei-menu-side__gen')) return;
+      var gen = document.createElement('div');
+      gen.className = 'pei-menu-side__gen wg-notranslate';
+      gen.innerHTML =
+        '<span class="pei-menu-side__k">' + (fr ? 'Besoin d’une Generac ?' : 'Need a Generac?') + '</span>' +
+        '<a class="pei-menu-side__v" href="' + GEN_HREF + '">' + GEN_PHONE + '</a>' +
+        '<span class="pei-menu-side__s">' + (fr ? 'Appelez-nous du lundi au vendredi.' : 'Call us Monday to Friday.') + '</span>';
+      side.appendChild(gen);
+    });
+  }
+
+  /* Le menu est (re)construit par le script principal et par Weglot : on réapplique à chaque changement. */
+  var pending = false;
+  function schedule() {
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(function () { pending = false; apply(); });
+  }
+  function start() {
+    apply();
+    try { new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true }); } catch (e) {}
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+  window.addEventListener('load', apply);
+})();
+</script>
