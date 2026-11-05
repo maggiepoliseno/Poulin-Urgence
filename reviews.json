@@ -2,7 +2,7 @@
   "source": "google-places",
   "placeId": "ChIJ4yhtivVLyUwRNKlYhUbzbE8",
   "rating": 5,
-  "count": 19,
+  "count": 21,
   "listingUrl": "https://maps.google.com/?cid=5723216710691498292&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
   "reviewUrl": "https://search.google.com/local/writereview?placeid=ChIJ4yhtivVLyUwRNKlYhUbzbE8",
   "reviews": [
@@ -158,5 +158,5 @@
       "timeApprox": true
     }
   ],
-  "updated": "2026-11-05T00:53:51.191Z"
+  "updated": "2026-11-05T17:00:38.844Z"
 }
