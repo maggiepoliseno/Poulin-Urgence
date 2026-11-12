@@ -1,15 +1,4 @@
-<!-- ============================================================================
-     POULIN ÉLECTRIQUE — PIED DE PAGE (v4)
-     Où coller : section Pied de page → bloc de code (mode HTML, « Afficher la source » désactivé)
-     Version du 17 septembre 2026
-     v4 : reconstruction après suppression de la section ; bandeau Generac pleine largeur avec le
-          logo distributeur hébergé (PEI_generac_strip_white.png) ; heures de bureau ajoutées à « Nous joindre ».
-     v5 (28 sept. 2026) : lien Accueil en tête de « Explorer », page courante surlignée, « Notre histoire » pointe vers sa page.
-     Le style de base des colonnes vient de la section 6 du Custom CSS ; ce bloc n'ajoute que les compléments.
-     ============================================================================ -->
 <style>
-  /* Pages entièrement injectées (main#page vide) : Squarespace impose au wrapper une hauteur
-     minimale d'un écran, ce qui laissait ~800 px de vide entre le contenu et ce pied de page. */
   #siteWrapper { min-height: 0 !important; }
 
   .pei-footer-wrap { box-sizing: border-box; width: min(1360px, calc(100vw - 64px)); margin-left: calc(50% - min(680px, 50vw - 32px)); }
@@ -19,7 +8,6 @@
   .pei-footer li a[href^="mailto"] { overflow-wrap: break-word !important; word-break: normal !important; hyphens: none !important; }
   .pei-footer__logo { margin-left: 0; }
 
-  /* bandeau Generac — pleine largeur, sous les colonnes : logo « G » (.pei-g, défini dans Code Injection → Header) + une ligne (25 sept.) */
   .pei-footer__generac {
     display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; margin: 0 0 30px; padding: 14px 22px 14px 18px;
     background: #0B0B0B; border: 1px solid rgba(214, 58, 52, .45); border-left: 3px solid #D63A34; border-radius: 12px;
@@ -33,7 +21,6 @@
 .pei-footer__generac .pei-footer__generac-go { margin-left: auto; font-family: 'Oswald', 'Arial Narrow', Impact, sans-serif; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; color: #F07A2A; white-space: nowrap; }
   @media (max-width: 640px) { .pei-footer__generac .pei-footer__generac-go { margin-left: 0; } }
 
-  /* bloc Confidentialité et sécurité (25 sept.) */
 .pei-footer__secure { display: flex; align-items: flex-start; gap: 12px; margin: 0 0 22px; padding: 18px 20px; border: 1px solid #1f2024; border-radius: 12px; background: rgba(11, 11, 11, .6); }
 .pei-footer__secure svg { width: 18px; height: 18px; flex: 0 0 18px; margin-top: 3px; fill: none; stroke: #D63A34; stroke-width: 2; }
 .pei-footer__secure p { margin: 0; font-size: 14px; line-height: 1.6; color: #9A9EA5; text-transform: none; letter-spacing: 0; }
@@ -52,7 +39,6 @@
   .fluid-engine:has(> .fe-block:only-child) { grid-template-rows: none !important; grid-auto-rows: auto !important; }
   .fluid-engine:has(> .fe-block:only-child) > .fe-block { grid-row: 1 / span 1 !important; }
 
-/* v5 (28 sept. 2026) : page courante surlignée dans les colonnes À propos et Explorer */
 .pei-footer li a.is-current { color: #FFFFFF !important; font-weight: 600 !important; }
 .pei-footer li a.is-current svg { stroke: var(--pei-ember, #F07A2A) !important; }
 .pei-footer li a.is-current::after { content: ""; display: inline-block; flex: 0 0 6px; width: 6px; height: 6px; margin-left: 8px; border-radius: 50%; background: var(--pei-ember, #F07A2A); box-shadow: 0 0 8px var(--pei-red, #d63a34); align-self: center; }
@@ -120,7 +106,6 @@
 </div>
 </div>
 <script>
-/* v5 (28 sept. 2026) : pied de page — la page courante est surlignée (Accueil inclus) ; la colonne Nous joindre est ignorée. */
 (function () {
   function norm(p) { return (p || '/').replace(/^https?:\/\/[^/]+/, '').replace(/[?#].*$/, '').replace(/^\/en(?=\/|$)/, '').toLowerCase().replace(/\/+$/, '') || '/'; }
   function mark() {
@@ -137,7 +122,6 @@
 })();
 </script>
 <script>
-/* Fond unique : retire tout fond cheval/braises encore porté par une page (le fond de site le remplace). */
 (function () {
   var DUP = /pei-hero|pei-logo-faded|pei_logo_horse|pei-embers|hero-bg/i;
   function sweep() {

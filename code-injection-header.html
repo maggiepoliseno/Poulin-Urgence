@@ -1,37 +1,5 @@
-<!-- 28 sept. 2026 : bloque la traduction automatique de Chrome/Google — seule la traduction Weglot (règles et corrections du projet) doit s’afficher -->
 <meta name="google" content="notranslate">
-<!-- ============================================================
-     POULIN ÉLECTRIQUE — Code Injection → FOOTER  ("filament" header, v3, self-contained)
-     Website Tools → Code Injection → Footer: REPLACE everything in the box with this file.
-     The header CSS is included below, so DELETE section 3 (En-tête) from Custom CSS —
-     nothing header-related should remain there.
-     Squarespace settings: Header Style = Solid · Button ON · Announcement Bar OFF · Cart/Social OFF.
-   v3.1 (24 sept. 2026) : vrais slugs des pages, bouton de l’en-tête → /nous-joindre, lien du mega-menu réparé.
-   v3.2 (24 sept. 2026) : « Concessionnaire autorisé Generac » en tête de la bande du haut.
-   v3.3 (25 sept. 2026) : logo « G » Generac (classe .pei-g) devant « Generac ».
-   v3.4 (25 sept. 2026) : Generac retiré de la bande du haut (la classe .pei-g reste pour les pages).
-   v3.5 (25 sept. 2026) : curseur Poulin (section 3l).
-   v3.6 (25 sept. 2026) : menu déroulant tolérant (3g-bis + script H).
-   v3.7 (25 sept. 2026) : hauteur réelle de l’en-tête publiée dans --pei-header-h (script I).
-   v3.8 (25 sept. 2026) : descriptions du menu, bande du haut et pied du menu mobile suivent la langue Weglot (wg-notranslate + re-rendu au changement de langue).
-   v3.9 (25 sept. 2026) : langue Weglot transmise aux iframes cbauer98.github.io (formulaire de demande, avis) par message pei-lang.
-     v3.10 (25 sept. 2026) : page Demander une soumission (Generac) : le contenu commence sous la hauteur réelle de l’en-tête (3m).
-     v3.11 (26 sept. 2026) : la page courante est en gras dans les menus déroulants (3n).
-     v3.12 (26 sept. 2026) : héros des pages secteur/service, FAQ, Nous joindre et Notre équipe : nom de la page en grand, phrase plus petite (3o).
-     v3.13 (26 sept. 2026) : tous les héros commencent sous la hauteur réelle de l’en-tête (3p) ; --pei-header-h suit les changements de taille de l’en-tête (ResizeObserver).
-     v3.14 (26 sept. 2026) : menu : « Besoin d’un électricien ? » (sans le mot projet) ; description Industriel EN : Manufacturing.
-     ============================================================ -->
 <style id="pei-header-css">
-/* ============================================================================
-   3. HEADER — "filament" concept  (replaces the WHOLE former section 3)
-   Squarespace prerequisites:
-     • Edit Site Header → Style: Solid (any colour — the CSS makes it glass)
-     • Edit Site Header → Elements → Logo: PEI_logo_C_trad_metal_h120.png
-     • Edit Site Header → Elements → Button ON: text "Soumission", link /contact
-     • Marketing → Announcement Bar: OFF (the utility strip is injected by the script)
-   Depends on 2_Code_Injection_Footer.html (strip, mega-menu, scrolled state).
-   ============================================================================ */
-/* ---- 3a. Local variables ---- */
 :root {
   --pei-steel: #C9CCD1;
   --pei-steel-2: #8A8F96;
@@ -39,7 +7,6 @@
   --pei-glass: rgba(5, 5, 5, 0.58);
   --pei-glass-solid: rgba(5, 5, 5, 0.92);
 }
-/* ---- 3b. The bar: glass, no Squarespace border ---- */
 .header,
 .header-inner,
 .header-background {
@@ -80,7 +47,6 @@ body.pei-scrolled .header-inner {
 .header-actions-action--social {
   display: none !important;
 }
-/* filament: red → ember line under the whole bar */
 .header-announcement-bar-wrapper {
   position: relative;
 }
@@ -95,14 +61,12 @@ body.pei-scrolled .header-inner {
   background: linear-gradient(90deg, rgba(214, 58, 52, 0) 0%, rgba(214, 58, 52, 0.55) 18%, rgba(214, 58, 52, 0.9) 45%, rgba(240, 122, 42, 0.95) 52%, rgba(214, 58, 52, 0.55) 70%, rgba(214, 58, 52, 0) 100%);
   box-shadow: 0 0 14px rgba(214, 58, 52, 0.55), 0 0 32px rgba(214, 58, 52, 0.25);
 }
-/* Squarespace's own announcement bar must stay off: the injected strip replaces it */
 .sqs-announcement-bar-dropzone,
 .sqs-announcement-bar,
 .sqs-announcement-bar-custom-location {
   display: none !important;
   height: 0 !important;
 }
-/* ---- 3c. Utility strip (injected by the script) ---- */
 .pei-strip {
   height: 36px;
   background: #050505;
@@ -168,10 +132,8 @@ body.pei-scrolled .pei-strip {
     display: none;
   }
 }
-/* Generac « G » mark (official file, embedded) — used in the strip and on pages */
 .pei-g { display: inline-block; flex: 0 0 auto; height: 18px; aspect-ratio: 78 / 72; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAE4AAABICAYAAABY88MAAAAKM0lEQVR42u2cW4wkVRnHf9851dU9V9ddLgFZ4wYU2Q0RRWMwwqJGlGyIopkX46vPvGjAxLiLCcqDCV4SE0Pi7U1IfOIBNKIxEjGESwiLUQMuqBBWbnufne6qvw91znRt0z1TXdU9Mwx7MpXu6bqd73+++3fOMRo2SQ4wM8tKv7WAS4APAhcC7wPeA8wDrdKRAA5YCOdmgA7QBlLAl67zgIUjBzKgCywDp8JxAngz/H4CeAN4ETgC/Bv4m5m9NtB/X+571WYNADPAxZdKugj4NPA54GPAbmCRrdMEvAo8DTwCPGhmfynRYmaWTxU4SS6+RNI+4DbgS8CuIZdnY/TDavRRQ75ryDPckHufAH5kZr9swn3jiCaSOpK+K+mM+q0nqSspk5Rr67W81Mdy/x6SdFkEb+IcFzlN0gXAb4Drw6leSQe9nVoejiTowgNm9kxZohoDFzkN2AE8DHwoKOHkbQjYYOsFOo4AHw+6kLXAc+MYkvCgX5RAa20D0AigdYP1/1kVI+Eqcps3s0zSV4Bbwgi12F6tFeg6IOmWoJJ8bVENpprgYz0TRkVjcuvbpWWBrkfM7Pq1dF0V4r2ZCVgC9gRluh1BIxg4gOskXRO4ztUFLiL+tSH+EduU6zxw61oYuYrux5XB2rCNuW1QfX1qgHHG4rh4/qZgebIJWFFN+WjaIs1XS9oZGMfGBS525IYJOZu9UqA+rUPhPVkDjlPwV68ahVOyljUNLogHPtxQTKNBcYGgN8NnNiK2HDfisZBNaQNzJbrqGrI86LlLR3kfSQXkd6/1gDGU7UvAj4EHQoonbyheNsQizgNXBAf9qyFLUwe82Kf31wnmffi8MQTCWY2gOt7zsKRLNzyPJH2zZt+74fOe8JxkHI6L7YKa4pQHrvgH8AUzOxESnNmU3RoXk51m9j1J+0OOMCv5aVXbwlox2nqicHlN4OIz7oigmVl3g/wwJCWSAO4NwNVp7TrAxXZhTZfDAUeB3wdz3tvolFFwJZ4AVkIsWtWdyks6uHaQXyf9HZ3Gx8zseMisbHTUEd/3BkX9wYKougpHGj5bTTiu3aDTj5UGKN9I1MxMgdOPA48CVwNnKzBLLAZ1gFdGqakqwKUNXIXnNzV2Krhckm4NtOZj9N9F9TKsDpFUELfFGj5cvPblBoZlkgB2KRKVE2vT4jgXwHppKwA3LNYck2urA1dK4I3LcSpFHacbELsVij8aFfMma8SpkpQCF00gRVNnpDO2cEsqnJ9tCsK4YhUG7RMU0ya6m8R5HnjVzP5YBzjPxicuo5h/B/jMJjPWk8BH4mCOA1xaI76bVDsW3IF8E/oQizav1RVV20QF7elnnf0mvd8GpKByyJXzzijQ1PK3zgM3BeCa5O7f0cCd57YGwOXnYRofuLPA6+e5r6I7Ep29UB481gC4Jq5M5Pac4eXAKvc3dalsFO1ujdAnnjtR0/N39OcE1+l4m34WdjBDW6UwXb52Q2PV+MLTNbnFKKbs17kX4A7gHvrV/2HX5CPuL4OcAXcB1zHBmVZVgDtZQ1RjBy8Zl+NKauLpCSYOXpm0nq6SyGzix11bt8Nx4ckEwqaMosJPA+5/S8iVjHFzHWu9PxShe8MyDOtwXt6Qy2LRJQEunoCxGssdqavjYlXrA0G3wOakp6BIxF5RE7iVJsAda8jm3wqcZqOmhU4ruxHeexPF/OU6c/uWRwFehZDnGuiXHPispNvNrBcq64kkL8maFFHWElFJiZl1Q93i6yUrP+6gjwQuqXDz8w1ELboDd0vaDXzbzF4fIHSSRZk86MZe0K33AnsbuCErdUYurtnaLelUaS2UGkz3ekHSXZI+KWkqKwslLUr6oqS/ltaXqeY0rx+EZyaVQ6JS0cQBhynWnjZxIAczuf8DXgD+E0bWRviDWSn0immuYda5QzFB6JqS/1i3v3GJ0jfM7PtB9HuVRDWAFlfUPD4B4HwJAB+IvBD46BQYL29oyeMg/rOuVY0P+NOE/CBHf9GcSlw0qSMbCLnqegNxkF8cFdolFUfud8HCdGpYqLUGxdi66yaOAn8fOzsSvfewSORfwJ95ZyQ2I31PmdnpQL/GFdXyNT9heyyxrOrDPbgWRlVXD0aReoxiKvxmFIk3ErSzwFVmdmTUCsJ1OS6GS8Ec305/xuJ2FVMDHgig+SbLLmMK3ZvZb4GfUmRlu9sYvLsnkR1ZfWBwhm8D/lACb7sUcbpB/fzczB5fbyuNcXeBiNHEAvBr4OZSVDC1/P4Ggdai2MzlBoqstya1mUGMJpyZnQAOAIeCIo2BetkJ3eqcqFI41wKeAj5vZsfWA612JBDTQQHIq0Pq5ssUK/cG49MqANqk+zjCcS2nwstewa+A28zszSp7jjQOocp6QNLlFDtE3Bxclou3OMedAR4CfhhnXVYFbRKx56jdvBaAKyl2jNgDXAbsZPhikySEcq4Uy7bozwb1pWNUDTVaw/JK6bjbV4/+rl/HQyj1CPComT1fokFj1UQmmAeLhOdNCy1r5QcH+m1DxHD1cz0gdN99nqUlwPJzavaHSs99NnxfmhJwa0QbVfRQicBDwCGtdq/4U+ni0Tt+HSz98izG0hIcPmrceCMsvGwc3ed47yVi31IOZE3Wl1lNjWtvGecKozS6hQsP3y/uRLYBFlnCOLTfs/O/ntdPeU4velzXsehSchaROmTdNrQ60EvJrQ0ugTwhtXkTGAcrEH0/sBfZndMPt3QQx6XXel561XNy2XPRDoe6DmvNka3M07M2XXVILIUspUcHXIKjDeyAfB7oIBd3QOwgtUAtvM2CzZPnM0AKlgIpUguzBNRiddK4eVDxKTwEdWR2tv6OhQf3ppx8rcX8LuPdZ+Y44eeRpbDSoUsHLMVZiyxP8c7h2YFYJKeD6BOECqK8tZAtIBXnRAdIMVqBKF8QpNY5RMk8puHLCjSMc5VjliGExTSZBXWheE8ezilkHwWmfibSzpru2nMxPbsC0x4y7US2CzSPmMFoI9pY6LhsAdMcOXMY84gOFvexVDGrSDjMCN8NCyVAmTDlqzm92PHid4X/C4KwvPTbWz8LLSOUQ19PlXy0sqa3+NX6ymmgLHnOuXXVmCFbTkhPn2Sl8xy95EWSnidt7aCbzWP5LDkzGB1QgrkO8C5QB+c6mDy5pQFYj0hw5nHMkWsWs4Ll5VpY3sZIEa2Cg6yNqXA7jATMBa4JLoeG2MhVW5kXXCMFTgmDsco14aD//yrXBMAZMArDbYRGgGpTs6qrb17Cs3ev5/hxz+KiZ3nZsyub4ZRbxOdzdP0sCR16WQouIbV5YJEsm0W0wXUg75BbCkox85jNIc3R3721jVToKpMHS/o6Skmhn+TBHMhhZgPY6FwGVD9LYmFQzpUKwM7YqpUctI7PYqsG4nBFgPchDrNxlvHg/gSOJLDiYC6BrmOODst+gUwzOM0UhiPq2yzFuRYt7SCz+dUByIO+tTgIeJzNIpvD8nahu6PEqA3W+z8lGCywfaYFkgAAAABJRU5ErkJggg==) center / contain no-repeat; vertical-align: middle; }
 .pei-strip__generac .pei-g { height: 14px; }
-/* Generac badge (first item in the strip) */
 .pei-strip__generac strong { letter-spacing: 0.04em; }
 @media (max-width: 799px) {
   .pei-strip__group { gap: 18px; }
@@ -179,7 +141,6 @@ body.pei-scrolled .pei-strip {
 @media (max-width: 480px) {
   .pei-strip__glabel { display: none; }
 }
-/* ---- 3d. Logo ---- */
 .header-title-logo {
   display: block !important;
   line-height: 0;
@@ -200,7 +161,6 @@ body.pei-scrolled .header-title-logo img {
     height: 28px !important;
   }
 }
-/* ---- 3e. Desktop layout: logo — nav — button ---- */
 @media (min-width: 800px) {
   .header-display-desktop {
     display: flex !important;
@@ -242,13 +202,11 @@ body.pei-scrolled .header-title-logo img {
     display: none !important;
   }
 }
-/* ---- 3f. Nav links: Oswald, uppercase, ember glow ---- */
 .header-nav-item {
   margin: 0 !important;
   position: relative;
 }
 @media (min-width: 800px) {
-  /* item spans the full bar height: the panel opens right under the filament, no hover gap */
   .header-nav-item {
     height: 88px;
     display: flex;
@@ -278,7 +236,6 @@ body.pei-scrolled .header-title-logo img {
 .header-nav-folder-title:hover {
   color: #FFFFFF !important;
 }
-/* active item or open folder: ember bar with glow */
 .header-nav-item--active > a::before,
 .header-nav-item--folder:hover > .header-nav-folder-title::before,
 .header-nav-item--folder:focus-within > .header-nav-folder-title::before {
@@ -295,7 +252,6 @@ body.pei-scrolled .header-title-logo img {
 .header-nav-item--folder:hover > .header-nav-folder-title {
   color: #FFFFFF !important;
 }
-/* chevron */
 .header-nav-folder-title::after {
   content: "";
   display: inline-block;
@@ -314,7 +270,6 @@ body.pei-scrolled .header-title-logo img {
   top: 1px;
   border-color: var(--pei-ember);
 }
-/* ---- 3g. Dropdown panel: two-column mega-menu + call-out ---- */
 .header-nav-folder-content {
   background: #0a0a0b !important;
   border: 1px solid #1f2024 !important;
@@ -373,7 +328,6 @@ body.pei-scrolled .header-title-logo img {
   text-transform: none;
   letter-spacing: 0;
 }
-/* folders with 4+ pages: two columns + call-out (class added by the script) */
 .header-nav-folder-content {
   left: auto !important;
   right: 0 !important;
@@ -437,9 +391,6 @@ body.pei-scrolled .header-title-logo img {
   color: #FFFFFF !important;
   text-decoration: underline !important;
 }
-/* ---- 3g-bis. Menu déroulant « tolérant » (25 sept.) : reste ouvert ~0,4 s quand la souris
-   quitte le titre, pas d'espace entre la barre et le panneau, pont invisible au-dessus du panneau.
-   La classe .pei-open est posée par le script (section H). ---- */
 @media (min-width: 800px) {
   .header-nav-folder-content { margin-top: 0 !important; }
   .header-nav-folder-content::before { content: ""; position: absolute; left: -24px; right: -24px; top: -16px; height: 16px; }
@@ -455,7 +406,6 @@ body.pei-scrolled .header-title-logo img {
   }
   .header-nav-item--folder.pei-open > .header-nav-folder-title::after { transform: rotate(-135deg); top: 1px; border-color: var(--pei-ember); }
 }
-/* ---- 3h. Native "Soumission" button: chamfered blade ---- */
 .header-actions-action--cta .btn,
 .header-menu-cta .btn {
   font-family: var(--pei-head) !important;
@@ -499,8 +449,6 @@ body.pei-scrolled .header-actions-action--cta .btn {
 .pei-pill {
   display: none !important;
 }
-/* old pill: removed */
-/* ---- 3i. Language picker (Weglot / Squarespace), if it shows in the bar ---- */
 .header .language-picker .current-language,
 .header .language-picker .current-language-name {
   font-family: var(--pei-body) !important;
@@ -528,7 +476,6 @@ body.pei-scrolled .header-actions-action--cta .btn {
 .header .language-picker-content a:hover span {
   color: var(--pei-red) !important;
 }
-/* ---- 3j. Mobile: two-line burger, dark sheet, sub-items with rule ---- */
 .header-burger {
   width: 44px !important;
   height: 44px !important;
@@ -611,7 +558,6 @@ body.pei-scrolled .header-actions-action--cta .btn {
   height: 52px;
   font-size: 15px !important;
 }
-/* sheet footer block (injected) */
 .pei-menu-foot {
   padding: 18px 0 8px;
   display: flex;
@@ -645,30 +591,25 @@ body.pei-scrolled .header-actions-action--cta .btn {
   line-height: 1.5;
   color: #9A9EA5;
 }
-/* ---- 3l. Curseur Poulin — flèche rouge, orange sur ce qui se clique (souris seulement) ---- */
 @media (hover: hover) and (pointer: fine) {
   html, body { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'%3E%3Cpath d='M4 3 L4 20.5 L8.6 16.2 L11.7 23 L14.6 21.8 L11.6 15.1 L17.8 15.1 Z' fill='%23D63A34' stroke='%23ffffff' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") 4 3, auto; }
   a[href], button, [role="button"], summary, select, label[for], .btn, .header-burger, .header-nav-folder-title { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'%3E%3Cpath d='M4 3 L4 20.5 L8.6 16.2 L11.7 23 L14.6 21.8 L11.6 15.1 L17.8 15.1 Z' fill='%23F07A2A' stroke='%23ffffff' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") 4 3, pointer !important; }
   input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]), textarea, [contenteditable="true"] { cursor: text !important; }
 }
-/* ---- 3k. Old floating bubble: removed (the Soumission button replaces it) ---- */
 #pei-cta {
   display: none !important;
 }
 
-/* ---- 3m. Contenu sous l’en-tête : la page soumission Generac suit --pei-header-h ---- */
 .pei-soum {
   padding-top: calc(var(--pei-header-h, 190px) + 48px) !important;
 }
 
-/* ---- 3n. Page courante en gras dans les menus déroulants (bureau et mobile) ---- */
 .header-nav-folder-item--active .header-nav-folder-item-content,
 .header-nav-folder-content a[aria-current="page"] .header-nav-folder-item-content,
 .header-menu-nav-folder-content a[aria-current="page"] .header-menu-nav-item-content {
   font-weight: 700 !important;
 }
 
-/* ---- 3o. Héros des pages secteur et service (+ FAQ, Nous joindre, Notre équipe) : le nom de la page en grand, la phrase plus petite ---- */
 :is(
 #collection-6aa4368353c91c12fb4c64eb,
 #collection-6aa4373b112bf47fa668d97e,
@@ -727,23 +668,18 @@ body.pei-scrolled .header-actions-action--cta .btn {
   margin: 0 0 24px !important;
 }
 
-/* ---- 3p. Tous les héros commencent sous l’en-tête réel (--pei-header-h, script I) ---- */
 .pei-hero {
   padding-top: calc(var(--pei-header-h, 214px) + 40px) !important;
 }
 
-/* ---- 3q. 26 sept. 2026 — Menus déroulants : on voit toujours sur quelle page on est ---- */
-/* Onglet du haut : trait orange = section courante ; survol d'une autre section = trait gris */
 .header-nav-item--folder:not(.header-nav-item--active):hover > .header-nav-folder-title::before,
 .header-nav-item--folder:not(.header-nav-item--active):focus-within > .header-nav-folder-title::before {
   background: rgba(255, 255, 255, 0.45) !important;
   box-shadow: none !important;
 }
-/* Titres et descriptions toujours alignés à gauche */
 .header-nav-folder-item a { align-items: stretch !important; }
 .header-nav-folder-item-content,
 .header-nav-folder-item a .pei-nav-desc { text-align: left !important; }
-/* Page courante : barre orange, fond, titre orange et « Vous êtes ici » */
 .header-nav-folder-item--active a { background: #16120f !important; border-left-color: var(--pei-ember) !important; }
 .header-nav-folder-item--active a:hover { background: #1b1612 !important; }
 .header-nav-folder-item--active .header-nav-folder-item-content { color: var(--pei-ember) !important; }
@@ -759,7 +695,6 @@ body.pei-scrolled .header-actions-action--cta .btn {
   color: var(--pei-ember);
 }
 html[lang^="en"] .header-nav-folder-item--active .header-nav-folder-item-content::after { content: "· You are here"; }
-/* Menu mobile : page courante en orange */
 .header-menu-nav-item--active a { color: var(--pei-ember) !important; box-shadow: inset 3px 0 0 var(--pei-ember); }
 .header-menu-nav-item--active a * { color: var(--pei-ember) !important; }
 
@@ -774,20 +709,18 @@ html[lang^="en"] .header-nav-folder-item--active .header-nav-folder-item-content
   var fr = lang.indexOf('fr') === 0;
   var path = location.pathname.toLowerCase().replace(/\/+$/, '') || '/';
 
-  /* ---------- Settings ---------- */
   var PHONE = '450 218-4600';
   var PHONE_HREF = 'tel:+14502184600';
   var HOURS_FR = 'lun–jeu 7 h – 15 h, ven 7 h – 12 h';
   var HOURS_EN = 'Mon–Thu 7 a.m. – 3 p.m., Fri 7 a.m. – noon';
-  var LANG_URL = '';                    /* e.g. 'https://en.poulinelectrique.com' — empty = no FR/EN switch in the strip */
-  var QUOTE_URL = '/nous-joindre';           /* Soumission button target */
+  var LANG_URL = '';
+  var QUOTE_URL = '/nous-joindre';
   var QUOTE_URL_GENERAC = '/generac-demander-une-soumission';
-  var GENERAC_URL = '/generac-apercu';    /* Generac badge in the strip */
+  var GENERAC_URL = '/generac-apercu';
 
   var ICON_PHONE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>';
   var ICON_SHIELD = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg>';
 
-  /* ---------- A. Description under each dropdown link (keyed by page slug) ---------- */
   var DESC = {
     fr: {
       '': 'Un héritage familial, plus de 25 ans à votre service.',
@@ -837,14 +770,13 @@ html[lang^="en"] .header-nav-folder-item--active .header-nav-folder-item-content
       if (a.querySelector('.pei-nav-desc')) return;
       var text = map[slug(a)];
       if (!text) return;
-      var s = document.createElement('div'); /* div, pas span : Weglot traduit le titre et la description séparément */
+      var s = document.createElement('div');
       s.className = 'pei-nav-desc wg-notranslate';
       s.textContent = text;
       a.appendChild(s);
     });
   }
 
-  /* ---------- B. Clickable folder title (opens the folder's first page) — desktop only ---------- */
   function clickableFolders() {
     if ('ontouchstart' in window) return;
     document.querySelectorAll('.header-nav-folder-title').forEach(function (title) {
@@ -859,7 +791,6 @@ html[lang^="en"] .header-nav-folder-item--active .header-nav-folder-item-content
     });
   }
 
-  /* ---------- C. Mega-menu: folders with 4+ pages → two columns + call-out ---------- */
   function megaMenus() {
     document.querySelectorAll('.header-nav-folder-content').forEach(function (panel) {
       var items = panel.querySelectorAll('.header-nav-folder-item');
@@ -880,7 +811,6 @@ html[lang^="en"] .header-nav-folder-item--active .header-nav-folder-item-content
     });
   }
 
-  /* ---------- D. Utility strip above the bar ---------- */
   function addStrip() {
     var host = document.querySelector('.header-announcement-bar-wrapper');
     if (!host || host.querySelector('.pei-strip')) return;
@@ -898,7 +828,6 @@ html[lang^="en"] .header-nav-folder-item--active .header-nav-folder-item-content
     host.insertBefore(strip, host.firstChild);
   }
 
-  /* ---------- E. Soumission button: Generac target on Generac pages ---------- */
   function quoteButton() {
     var generac = path.indexOf('generac') > -1 || path.indexOf('generatrice') > -1;
     document.querySelectorAll('.header-actions-action--cta .btn, .header-menu-cta .btn').forEach(function (b) {
@@ -907,7 +836,6 @@ html[lang^="en"] .header-nav-folder-item--active .header-nav-folder-item-content
     });
   }
 
-  /* ---------- F. Mobile menu footer: phone and hours ---------- */
   function mobileFoot() {
     var nav = document.querySelector('.header-menu-nav-list') || document.querySelector('.header-menu-nav');
     if (!nav || document.querySelector('.pei-menu-foot')) return;
@@ -919,7 +847,6 @@ html[lang^="en"] .header-nav-folder-item--active .header-nav-folder-item-content
     nav.appendChild(d);
   }
 
-  /* ---------- G. Scrolled state: compact bar ---------- */
   function scrollState() {
     var on = false;
     function tick() {
@@ -930,12 +857,10 @@ html[lang^="en"] .header-nav-folder-item--active .header-nav-folder-item-content
     tick();
   }
 
-  /* ---------- H. Menu déroulant tolérant : délai de fermeture (ordinateur seulement) ---------- */
   function hoverIntent() {
     if (window.__peiHoverIntent || !window.matchMedia('(hover: hover) and (min-width: 800px)').matches) return;
     window.__peiHoverIntent = true;
     var DELAY = 400, timer = null, open = null;
-    /* garde le panneau dans l'écran (ex. « À propos » débordait à gauche) */
     function fit(item) {
       var p = item.querySelector('.header-nav-folder-content');
       if (!p) return;
@@ -963,7 +888,6 @@ html[lang^="en"] .header-nav-folder-item--active .header-nav-folder-item-content
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(open); });
   }
 
-  /* ---------- I. Hauteur réelle de l'en-tête → --pei-header-h (le héros commence juste dessous) ---------- */
   function headerOffset() {
     var h = document.querySelector('.header');
     if (!h || document.body.classList.contains('pei-scrolled')) return;
@@ -972,7 +896,6 @@ html[lang^="en"] .header-nav-folder-item--active .header-nav-folder-item-content
     if (window.ResizeObserver && !window.__peiRO) { window.__peiRO = new ResizeObserver(function () { headerOffset(); }); window.__peiRO.observe(h); }
   }
 
-    /* v3.9 : le formulaire et les avis (GitHub Pages, dans des iframes) suivent la langue Weglot */
   function syncFrames() {
     var ORIGIN = 'https://cbauer98.github.io';
     var send = function (f) { try { f.contentWindow.postMessage({ type: 'pei-lang', lang: curLang().indexOf('fr') === 0 ? 'fr' : 'en' }, ORIGIN); } catch (e) {} };
@@ -984,9 +907,8 @@ html[lang^="en"] .header-nav-folder-item--active .header-nav-folder-item-content
 
   function run() { lang = curLang(); fr = lang.indexOf('fr') === 0; map = fr ? DESC.fr : DESC.en; addDescriptions(); clickableFolders(); megaMenus(); addStrip(); quoteButton(); mobileFoot(); headerOffset(); syncFrames(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
-  window.addEventListener('load', run); /* second pass: Squarespace sometimes re-renders the header */
+  window.addEventListener('load', run);
 
-  /* v3.8 : Weglot — re-render the language-dependent pieces once Weglot starts, and on every language switch */
   function rerender() {
     document.querySelectorAll('.pei-nav-desc, .pei-menu-side, .pei-strip, .pei-menu-foot').forEach(function (n) { n.remove(); });
     run();
