@@ -7,6 +7,17 @@
   "reviewUrl": "https://search.google.com/local/writereview?placeid=ChIJ4yhtivVLyUwRNKlYhUbzbE8",
   "reviews": [
     {
+      "author": "Mathieu",
+      "authorUrl": "https://www.google.com/maps/contrib/104429654647872668829/reviews",
+      "photo": "https://lh3.googleusercontent.com/a-/ALV-UjVJA0kZ5xPMK7xL3MRmGv1vsZLTqEUq4UQ5V7qVix1p31MbtDdKuQ=s128-c0x00000000-cc-rp-mo",
+      "rating": 5,
+      "text": "**\"Il est électricien, un spécialiste de tout ce qui touche à l'électricité.\"**\nSam et Dalton",
+      "translated": false,
+      "relative": "il y a une semaine",
+      "time": "2026-11-05T16:04:02.790353918Z",
+      "url": "https://www.google.com/maps/reviews/data=!4m6!14m5!1m4!2m3!1sCi9DQUlRQUNvZENodHljRjlvT2tGSGFVbGxSVTE1Tm10b1NYUXlhME01ZUd0UWVVRRAB!2m1!1s0x4cc94bf58a6d28e3:0x4f6cf3468558a934"
+    },
+    {
       "author": "Henry Bladimir",
       "authorUrl": null,
       "photo": null,
@@ -158,5 +169,5 @@
       "timeApprox": true
     }
   ],
-  "updated": "2026-11-06T17:00:39.148Z"
+  "updated": "2026-11-14T05:00:38.678Z"
 }
