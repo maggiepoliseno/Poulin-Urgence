@@ -756,7 +756,7 @@
     </div>
   </div>
 
-  <a class="generac-link" id="generacLink" href="https://www.poulinelectrique.com/generac-entretien-et-reparations#formulaire" target="_top"><span>Cliquez ici pour Generac</span><span class="generac-link__cta">Demande Generac ›</span></a>
+  <a class="generac-link" id="generacLink" href="https://www.poulinelectrique.com/generac-apercu" target="_top"><span>Cliquez ici pour Generac</span><span class="generac-link__cta">Demande Generac ›</span></a>
 
   </div>
   <div class="pei-col pei-col--right">
@@ -1007,12 +1007,22 @@
     });
   }
 
+  // 24 nov. 2026 — « Demande Generac » mène à la page Generac (aperçu) dans la langue du visiteur
+  function setGeneracLink() {
+    var a = document.getElementById('generacLink');
+    if (!a) return;
+    var origin = 'https://www.poulinelectrique.com';
+    try { if (document.referrer) origin = new URL(document.referrer).origin; } catch (e) {}
+    a.href = origin + (LANG === 'en' ? '/en/generac' : '/generac-apercu');
+  }
+
   function applyLang() {
     document.documentElement.lang = LANG === 'en' ? 'en-CA' : 'fr-CA';
     document.title = MODE === 'generac'
       ? (LANG === 'en' ? 'Poulin Électrique – Generac Service Request' : 'Poulin Électrique – Demande de service Generac')
       : L('title');
     translateStatic();
+    setGeneracLink();
     if (selectedSector) setCopy(selectedSector.key, selectedSector.division); else setCopy('industriel', 'electricite');
     setButton();
   }
@@ -1306,8 +1316,7 @@
     if (sel && PLANS[p]) sel.value = PLANS[p];
     if (new URLSearchParams(location.search).get('urgence') === '1') selectUrgent();
     // Lien vers le formulaire Generac : même domaine que la page qui intègre le formulaire
-    var a = document.getElementById('generacLink');
-    try { if (a && document.referrer) a.href = new URL(document.referrer).origin + '/generac-entretien-et-reparations#formulaire'; } catch (e) {}
+    setGeneracLink();
   }
   // 26 sept. 2026 — bouton « Ma génératrice est en panne » : demande urgente présélectionnée
   function selectUrgent() {
