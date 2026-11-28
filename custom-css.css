@@ -927,15 +927,14 @@ a.pei-card--go:focus-visible { outline: 2px solid currentColor; outline-offset: 
 }
 
 
-/* 15. Weglot (25 sept.) : les lignes du téléphone Mobile Link sont en <div> pour que l’étiquette et la valeur
-   soient traduites séparément (avec des <span>, Weglot les fusionnait en une seule phrase). */
+/* 15. (25 sept.) : les lignes du téléphone Mobile Link sont en <div> (étiquette et valeur séparées). */
 .pei-phone__row > div:first-child { color: #8A8A8A; }
 .pei-phone__row > div:last-child { color: #fff; font-weight: 600; }
 
 
 
 /* 16. Menu : la page Accueil s’affiche en icône de maison (27 sept.). Le mot « Accueil »
-   reste dans le code (lecteurs d’écran, Weglot) ; seul l’affichage change.
+   reste dans le code (lecteurs d’écran) ; seul l’affichage change.
    Ordinateur : icône seule, avec la même barre braise que les autres onglets au survol
    et sur la page active (l’icône est dans ::after pour laisser ::before à la barre).
    Menu mobile : icône + texte. */

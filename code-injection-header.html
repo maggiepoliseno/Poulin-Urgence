@@ -702,7 +702,6 @@ html[lang^="en"] .header-nav-folder-item--active .header-nav-folder-item-content
 <script>
 (function () {
   function curLang() {
-    try { var w = window.Weglot && Weglot.getCurrentLang && Weglot.getCurrentLang(); if (w) return String(w).toLowerCase(); } catch (e) {}
     return (document.documentElement.lang || 'fr').toLowerCase();
   }
   var lang = curLang();
@@ -771,7 +770,7 @@ html[lang^="en"] .header-nav-folder-item--active .header-nav-folder-item-content
       var text = map[slug(a)];
       if (!text) return;
       var s = document.createElement('div');
-      s.className = 'pei-nav-desc wg-notranslate';
+      s.className = 'pei-nav-desc';
       s.textContent = text;
       a.appendChild(s);
     });
@@ -799,7 +798,7 @@ html[lang^="en"] .header-nav-folder-item--active .header-nav-folder-item-content
       var generac = false;
       items.forEach(function (it) { var a = it.querySelector('a[href]'); if (a && slug(a).indexOf('generac') > -1) generac = true; });
       var side = document.createElement('div');
-      side.className = 'pei-menu-side wg-notranslate';
+      side.className = 'pei-menu-side';
       var link = generac ? '<a href="' + QUOTE_URL_GENERAC + '">' + (fr ? 'demandez une soumission' : 'request a quote') + '</a>'
                          : '<a href="/electricite-demande-de-service">' + (fr ? 'faites une demande de service' : 'send a service request') + '</a>';
       side.innerHTML =
@@ -815,7 +814,7 @@ html[lang^="en"] .header-nav-folder-item--active .header-nav-folder-item-content
     var host = document.querySelector('.header-announcement-bar-wrapper');
     if (!host || host.querySelector('.pei-strip')) return;
     var strip = document.createElement('div');
-    strip.className = 'pei-strip wg-notranslate';
+    strip.className = 'pei-strip';
     var langHtml = LANG_URL ? '<a class="pei-strip__lang" href="' + LANG_URL + '">' + (fr ? '<b>FR</b> / EN' : 'FR / <b>EN</b>') + '</a>' : '';
     strip.innerHTML =
       '<div class="pei-strip__group">' +
@@ -840,7 +839,7 @@ html[lang^="en"] .header-nav-folder-item--active .header-nav-folder-item-content
     var nav = document.querySelector('.header-menu-nav-list') || document.querySelector('.header-menu-nav');
     if (!nav || document.querySelector('.pei-menu-foot')) return;
     var d = document.createElement('div');
-    d.className = 'pei-menu-foot wg-notranslate';
+    d.className = 'pei-menu-foot';
     d.innerHTML =
       '<a class="pei-menu-foot__phone" href="' + PHONE_HREF + '">' + ICON_PHONE + PHONE + ' <small>' + (fr ? 'Bureau' : 'Office') + '</small></a>' +
       '<span class="pei-menu-foot__hours">' + (fr ? HOURS_FR.charAt(0).toUpperCase() + HOURS_FR.slice(1) : HOURS_EN) + '</span>';
@@ -909,18 +908,6 @@ html[lang^="en"] .header-nav-folder-item--active .header-nav-folder-item-content
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
   window.addEventListener('load', run);
 
-  function rerender() {
-    document.querySelectorAll('.pei-nav-desc, .pei-menu-side, .pei-strip, .pei-menu-foot').forEach(function (n) { n.remove(); });
-    run();
-  }
-  function hookWeglot() {
-    if (window.__peiWeglot || !window.Weglot || typeof Weglot.on !== 'function') return;
-    window.__peiWeglot = true;
-    Weglot.on('initialized', rerender);
-    Weglot.on('languageChanged', rerender);
-    if (Weglot.initialized || (Weglot.getCurrentLang && Weglot.getCurrentLang())) rerender();
-  }
-  window.addEventListener('load', hookWeglot);
   scrollState();
   hoverIntent();
   var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(headerOffset, 150); });

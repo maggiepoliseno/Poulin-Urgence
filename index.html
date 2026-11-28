@@ -900,7 +900,7 @@
 
   // ============================================================
   // LANGUE (25 sept. 2026) — FR par défaut ; anglais via ?lang=en
-  // ou message { type: 'pei-lang', lang: 'en' | 'fr' } envoyé par la page Squarespace (Weglot).
+  // ou message { type: 'pei-lang', lang: 'en' | 'fr' } envoyé par la page Squarespace.
   // Les données envoyées au webhook restent en français (+ champ « lang »).
   // ============================================================
   let LANG = /[?&]lang=en(&|$)/.test(location.search) ? 'en' : 'fr';

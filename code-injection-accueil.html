@@ -156,7 +156,7 @@ button.pei-btn { font-family: inherit; border: 0; cursor: pointer; -webkit-appea
     (function () {
       var f = document.getElementById('pei-avis'); if (!f) return;
       var base = (f.getAttribute('src') || '').replace(/[?&]lang=\w+/, '');
-      function lang() { var l = document.documentElement.lang || ''; try { if (window.Weglot && Weglot.getCurrentLang) l = Weglot.getCurrentLang() || l; } catch (e) {} return /^en/i.test(l) ? 'en' : 'fr'; }
+      function lang() { var l = document.documentElement.lang || ''; return /^en/i.test(l) ? 'en' : 'fr'; }
       function sync() {
         var want = base + (lang() === 'en' ? (base.indexOf('?') > -1 ? '&' : '?') + 'lang=en' : '');
         if (f.getAttribute('src') !== want) f.setAttribute('src', want);
